@@ -18,6 +18,20 @@ Most tools do one phase. founder-os does all of them, and the learning compounds
 
 ## Install
 
+**From the marketplace** (recommended):
+```bash
+# In Claude Code:
+/plugin marketplace add rhinehart514/founder-os
+/plugin install founder-os@founder-os-marketplace
+```
+
+**From GitHub directly:**
+```bash
+# CLI:
+claude plugin install founder-os@founder-os-marketplace --scope user
+```
+
+**From source** (for development):
 ```bash
 git clone https://github.com/rhinehart514/founder-os.git
 cd founder-os
@@ -29,11 +43,6 @@ Then in any project:
 cd your-project
 claude
 # type /onboard to bootstrap
-```
-
-Or install as a Claude Code plugin:
-```bash
-claude plugin add /path/to/founder-os
 ```
 
 ## Quick start

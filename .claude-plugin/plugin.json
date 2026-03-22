@@ -2,13 +2,16 @@
   "name": "founder-os",
   "version": "1.0.0",
   "description": "AI cofounder for serial entrepreneurs. Full lifecycle: ideate → validate → decide → build → measure → ship → learn. Proactive market intelligence, 14 failure pattern detection, prediction-driven learning that compounds across ventures.",
-  "author": "Laney Fraass",
+  "author": {
+    "name": "Laney Fraass"
+  },
   "keywords": [
     "founder", "startup", "serial-entrepreneur", "ideation", "validation",
     "build", "measure", "ship", "learn", "product", "eval", "score",
     "portfolio", "market-intelligence", "predictions", "ai-native", "2026"
   ],
   "skills": "./skills/",
+  "hooks": "./hooks/hooks.json",
   "agents": [
     "./agents/builder.md",
     "./agents/consolidator.md",
