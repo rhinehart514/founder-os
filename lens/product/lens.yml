@@ -1,0 +1,12 @@
+name: product
+description: "Web product measurement — dead ends, empty states, taste, DOM/copy/blind eval"
+version: 1.0.0
+author: founder-os
+provides:
+  scoring: true
+  eval: true
+  beliefs: true
+  mind: true
+  commands: false
+compatible_project_types: ["nextjs", "react", "vue", "svelte", "node"]
+dependencies: ["node"]

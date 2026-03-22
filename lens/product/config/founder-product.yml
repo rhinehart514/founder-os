@@ -1,0 +1,56 @@
+# founder-product.yml — Product lens configuration.
+# Extends config/founder.yml with product-development-specific settings.
+
+# ── Structure weights (web scoring) ──────────────────
+scoring:
+  structure:
+    dead_end_weight: 0.5
+    empty_state_weight: 0.33
+
+# ── Taste (skills/taste/SKILL.md — native skill, 0-100 scale) ────
+# Legacy taste.mjs still used by `founder taste` CLI (1-5 scale)
+# The /taste skill reads these config values for viewport sizes and limits
+taste:
+  max_routes: 8
+  max_screenshots: 24
+  cache_ttl: 7200
+  stale_warning_days: 7
+  viewports:
+    desktop: { width: 1440, height: 900 }
+    mobile: { width: 390, height: 844 }
+  timeouts:
+    page_load: 30000
+    post_load_wait: 1000
+    eval_timeout: 180000
+    port_check: 5000
+    server_startup: 3000
+  dimensions:
+    - hierarchy
+    - breathing_room
+    - contrast
+    - polish
+    - emotional_tone
+    - information_density
+    - wayfinding
+    - distinctiveness
+    - scroll_experience
+    - layout_coherence
+    - information_architecture
+
+# ── Go — product-specific ───────────────────────────────
+go:
+  taste_every_n: 3
+
+# ── Corpus ───────────────────────────────────────────────
+corpus:
+  staleness_days: 90
+  min_consensus_score: 8.0
+  max_score_variance: 0.5
+  update_every_n_iterations: 5
+  categories:
+    - ui/saas
+    - ui/consumer
+    - ui/developer
+    - copy/landing
+    - copy/onboarding
+    - code/patterns

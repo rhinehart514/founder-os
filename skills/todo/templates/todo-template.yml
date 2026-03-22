@@ -1,0 +1,13 @@
+# Todo item template — all valid fields
+# Required: id, title, status, created_at
+# Optional: feature, version, source, promoted_at, done_at
+
+- id: xx-01                    # 2-letter prefix + number. Prefix from feature or random.
+  title: "descriptive title"   # What needs to happen. Specific, not vague.
+  status: backlog              # backlog | active | done
+  feature: null                # Feature name from config/founder.yml. null if untagged.
+  version: null                # Version tag (e.g., v9.0). null if untagged.
+  source: /todo                # Origin: /todo, /go builder, /eval measurer, etc.
+  created_at: "2026-03-17"    # ISO date. Required for decay computation.
+  promoted_at: null            # ISO date when activated. null if never promoted.
+  done_at: null                # ISO date when completed. null if not done.

@@ -1,0 +1,169 @@
+# Assertion Types
+
+Ordered from most deterministic to most variable. Prefer types at the top. Use types at the bottom only when mechanical checks can't express the belief.
+
+## file_check — does it exist?
+
+**Signal:** Low. Proves existence, nothing about quality.
+**Variance:** Zero. Same result every run.
+**When to use:** Infrastructure checks. "This config file exists." "This script is present."
+**When NOT to use:** When you actually care whether the file is correct — use content_check or command_check instead.
+
+```yaml
+- id: score-script-exists
+  belief: "score.sh exists in bin/"
+  type: file_check
+  path: bin/score.sh
+  feature: scoring
+  severity: block
+```
+
+**Upgrade path:** file_check -> content_check (file exists AND contains X) -> command_check (file exists AND runs correctly).
+
+## content_check — does it contain the right things?
+
+**Signal:** Medium. Proves structure, not behavior.
+**Variance:** Zero. Same result every run.
+**When to use:** Verifying config has required fields. Checking source files contain key patterns. Ensuring forbidden patterns are absent.
+**When NOT to use:** When the content's presence doesn't guarantee it works. "File contains `health_gate`" doesn't mean the health gate works.
+
+```yaml
+- id: score-has-health-gate
+  belief: "score.sh implements a health gate"
+  type: content_check
+  path: bin/score.sh
+  contains: "health_gate"
+  feature: scoring
+  severity: warn
+```
+
+```yaml
+- id: no-console-in-tsx
+  belief: "no console.log in TSX files"
+  type: content_check
+  path: src/
+  forbidden: "console.log"
+  glob: "**/*.tsx"
+  feature: hygiene
+  severity: warn
+```
+
+## command_check — does it actually work?
+
+**Signal:** High. Tests real behavior end-to-end.
+**Variance:** Low (deterministic commands). Medium (if command depends on external state).
+**When to use:** Testing that scripts run, CLIs produce expected output, commands exit cleanly. This is the workhorse assertion type.
+**When NOT to use:** When the thing you're testing can't be invoked from a shell command.
+
+```yaml
+- id: score-runs-clean
+  belief: "founder score . produces a number and exits 0"
+  type: command_check
+  command: "bash bin/score.sh . 2>&1"
+  expect_exit: 0
+  feature: scoring
+  severity: block
+```
+
+```yaml
+- id: eval-detects-failures
+  belief: "eval.sh reports failing assertions"
+  type: command_check
+  command: "bash bin/eval.sh . 2>&1 | grep -q 'fail\\|FAIL\\|✗'"
+  expect_exit: 0
+  feature: scoring
+  severity: warn
+```
+
+**Fields:**
+- `command` — shell command to run
+- `expect_exit` — expected exit code (default: 0)
+- `expect_output` — string that must appear in stdout (optional)
+
+## self_check — founder internal metric
+
+**Signal:** High. Tests founder's own measurement system.
+**Variance:** Low.
+**When to use:** Verifying founder subsystems work. References `self.sh --eval` metrics.
+
+```yaml
+- id: score-runs
+  belief: "founder score . produces a number"
+  type: self_check
+  metric: score-runs
+  feature: scoring
+  severity: block
+```
+
+## score_trend — is it improving?
+
+**Signal:** High for longitudinal health. Requires history.
+**Variance:** Low (mechanical comparison of stored values).
+**When to use:** Tracking that scores don't regress over time. Detecting stagnation.
+**When NOT to use:** On new projects with < 5 eval runs.
+
+```yaml
+- id: score-not-stagnant
+  belief: "score has changed in the last 5 eval runs"
+  type: score_trend
+  direction: not_flat
+  window: 5
+  feature: scoring
+  severity: warn
+```
+
+**Fields:**
+- `direction` — `up`, `down`, `not_flat`
+- `window` — number of recent data points to compare
+
+## llm_judge — does it seem right?
+
+**Signal:** Highest (tests qualitative claims). **Variance:** Highest (different results across runs).
+**When to use:** When the belief is qualitative and can't be reduced to a mechanical check. "The readme is clear." "The error messages are helpful." "The code follows the project's patterns."
+**When NOT to use:** When a mechanical check would work. If you can grep for it, don't judge it.
+
+```yaml
+- id: readme-is-clear
+  belief: "README explains what the project does in under 30 seconds of reading"
+  type: llm_judge
+  claim: "README.md clearly explains the project's purpose and how to get started"
+  evidence_files: ["README.md"]
+  feature: docs
+  severity: warn
+```
+
+**Fields:**
+- `claim` — what should be true (the LLM evaluates this)
+- `evidence_files` — files the LLM reads to evaluate the claim
+- `prompt` — alternative to claim, more detailed evaluation instructions (optional)
+- `path` — single file path shorthand for evidence_files (optional)
+
+**Reducing variance:** Be specific in claims. "README explains purpose and install steps" beats "README is good." Include the evidence files so the judge has concrete material.
+
+## feature_review — holistic feature audit
+
+**Signal:** High but expensive.
+**Variance:** High (LLM generates the evaluation).
+**When to use:** Periodic deep audits of feature completeness. Usually generated by `/eval`, not hand-written.
+
+```yaml
+- id: scoring-delivers-value
+  belief: "scoring feature delivers on its value hypothesis"
+  type: feature_review
+  feature: scoring
+  severity: warn
+```
+
+## Decision tree: which type to use
+
+```
+Can you check it with a file path?
+  ├─ Yes → Does content matter, or just existence?
+  │         ├─ Just existence → file_check
+  │         └─ Content matters → content_check
+  └─ No → Can you run a command to test it?
+           ├─ Yes → command_check
+           └─ No → Is it about score trends?
+                    ├─ Yes → score_trend
+                    └─ No → llm_judge (last resort)
+```

@@ -1,0 +1,43 @@
+{
+  "_schema": "market-context.json — structured output from /research market",
+  "_version": "1.0",
+  "updated": "YYYY-MM-DD",
+  "domain": "description of the market/problem space",
+  "competitors": [
+    {
+      "name": "Competitor Name",
+      "url": "https://example.com",
+      "category": "direct|adjacent|substitute",
+      "stage": "pre-revenue|early|growth|mature",
+      "pricing": "free|freemium|paid ($X/mo)|enterprise",
+      "approach": "1-sentence: how they solve the problem",
+      "strength": "their best advantage",
+      "weakness": "their biggest gap",
+      "evidence": "how you know this (URL, screenshot, user report)",
+      "last_checked": "YYYY-MM-DD"
+    }
+  ],
+  "market_signals": [
+    {
+      "date": "YYYY-MM-DD",
+      "signal": "what happened",
+      "source": "URL or description",
+      "source_tier": "T1|T2|T3|T4|T5",
+      "confidence": "high|medium|low",
+      "implication": "what this means for us"
+    }
+  ],
+  "gaps": [
+    {
+      "gap": "unserved need in the market",
+      "evidence": "why we believe this gap exists",
+      "opportunity_size": "how many people have this need",
+      "our_fit": "how well positioned we are to fill it"
+    }
+  ],
+  "positioning": {
+    "our_approach": "how we solve the problem differently",
+    "differentiation": "what we do that nobody else does",
+    "risk": "biggest threat to our positioning"
+  }
+}

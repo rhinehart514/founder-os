@@ -1,0 +1,17 @@
+{
+  "feature": "",
+  "last_score": 0,
+  "last_scored": "",
+  "delivery_criteria": [
+    "REPLACE: specific observable criteria for what the feature delivers",
+    "REPLACE: each criterion should be falsifiable (can check if met or not)"
+  ],
+  "craft_criteria": [
+    "REPLACE: error handling quality at specific paths",
+    "REPLACE: system design decisions that serve or hinder the user"
+  ],
+  "known_gaps": [
+    "REPLACE: acknowledged weaknesses from this eval"
+  ],
+  "score_history": []
+}

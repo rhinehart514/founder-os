@@ -1,0 +1,11 @@
+# Feature template — copy into config/founder.yml under features:
+# Replace everything in <angle brackets>
+
+  <feature-name>:
+    delivers: "<one sentence — what the user gets, specific and testable>"
+    for: "<specific person and their situation, not 'users'>"
+    code: ["<path/to/file1>", "<path/to/dir/>"]
+    weight: <1-5>  # 5=core value, 4=important, 3=nice-to-have, 2=peripheral, 1=experimental
+    status: active
+    # depends_on: [<other_feature>]  # uncomment if this needs another feature working first
+    # commands: ["<cli-command>", "</slash-command>"]  # optional: how users invoke this

@@ -1,0 +1,165 @@
+# founder.yml — founder-os evaluates itself
+# The product that measures products must measure itself.
+
+# ── Project ─────────────────────────────────────────
+project:
+  name: founder-os
+  stage: mvp    # fresh port, untested on external projects
+  mode: build
+  type: cli     # Claude Code plugin (CLI + skills)
+
+# ── Value Definition ───────────────────────────────
+value:
+  hypothesis: "A serial entrepreneur's product gets from idea to measurably better every session — validating before building, building with measurement, learning across ventures"
+  user: "Solo technical founder with multiple ideas who lives in Claude Code"
+  signals:
+    - name: idea_to_score
+      description: "Full lifecycle works: /discover → /decide → /build → /score produces a number"
+      target: "Complete loop in one session"
+      measurable: true
+    - name: portfolio_compounds
+      description: "Killing an idea updates the knowledge model, making the next idea better"
+      target: "Dead end patterns grow after /retro"
+      measurable: true
+    - name: build_loop_works
+      description: "/go produces score improvements on a real project"
+      target: "Score delta > 0 within 1 /go session"
+      measurable: true
+    - name: prediction_accuracy
+      description: "Predictions are well-calibrated across ventures"
+      target: "50-70% accuracy"
+      measurable: true
+
+# ── Scoring ────────────────────────────────────────
+scoring:
+  cache_ttl: 300
+  health_gate_threshold: 20
+  health_warn_threshold: 40
+  onboarding_cap: 50
+  build:
+    ts_error_penalty: -30
+    stale_build_penalty: -10
+    build_fail_penalty: -50
+    gate_threshold: 70
+
+integrity:
+  stage_ceilings:
+    mvp: { score: [30, 65], taste: [20, 60] }
+    early: { score: [45, 80], taste: [35, 70] }
+    growth: { score: [60, 90], taste: [55, 80] }
+    mature: { score: [70, 95], taste: [70, 90] }
+  cosmetic_only_warning: true
+  max_single_commit_delta: 15
+  plateau_tasks: 3
+
+build:
+  revert_on_regression: true
+  simplicity_bias: true
+
+go:
+  plateau_threshold: 3
+
+# ── Features ─────────────────────────────────────────
+features:
+
+  # === VALIDATION PHASE ===
+
+  ideation:
+    delivers: "evidence-weighted idea generation with kill lists, creative techniques, and portfolio awareness"
+    for: "serial entrepreneur deciding what to build next"
+    skills: ["/ideate", "/discover", "/decide"]
+    code: ["skills/ideate/SKILL.md", "skills/discover/SKILL.md", "skills/decide/SKILL.md", "skills/ideate/techniques/", "skills/ideate/scripts/"]
+    status: active
+    weight: 4
+
+  validation:
+    delivers: "structured research that produces go/kill decisions with cited evidence"
+    for: "serial entrepreneur evaluating an idea"
+    skills: ["/research", "/strategy", "/product", "/money"]
+    code: ["skills/research/SKILL.md", "skills/strategy/SKILL.md", "skills/product/SKILL.md", "skills/money/SKILL.md", "skills/research/scripts/", "skills/strategy/scripts/"]
+    status: active
+    weight: 5
+
+  portfolio:
+    delivers: "cross-venture state — track ideas, stages, patterns, accuracy across all ventures"
+    for: "serial entrepreneur with multiple ideas"
+    skills: ["/portfolio", "/decide"]
+    code: ["skills/portfolio/SKILL.md", "skills/decide/SKILL.md", "config/portfolio.yml"]
+    status: active
+    weight: 4
+    depends_on: [ideation]
+
+  # === BUILD PHASE ===
+
+  scoring:
+    delivers: "honest number that tells a founder if their product improved"
+    for: "solo founder who just made changes"
+    skills: ["/score", "/eval"]
+    code: ["skills/score/SKILL.md", "skills/eval/SKILL.md", "bin/score.sh", "bin/eval.sh", "bin/lib/config.sh", "skills/shared/product-topology.sh", "skills/shared/claim-verify.sh", "skills/score/scripts/synthesize.sh"]
+    internal: ["founder score .", "founder eval ."]
+    status: active
+    weight: 5
+
+  build-loop:
+    delivers: "autonomous build cycle — plan the bottleneck, build it, measure improvement, learn"
+    for: "solo founder who wants progress every session"
+    skills: ["/plan", "/go", "/push"]
+    code: ["skills/plan/SKILL.md", "skills/go/SKILL.md", "skills/push/SKILL.md", "skills/plan/scripts/", "skills/go/scripts/"]
+    status: active
+    weight: 5
+    depends_on: [scoring]
+
+  skills-system:
+    delivers: "every command a founder needs — from onboarding to shipping, backlog to taste testing, features to deployment"
+    for: "solo founder working in Claude Code"
+    skills: ["/founder", "/onboard", "/feature", "/todo", "/taste", "/ship", "/roadmap", "/copy", "/calibrate", "/configure", "/skill", "/retro"]
+    code: ["skills/founder/SKILL.md", "skills/onboard/SKILL.md", "skills/feature/SKILL.md", "skills/todo/SKILL.md", "skills/taste/SKILL.md", "skills/ship/SKILL.md", "skills/roadmap/SKILL.md", "skills/copy/SKILL.md"]
+    status: active
+    weight: 4
+
+  learning:
+    delivers: "a model that gets smarter every session — predictions, grading, feature purpose audits, knowledge updates across ventures"
+    for: "the system itself — compounds over time"
+    skills: ["/retro"]
+    code: ["skills/retro/SKILL.md", "hooks/session_start.sh", "bin/grade.sh", "bin/trail.sh", "~/.claude/knowledge/predictions.tsv"]
+    status: active
+    weight: 4
+    depends_on: [scoring]
+
+  world-awareness:
+    delivers: "proactive market intelligence — checks competitors, pricing, platform changes, regulation before the founder asks"
+    for: "serial entrepreneur who needs to know if the world changed while they were building"
+    skills: ["/strategy", "/research", "/plan", "/retro"]
+    code: ["mind/world.md", "skills/strategy/SKILL.md", "skills/plan/SKILL.md", "skills/retro/SKILL.md"]
+    status: active
+    weight: 4
+    depends_on: [validation]
+
+  install:
+    delivers: "install.sh + /onboard gets everything working on any project"
+    for: "new user trying founder-os for the first time"
+    skills: ["/onboard"]
+    code: ["skills/onboard/SKILL.md", "install.sh"]
+    internal: ["founder init"]
+    status: active
+    weight: 3
+
+# ── Evals ────────────────────────────────────────────
+evals:
+  generative: true
+  beliefs_fallback: true
+  execution_eval: true
+  tier1_on_every_build: true
+  tier2_on_demand: true
+  block_on_failure: true
+  warn_threshold: 3
+
+# ── Self ─────────────────────────────────────────────
+self:
+  prediction_accuracy_floor: 0.30
+  prediction_accuracy_ceiling: 0.90
+  prediction_stale_days: 7
+  knowledge_stale_days: 14
+  self_stale_days: 7
+  min_predictions_per_week: 3
+  hook_timeout_ms: 200

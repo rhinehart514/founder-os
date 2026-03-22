@@ -1,0 +1,648 @@
+# beliefs.yml — What must be true about founder-os
+#
+# Features (from config/founder.yml):
+#   ideation, validation, portfolio, scoring, build-loop, skills-system, learning, install
+#
+# Quality: correctness (works?), craft (well-made?), completeness (everything built?)
+# Layer: infrastructure (plumbing), logic (behavior), ux (experience)
+#
+# Types:
+#   file_check    — file exists, contains string, min lines (mechanical)
+#   content_check — forbidden words in source dirs (mechanical)
+#   self_check    — runs self.sh --eval metric (mechanical)
+#   bench_check   — runs founder bench, checks calibration % (mechanical)
+#   score_trend   — reads history.tsv, checks score variance/direction (mechanical)
+#   assertion_trend — are assertions graduating (fail→pass) over sessions? (mechanical)
+#   session_continuity — is the system being used regularly? (mechanical)
+#   value_velocity — how fast does score improve from baseline? (mechanical)
+#   command_check — run arbitrary shell command (mechanical)
+#   feature_review — Claude evaluates feature completeness (capabilities list or inferred)
+#   llm_judge     — Claude evaluates code quality (subjective, uses Haiku)
+#
+# feature: which part of the product this tests (must match founder.yml feature names)
+# quality: dimension (correctness | craft | completeness)
+# layer: infrastructure | logic | ux
+# severity: block (score = 0 if failing) | warn (flags but continues)
+
+beliefs:
+
+  # ════════════════════════════════════════════════════════
+  # IDEATION — can it generate and evaluate ideas?
+  # ════════════════════════════════════════════════════════
+
+  - id: discover-skill-exists
+    belief: "/discover skill exists with routing modes"
+    type: file_check
+    path: "skills/discover/SKILL.md"
+    contains: "Routing"
+    feature: ideation
+    quality: correctness
+    layer: infrastructure
+    severity: block
+
+  - id: ideate-has-techniques
+    belief: "/ideate has creative thinking techniques"
+    type: command_check
+    command: test $(ls skills/ideate/techniques/*.md 2>/dev/null | wc -l) -ge 5
+    feature: ideation
+    quality: completeness
+    layer: logic
+    severity: warn
+
+  - id: ideate-has-kill-list
+    belief: "/ideate can generate kill lists — ideas must die"
+    type: file_check
+    path: "skills/ideate/SKILL.md"
+    contains: "kill"
+    feature: ideation
+    quality: correctness
+    layer: logic
+    severity: warn
+
+  - id: decide-skill-exists
+    belief: "/decide skill exists for go/kill decisions"
+    type: file_check
+    path: "skills/decide/SKILL.md"
+    contains: "GO"
+    feature: ideation
+    quality: correctness
+    layer: infrastructure
+    severity: block
+
+  - id: ideation-complete
+    belief: "Ideation covers generate → improve → kill lifecycle"
+    type: feature_review
+    feature: ideation
+    quality: completeness
+    layer: logic
+    capabilities:
+      - "/discover takes a raw idea and creates a portfolio entry"
+      - "/ideate generates evidence-weighted ideas with creative techniques"
+      - "/ideate kill produces kill-list audits"
+      - "/decide produces structured go/kill/park/pivot decisions"
+      - "Ideas flow from /discover → /research → /decide"
+    severity: warn
+
+  # ════════════════════════════════════════════════════════
+  # VALIDATION — can it research and validate ideas?
+  # ════════════════════════════════════════════════════════
+
+  - id: research-skill-exists
+    belief: "/research skill exists with multiple modes"
+    type: file_check
+    path: "skills/research/SKILL.md"
+    contains: "MARKET"
+    feature: validation
+    quality: correctness
+    layer: infrastructure
+    severity: block
+
+  - id: research-has-scripts
+    belief: "/research has supporting scripts for evidence gathering"
+    type: command_check
+    command: test $(ls skills/research/scripts/*.sh 2>/dev/null | wc -l) -ge 2
+    feature: validation
+    quality: completeness
+    layer: logic
+    severity: warn
+
+  - id: strategy-skill-exists
+    belief: "/strategy skill exists with honest assessment mode"
+    type: file_check
+    path: "skills/strategy/SKILL.md"
+    contains: "HONEST"
+    feature: validation
+    quality: correctness
+    layer: infrastructure
+    severity: block
+
+  - id: money-skill-exists
+    belief: "/money skill exists for unit economics"
+    type: file_check
+    path: "skills/money/SKILL.md"
+    contains: "unit"
+    feature: validation
+    quality: correctness
+    layer: infrastructure
+    severity: warn
+
+  - id: validation-complete
+    belief: "Validation covers market → model → moat with evidence"
+    type: feature_review
+    feature: validation
+    quality: completeness
+    layer: logic
+    capabilities:
+      - "/research gathers market evidence with source quality tracking"
+      - "/strategy produces honest diagnoses with competitive scan"
+      - "/product pressure-tests whether you're building something that matters"
+      - "/money models pricing, unit economics, and runway"
+      - "All validation skills produce cited evidence, not opinions"
+    severity: warn
+
+  # ════════════════════════════════════════════════════════
+  # PORTFOLIO — cross-venture state management
+  # ════════════════════════════════════════════════════════
+
+  - id: portfolio-skill-exists
+    belief: "/portfolio skill exists for cross-venture tracking"
+    type: file_check
+    path: "skills/portfolio/SKILL.md"
+    contains: "portfolio"
+    feature: portfolio
+    quality: correctness
+    layer: infrastructure
+    severity: block
+
+  - id: portfolio-template-exists
+    belief: "portfolio.yml template exists with idea structure"
+    type: file_check
+    path: "config/portfolio.yml"
+    contains: "ideas"
+    feature: portfolio
+    quality: correctness
+    layer: infrastructure
+    severity: block
+
+  - id: portfolio-global-location
+    belief: "Portfolio lives at ~/.founder-os/ (global, spans projects)"
+    type: file_check
+    path: "install.sh"
+    contains: ".founder-os"
+    feature: portfolio
+    quality: correctness
+    layer: infrastructure
+    severity: warn
+
+  - id: patterns-detect-sprawl
+    belief: "Pattern detection catches portfolio sprawl (>3 active ideas)"
+    type: file_check
+    path: "mind/patterns.md"
+    contains: "Portfolio Sprawl"
+    feature: portfolio
+    quality: completeness
+    layer: logic
+    severity: warn
+
+  # ════════════════════════════════════════════════════════
+  # SCORING — does the score work and mean something?
+  # ════════════════════════════════════════════════════════
+
+  - id: score-runs
+    belief: "founder score . produces a number"
+    type: self_check
+    metric: score-runs
+    feature: scoring
+    quality: correctness
+    layer: infrastructure
+    severity: block
+
+  - id: value-hypothesis-exists
+    belief: "founder.yml defines what value the product delivers"
+    type: file_check
+    path: "config/founder.yml"
+    contains: "hypothesis:"
+    feature: scoring
+    quality: correctness
+    layer: infrastructure
+    severity: block
+
+  - id: score-calibrated
+    belief: "founder score gives honest numbers — low for bad repos, high for good ones"
+    type: bench_check
+    min_calibration: 80
+    feature: scoring
+    quality: correctness
+    layer: logic
+    severity: warn
+
+  - id: scoring-formula-clear
+    belief: "score.sh formula is understandable — a new contributor can read it"
+    type: file_check
+    path: "bin/score.sh"
+    contains: "SCORING FORMULA"
+    feature: scoring
+    quality: craft
+    layer: ux
+    severity: warn
+
+  - id: eval-runs
+    belief: "founder eval . exits without crash"
+    type: self_check
+    metric: eval-runs
+    feature: scoring
+    quality: correctness
+    layer: infrastructure
+    severity: block
+
+  - id: beliefs-are-meaningful
+    belief: "The assertions test things that matter, not trivial checks"
+    type: command_check
+    command: test $(grep '    type:' lens/product/eval/beliefs.yml | sort -u | wc -l) -gt 3
+    feature: scoring
+    quality: craft
+    layer: logic
+    severity: warn
+
+  - id: scoring-complete
+    belief: "Scoring covers the full value measurement stack"
+    type: feature_review
+    feature: scoring
+    quality: completeness
+    layer: logic
+    capabilities:
+      - "score.sh produces a numeric score for any project type"
+      - "health gate blocks score when infrastructure is broken"
+      - "assertions drive the score when beliefs.yml exists"
+      - "eval.sh does generative evaluation (Claude judges claim vs code)"
+      - "synthesize.sh orchestrates all 5 tiers into one number"
+      - "score handles edge cases: empty project, no assertions, missing files"
+    severity: warn
+
+  # ════════════════════════════════════════════════════════
+  # BUILD-LOOP — plan → build → measure → learn
+  # ════════════════════════════════════════════════════════
+
+  - id: plan-skill-exists
+    belief: "/plan skill exists with bottleneck detection"
+    type: file_check
+    path: "skills/plan/SKILL.md"
+    contains: "bottleneck"
+    feature: build-loop
+    quality: correctness
+    layer: infrastructure
+    severity: block
+
+  - id: go-skill-exists
+    belief: "/go skill exists for autonomous building"
+    type: file_check
+    path: "skills/go/SKILL.md"
+    contains: "autonomous"
+    feature: build-loop
+    quality: correctness
+    layer: infrastructure
+    severity: block
+
+  - id: plan-has-recovery
+    belief: "/plan handles failure gracefully"
+    type: file_check
+    path: "skills/plan/SKILL.md"
+    contains: "If something breaks"
+    feature: build-loop
+    quality: correctness
+    layer: infrastructure
+    severity: warn
+
+  - id: go-has-recovery
+    belief: "/go handles failure gracefully"
+    type: file_check
+    path: "skills/go/SKILL.md"
+    contains: "If something breaks"
+    feature: build-loop
+    quality: correctness
+    layer: infrastructure
+    severity: warn
+
+  - id: push-skill-exists
+    belief: "/push skill exists for targeted score improvement"
+    type: file_check
+    path: "skills/push/SKILL.md"
+    contains: "target"
+    feature: build-loop
+    quality: completeness
+    layer: infrastructure
+    severity: warn
+
+  - id: build-loop-complete
+    belief: "Build loop covers plan → build → measure → revert-if-worse"
+    type: feature_review
+    feature: build-loop
+    quality: completeness
+    layer: logic
+    capabilities:
+      - "/plan finds the bottleneck and proposes work"
+      - "/go builds autonomously with measurement after each change"
+      - "/go reverts when assertions regress"
+      - "/push targets a specific score for a feature"
+      - "Builder agent works in worktree isolation"
+      - "Measurer agent runs scores cheaply"
+    severity: warn
+
+  # ════════════════════════════════════════════════════════
+  # SKILLS-SYSTEM — do all the skills work together?
+  # ════════════════════════════════════════════════════════
+
+  - id: founder-dashboard-exists
+    belief: "/founder dashboard skill exists"
+    type: file_check
+    path: "skills/founder/SKILL.md"
+    contains: "portfolio"
+    feature: skills-system
+    quality: correctness
+    layer: infrastructure
+    severity: block
+
+  - id: onboard-skill-exists
+    belief: "/onboard bootstraps any project"
+    type: file_check
+    path: "skills/onboard/SKILL.md"
+    contains: "founder.yml"
+    feature: skills-system
+    quality: correctness
+    layer: infrastructure
+    severity: block
+
+  - id: skills-count-sufficient
+    belief: "At least 20 skills exist as SKILL.md files"
+    type: command_check
+    command: test $(find skills -name SKILL.md | wc -l) -ge 20
+    feature: skills-system
+    quality: completeness
+    layer: infrastructure
+    severity: warn
+
+  - id: agents-count-sufficient
+    belief: "At least 10 agents are registered"
+    type: command_check
+    command: test $(ls agents/*.md | wc -l) -ge 10
+    feature: skills-system
+    quality: completeness
+    layer: infrastructure
+    severity: warn
+
+  - id: commands-recommend-next-steps
+    belief: "At least 10 skills contain next-command recommendations"
+    type: command_check
+    command: test $(grep -rl '/plan\|/go\|/eval\|/ship\|/roadmap' skills/*/SKILL.md | wc -l) -ge 10
+    feature: skills-system
+    quality: completeness
+    layer: ux
+    severity: warn
+
+  - id: commands-recommend-existing
+    belief: "Recommended slash commands exist as skill folders"
+    type: command_check
+    command: for cmd in plan go eval feature ship onboard research ideate founder roadmap retro strategy todo score; do test -f "skills/${cmd}/SKILL.md" || exit 1; done
+    feature: skills-system
+    quality: correctness
+    layer: logic
+    severity: warn
+
+  - id: taste-skill-exists
+    belief: "/taste exists for visual product intelligence"
+    type: file_check
+    path: "skills/taste/SKILL.md"
+    contains: "Playwright"
+    feature: skills-system
+    quality: completeness
+    layer: infrastructure
+    severity: warn
+
+  - id: ship-skill-exists
+    belief: "/ship exists for deployment"
+    type: file_check
+    path: "skills/ship/SKILL.md"
+    contains: "deploy"
+    feature: skills-system
+    quality: completeness
+    layer: infrastructure
+    severity: warn
+
+  # ════════════════════════════════════════════════════════
+  # LEARNING — does the system get smarter over time?
+  # ════════════════════════════════════════════════════════
+
+  - id: knowledge-model-exists
+    belief: "experiment-learnings.md exists — the system can't compound without it"
+    type: file_check
+    path: "~/.claude/knowledge/experiment-learnings.md"
+    min_lines: 5
+    feature: learning
+    quality: correctness
+    layer: infrastructure
+    severity: block
+
+  - id: predictions-logged
+    belief: "predictions.tsv has entries — the learning loop is running"
+    type: self_check
+    metric: predictions-logged
+    feature: learning
+    quality: correctness
+    layer: infrastructure
+    severity: warn
+
+  - id: retro-skill-exists
+    belief: "/retro skill exists for grading and consolidation"
+    type: file_check
+    path: "skills/retro/SKILL.md"
+    contains: "grade"
+    feature: learning
+    quality: correctness
+    layer: infrastructure
+    severity: block
+
+  - id: grade-sh-exists
+    belief: "grade.sh exists for auto-grading predictions"
+    type: command_check
+    command: test -f bin/grade.sh
+    feature: learning
+    quality: correctness
+    layer: infrastructure
+    severity: warn
+
+  - id: knowledge-model-four-sections
+    belief: "experiment-learnings.md has Known/Uncertain/Unknown/Dead Ends structure"
+    type: command_check
+    command: FILE=~/.claude/knowledge/experiment-learnings.md; grep -q 'Known' "$FILE" && grep -q 'Uncertain' "$FILE" && grep -q 'Unknown' "$FILE" && grep -q 'Dead End' "$FILE"
+    feature: learning
+    quality: correctness
+    layer: logic
+    severity: warn
+
+  - id: predictions-path-in-mind
+    belief: "predictions.tsv path is referenced in mind files"
+    type: command_check
+    command: grep -rl 'predictions.tsv' mind/*.md | head -1 | grep -q .
+    feature: learning
+    quality: correctness
+    layer: infrastructure
+    severity: warn
+
+  - id: learning-complete
+    belief: "Learning covers the full predict-measure-update loop"
+    type: feature_review
+    feature: learning
+    quality: completeness
+    layer: logic
+    capabilities:
+      - "predictions.tsv gets new entries logged with evidence"
+      - "grade.sh auto-grades predictions against score history"
+      - "experiment-learnings.md gets updated when predictions are wrong"
+      - "session boot card surfaces prediction accuracy and staleness"
+      - "/retro has accuracy, grade, consolidate, stale, health modes"
+      - "Knowledge model compounds across ventures (not just one project)"
+    severity: warn
+
+  # ════════════════════════════════════════════════════════
+  # INSTALL — can someone install and get started?
+  # ════════════════════════════════════════════════════════
+
+  - id: install-is-executable
+    belief: "install.sh exists and is executable"
+    type: command_check
+    command: test -x install.sh
+    feature: install
+    quality: correctness
+    layer: infrastructure
+    severity: block
+
+  - id: plugin-json-exists
+    belief: ".claude-plugin/plugin.json exists with all agents"
+    type: command_check
+    command: test -f .claude-plugin/plugin.json && test $(jq '.agents | length' .claude-plugin/plugin.json 2>/dev/null) -ge 10
+    feature: install
+    quality: correctness
+    layer: infrastructure
+    severity: block
+
+  - id: hooks-json-exists
+    belief: "hooks/hooks.json exists for plugin hook registration"
+    type: command_check
+    command: test -f hooks/hooks.json && jq empty hooks/hooks.json 2>/dev/null
+    feature: install
+    quality: correctness
+    layer: infrastructure
+    severity: warn
+
+  - id: founder-cli-exists
+    belief: "bin/founder CLI entry point exists and is executable"
+    type: command_check
+    command: test -x bin/founder
+    feature: install
+    quality: correctness
+    layer: infrastructure
+    severity: block
+
+  - id: hooks-resolve
+    belief: "Session start hook is configured and executable"
+    type: command_check
+    command: test -x hooks/session_start.sh
+    feature: install
+    quality: correctness
+    layer: infrastructure
+    severity: warn
+
+  - id: founder-yml-template-exists
+    belief: "founder.yml template exists for new projects"
+    type: command_check
+    command: test -f config/founder.yml.template || test -f skills/onboard/templates/founder-yml-template.yml
+    feature: install
+    quality: completeness
+    layer: infrastructure
+    severity: warn
+
+  - id: install-complete
+    belief: "Install flow covers deps → permissions → config → knowledge → verification"
+    type: feature_review
+    feature: install
+    quality: completeness
+    layer: logic
+    capabilities:
+      - "install.sh checks for jq dependency"
+      - "install.sh makes bin/* and hooks/*.sh executable"
+      - "install.sh creates ~/.founder-os/ with portfolio template"
+      - "install.sh initializes predictions.tsv and experiment-learnings.md"
+      - "/onboard generates founder.yml with real features from code analysis"
+      - "Plugin mode works via .claude-plugin/plugin.json"
+    severity: warn
+
+  # ════════════════════════════════════════════════════════
+  # CROSS-FEATURE — features work together
+  # ════════════════════════════════════════════════════════
+
+  - id: no-jargon
+    belief: "No user needs a glossary to use founder-os"
+    type: content_check
+    forbidden: ["utilize", "leverage", "synergy", "paradigm", "ecosystem", "holistic"]
+    feature: skills-system
+    quality: craft
+    layer: ux
+    severity: warn
+
+  - id: feature-depends-on-valid
+    belief: "Every depends_on in founder.yml references a feature that exists"
+    type: command_check
+    command: awk '/^#/{next} /^  [a-z]/{feat=$1;sub(/:$/,"",feat);features[feat]=1} /depends_on:/{gsub(/.*\[/,"");gsub(/\].*/,"");split($0,deps,",");for(i in deps){gsub(/[ \t"]/,"",deps[i]);if(deps[i]!=""&&!(deps[i] in features)){print "INVALID: "deps[i];err=1}}} END{exit err+0}' config/founder.yml
+    feature: scoring
+    quality: correctness
+    layer: logic
+    severity: warn
+
+  # ════════════════════════════════════════════════════════
+  # WORLD-AWARENESS — proactive market intelligence
+  # ════════════════════════════════════════════════════════
+
+  - id: world-md-exists
+    belief: "mind/world.md exists with 2026 market context"
+    type: file_check
+    path: "mind/world.md"
+    contains: "2026"
+    feature: world-awareness
+    quality: correctness
+    layer: infrastructure
+    severity: block
+
+  - id: world-has-externalities
+    belief: "world.md covers platform risk, regulation, and pricing shifts"
+    type: command_check
+    command: grep -q 'Platform risk' mind/world.md && grep -q 'Regulation' mind/world.md && grep -q 'pricing' mind/world.md
+    feature: world-awareness
+    quality: completeness
+    layer: logic
+    severity: warn
+
+  - id: plan-uses-websearch
+    belief: "/plan has WebSearch in allowed-tools for proactive market checks"
+    type: file_check
+    path: "skills/plan/SKILL.md"
+    contains: "WebSearch"
+    feature: world-awareness
+    quality: correctness
+    layer: infrastructure
+    severity: warn
+
+  - id: retro-has-audit-mode
+    belief: "/retro has audit mode for checking if features still matter"
+    type: file_check
+    path: "skills/retro/SKILL.md"
+    contains: "AUDIT"
+    feature: world-awareness
+    quality: correctness
+    layer: logic
+    severity: block
+
+  - id: strategy-uses-playwright
+    belief: "/strategy can visit competitor sites with Playwright"
+    type: file_check
+    path: "skills/strategy/SKILL.md"
+    contains: "playwright"
+    feature: world-awareness
+    quality: completeness
+    layer: logic
+    severity: warn
+
+  - id: world-awareness-complete
+    belief: "World awareness covers proactive checks, feature audit, and externality detection"
+    type: feature_review
+    feature: world-awareness
+    quality: completeness
+    layer: logic
+    capabilities:
+      - "/plan WebSearches the market before proposing work"
+      - "/strategy visits competitor sites with Playwright before diagnosing"
+      - "/retro audit mode checks if each feature still matters"
+      - "/money checks real competitor pricing pages, not training data"
+      - "/discover WebSearches the idea space before generating business cases"
+      - "mind/world.md provides 2026 context: AI capabilities, pricing shifts, platform risk, regulation"
+      - "Feature audit questions check timing windows, platform risk, and competitive shifts"
+    severity: warn

@@ -1,0 +1,37 @@
+{
+  "revenue_per_user": {
+    "monthly": 0,
+    "annual": 0,
+    "value_metric": "per seat"
+  },
+  "acquisition": {
+    "channels": [
+      {
+        "name": "",
+        "estimated_cac": 0,
+        "evidence": "",
+        "confidence": "low"
+      }
+    ],
+    "blended_cac": 0
+  },
+  "retention": {
+    "monthly_churn_estimate": 0.05,
+    "average_lifetime_months": 20,
+    "evidence": "category benchmark",
+    "confidence": "low"
+  },
+  "unit_economics": {
+    "ltv": 0,
+    "cac": 0,
+    "ltv_cac_ratio": 0,
+    "payback_months": 0,
+    "healthy": false
+  },
+  "benchmarks": {
+    "solo_founder_target_ltv_cac": 3,
+    "solo_founder_target_payback": 3,
+    "category_avg_churn": 0.05,
+    "category_avg_ltv_cac": null
+  }
+}

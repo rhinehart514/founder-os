@@ -1,0 +1,40 @@
+# plan.yml — Snapshot of the current plan.
+# Source of truth for tasks is TaskCreate, not this file.
+# This file is for persistence across sessions and human readability.
+
+name: ""              # Short name for this plan (e.g., "auto-grade predictions")
+date: ""              # YYYY-MM-DD
+feature: ""           # Primary feature this plan targets (or "full-product")
+bottleneck: ""        # The diagnosed bottleneck (feature + dimension)
+thesis_version: ""    # Current roadmap version (e.g., "v9.0")
+
+# State snapshot at plan time
+state:
+  score: 0            # founder score .
+  product_completion: 0
+  version_completion: 0
+  prediction_accuracy: ""  # e.g., "63% (10/16)"
+  assertions: ""      # e.g., "56/63"
+
+# Moves (1-2, not 3-5)
+moves:
+  - title: ""
+    status: todo      # todo | in_progress | done | skipped
+    feature: ""
+    dimension: ""     # delivery | craft | viability
+    advances: ""      # roadmap evidence item ID (optional)
+    informed_by: ""   # citation from experiment-learnings or "Exploring: [what]"
+    prediction: ""    # "raise [metric] from X to Y"
+    wrong_if: ""      # falsification condition
+    acceptance:       # how to verify this move worked
+      - ""
+    files: []         # files likely to be touched
+
+  # Second move (optional)
+  # - title: ""
+  #   status: todo
+  #   ...
+
+# Startup patterns that fired (if any)
+warnings: []
+  # - "Feature Sprawl: 4 features in 30-60 range"

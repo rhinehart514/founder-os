@@ -1,0 +1,56 @@
+{
+  "monthly_costs": {
+    "infrastructure": 0,
+    "tools": 0,
+    "services": 0,
+    "other": 0,
+    "total": 0
+  },
+  "revenue": {
+    "model": "subscription",
+    "price_per_user": 0,
+    "current_users": 0,
+    "monthly_revenue": 0
+  },
+  "projections": {
+    "conservative": {
+      "month_3_users": 0,
+      "month_6_users": 0,
+      "month_12_users": 0,
+      "month_3_revenue": 0,
+      "month_6_revenue": 0,
+      "month_12_revenue": 0,
+      "breakeven_month": null
+    },
+    "expected": {
+      "month_3_users": 0,
+      "month_6_users": 0,
+      "month_12_users": 0,
+      "month_3_revenue": 0,
+      "month_6_revenue": 0,
+      "month_12_revenue": 0,
+      "breakeven_month": null
+    },
+    "optimistic": {
+      "month_3_users": 0,
+      "month_6_users": 0,
+      "month_12_users": 0,
+      "month_3_revenue": 0,
+      "month_6_revenue": 0,
+      "month_12_revenue": 0,
+      "breakeven_month": null
+    }
+  },
+  "decision_points": [
+    {
+      "month": 3,
+      "condition": "if < N users",
+      "action": "reassess channel strategy"
+    },
+    {
+      "month": 6,
+      "condition": "if < $N MRR",
+      "action": "pivot pricing or market"
+    }
+  ]
+}

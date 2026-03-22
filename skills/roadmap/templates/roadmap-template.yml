@@ -1,0 +1,24 @@
+# Template for a new version entry in roadmap.yml
+# Copy this block into the versions: section of roadmap.yml
+# Replace all bracketed values
+
+  v0.0:
+    thesis: "[One question this version is trying to answer]"
+    tier: major  # major | minor | patch
+    status: testing  # testing | proven | disproven | abandoned
+    # parent: v0.0  # only for minor/patch — which major version this belongs to
+    goal: "[1-2 sentences — what success looks like for this version]"
+    # if_disproven: "[What we'd learn if this thesis is wrong — the disproven value]"
+    evidence_needed:
+      - id: evidence-one
+        question: "[Specific, falsifiable question — answerable with data]"
+        status: todo  # todo | partial | proven | disproven
+        # evidence: "[Only fill when status changes — cite the specific proof]"
+      - id: evidence-two
+        question: "[Second evidence item]"
+        status: todo
+      - id: evidence-three
+        question: "[Third evidence item]"
+        status: todo
+    # summary: "[Auto-generated on bump — what was learned]"
+    # proven: YYYY-MM-DD  # date when thesis was proven/disproven

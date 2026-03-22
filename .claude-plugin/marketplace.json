@@ -1,0 +1,16 @@
+{
+  "name": "founder-os-marketplace",
+  "plugins": [
+    {
+      "name": "founder-os",
+      "path": "./",
+      "description": "AI cofounder for serial entrepreneurs. Full lifecycle from idea to shipped product: validate before you build, measure while you build, learn across ventures. 27 skills, 14 agents, proactive market intelligence, 14 failure pattern detection.",
+      "category": "productivity",
+      "tags": [
+        "founder", "startup", "serial-entrepreneur", "ideation", "validation",
+        "build", "measure", "ship", "learn", "product-quality", "eval", "score",
+        "portfolio", "market-intelligence", "ai-native", "predictions", "cofounder"
+      ]
+    }
+  ]
+}

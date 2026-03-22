@@ -1,0 +1,581 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+# founder — CLI for founder-os v1
+# A cofounder in your terminal. Measurement, agents, startup intelligence.
+
+VERSION="1.0.0"
+if [[ -n "${CLAUDE_PLUGIN_ROOT:-}" ]]; then
+    FOUNDER_DIR="$CLAUDE_PLUGIN_ROOT"
+else
+    _FOUNDER_SOURCE="${BASH_SOURCE[0]}"
+    while [[ -L "$_FOUNDER_SOURCE" ]]; do _FOUNDER_SOURCE="$(readlink "$_FOUNDER_SOURCE")"; done
+    FOUNDER_DIR="$(cd "$(dirname "$_FOUNDER_SOURCE")/.." && pwd)"
+fi
+
+# --- Colors ---
+RED='\033[0;31m'
+GREEN='\033[0;32m'
+YELLOW='\033[1;33m'
+CYAN='\033[0;36m'
+BOLD='\033[1m'
+DIM='\033[2m'
+NC='\033[0m'
+
+# --- Config reader ---
+source "$FOUNDER_DIR/bin/lib/config.sh"
+
+# --- Dependency check (warn, don't block) ---
+check_dep() {
+    local cmd="$1" needed_for="$2"
+    if ! command -v "$cmd" &>/dev/null; then
+        echo -e "  ${YELLOW}⚠${NC} ${cmd} not found — needed for ${needed_for}" >&2
+        return 1
+    fi
+    return 0
+}
+
+require_dep() {
+    local cmd="$1" needed_for="$2"
+    if ! command -v "$cmd" &>/dev/null; then
+        echo -e "  ${RED}✗${NC} ${cmd} not found — required for ${needed_for}" >&2
+        echo -e "  ${DIM}Install ${cmd} and try again.${NC}" >&2
+        exit 1
+    fi
+}
+
+# ============================================================
+# SCORE
+# ============================================================
+cmd_score() {
+    "$FOUNDER_DIR/bin/score.sh" "${@:-.}"
+}
+
+# ============================================================
+# TASTE
+# ============================================================
+cmd_taste() {
+    require_dep "node" "founder taste"
+    local args=("$@")
+    if [[ ${#args[@]} -eq 0 ]]; then
+        args=(".")
+    fi
+    local taste_script=""
+    for _ts in "$FOUNDER_DIR"/lens/*/eval/taste.mjs; do
+        [[ -f "$_ts" ]] && taste_script="$_ts" && break
+    done
+    [[ -z "$taste_script" ]] && taste_script="$FOUNDER_DIR/bin/taste.mjs"
+    if [[ ! -f "$taste_script" ]]; then
+        echo "taste.mjs not found — product lens not installed" >&2
+        exit 1
+    fi
+    node "$taste_script" "${args[@]}"
+}
+
+# ============================================================
+# STATUS
+# ============================================================
+cmd_status() {
+    echo ""
+    echo -e "  ${CYAN}◆${NC} ${BOLD}founder-os${NC} ${DIM}v${VERSION}${NC}"
+    echo ""
+
+    # Claude CLI check
+    if command -v claude &>/dev/null; then
+        echo -e "  ${GREEN}✓${NC} Claude CLI"
+    else
+        echo -e "  ${RED}✗${NC} Claude CLI not found"
+    fi
+
+    # Mind files
+    local mind_count=0
+    for f in "$FOUNDER_DIR"/mind/*.md; do
+        [[ -f "$f" ]] && ((mind_count++))
+    done
+    echo -e "  ${GREEN}✓${NC} Mind: ${mind_count} files loaded"
+
+    # Measurement stack
+    local stack_ok=true
+    # Check measurement stack — taste.mjs searched across lenses
+    local _taste_found=false
+    for _ts in "$FOUNDER_DIR"/lens/*/eval/taste.mjs; do
+        [[ -f "$_ts" ]] && _taste_found=true && break
+    done
+    for tool in "$FOUNDER_DIR/bin/score.sh" "$FOUNDER_DIR/bin/eval.sh"; do
+        [[ ! -f "$tool" ]] && stack_ok=false
+    done
+    [[ "$_taste_found" == "false" ]] && stack_ok=false
+
+    # Installed lenses
+    local _lens_names=()
+    for _lyml in "$FOUNDER_DIR"/lens/*/lens.yml; do
+        [[ -f "$_lyml" ]] || continue
+        local _lname
+        _lname=$(grep '^name:' "$_lyml" 2>/dev/null | head -1 | sed 's/^name:[[:space:]]*//')
+        [[ -n "$_lname" ]] && _lens_names+=("$_lname")
+    done
+    if [[ ${#_lens_names[@]} -gt 0 ]]; then
+        echo -e "  ${GREEN}✓${NC} Lenses: ${_lens_names[*]}"
+    fi
+
+    if $stack_ok; then
+        echo -e "  ${GREEN}✓${NC} Measurement: score, taste, eval"
+    else
+        echo -e "  ${RED}✗${NC} Measurement stack incomplete"
+    fi
+
+    # Last score
+    if [[ -f ".claude/cache/score-cache.json" ]] && command -v jq &>/dev/null; then
+        local score warnings mode a_count a_pass health_min
+        score=$(jq -r '.score // "?"' .claude/cache/score-cache.json 2>/dev/null)
+        mode=$(jq -r '.scoring_mode // "empty"' .claude/cache/score-cache.json 2>/dev/null)
+        a_count=$(jq -r '.assertion_count // 0' .claude/cache/score-cache.json 2>/dev/null)
+        a_pass=$(jq -r '.assertion_pass_count // 0' .claude/cache/score-cache.json 2>/dev/null)
+        health_min=$(jq -r '.health_min // "?"' .claude/cache/score-cache.json 2>/dev/null)
+        warnings=$(jq -r '.integrity_warnings // [] | join(", ")' .claude/cache/score-cache.json 2>/dev/null)
+        echo ""
+        if [[ "$mode" == "assertions" ]]; then
+            echo -e "  ${DIM}score${NC}    ${BOLD}${score}/100${NC}  ${DIM}${a_pass}/${a_count} assertions · health ${health_min}${NC}"
+        elif [[ "$mode" == "onboarding" ]]; then
+            echo -e "  ${DIM}score${NC}    ${BOLD}${score}/50${NC}   ${DIM}onboarding · health ${health_min}${NC}"
+        else
+            echo -e "  ${DIM}score${NC}    ${BOLD}${score}/100${NC}  ${DIM}no value hypothesis · health ${health_min}${NC}"
+        fi
+        [[ -n "$warnings" ]] && echo -e "           ${YELLOW}⚠ ${warnings}${NC}"
+    fi
+
+    # Active plan (plan.yml)
+    if [[ -f ".claude/plans/plan.yml" ]]; then
+        local task_count=0 next_task=""
+        task_count=$(grep -cE '^\s+-\s' .claude/plans/plan.yml 2>/dev/null || echo 0)
+        next_task=$(grep -A1 'tasks:' .claude/plans/plan.yml 2>/dev/null | tail -1 | sed 's/^\s*- *//' | head -c 60 || echo "")
+        if [[ -n "$next_task" ]]; then
+            echo -e "  ${DIM}plan${NC}     ${task_count} tasks ${DIM}· ▸ ${next_task}${NC}"
+        fi
+    fi
+
+    # Next action suggestion
+    if [[ -f ".claude/cache/score-cache.json" ]] && command -v jq &>/dev/null; then
+        local _warnings
+        _warnings=$(jq -r '.integrity_warnings // [] | length' .claude/cache/score-cache.json 2>/dev/null)
+        if [[ "$_warnings" -gt 0 ]]; then
+            echo -e "  ${GREEN}▸${NC} ${DIM}/plan to address warnings${NC}"
+        else
+            echo -e "  ${GREEN}▸${NC} ${DIM}/eval for deeper feature analysis${NC}"
+        fi
+    else
+        echo -e "  ${GREEN}▸${NC} ${DIM}/plan to find the bottleneck${NC}"
+    fi
+    echo ""
+}
+
+# ============================================================
+# CONFIG
+# ============================================================
+cmd_config() {
+    echo ""
+    echo -e "  ${CYAN}◆${NC} ${BOLD}founder config${NC}"
+    echo -e "  ${DIM}$FOUNDER_DIR/config/founder.yml${NC}"
+    echo ""
+
+    if [[ ! -f "$FOUNDER_DIR/config/founder.yml" ]]; then
+        echo -e "  ${RED}✗${NC} founder.yml not found"
+        return 1
+    fi
+
+    echo -e "  ${BOLD}Scoring${NC}"
+    printf "    cache         %ss\n" "$(cfg scoring.cache_ttl 300)"
+    printf "    build gate    %s\n" "$(cfg scoring.build.gate_threshold 70)"
+    printf "    health gate   %s\n" "$(cfg scoring.health_gate_threshold 20)"
+    printf "    health warn   %s\n" "$(cfg scoring.health_warn_threshold 40)"
+    printf "    onboard cap   %s\n" "$(cfg scoring.onboarding_cap 50)"
+    echo ""
+    echo -e "  ${BOLD}Taste${NC}"
+    printf "    max routes    %s\n" "$(cfg taste.max_routes 8)"
+    printf "    screenshots   %s\n" "$(cfg taste.max_screenshots 24)"
+    printf "    cache         %ss\n" "$(cfg taste.cache_ttl 7200)"
+    echo ""
+    echo -e "  ${BOLD}Build${NC}"
+    printf "    revert on reg %s\n" "$(cfg build.revert_on_regression true)"
+    printf "    simplicity    %s\n" "$(cfg build.simplicity_bias true)"
+    echo ""
+    echo -e "  ${BOLD}Integrity${NC}"
+    printf "    max delta     %s pts/commit\n" "$(cfg integrity.max_single_commit_delta 15)"
+    printf "    plateau       %s tasks\n" "$(cfg integrity.plateau_tasks 3)"
+    echo ""
+}
+
+# ============================================================
+# DATA
+# ============================================================
+cmd_data() {
+    bash "$FOUNDER_DIR/bin/data.sh" "${@:-.}"
+}
+
+# ============================================================
+# GO (autonomous build loop via Claude Code)
+# ============================================================
+cmd_go() {
+    require_dep "claude" "founder go (autonomous build loop)"
+    echo ""
+    echo -e "  ${CYAN}◆${NC} ${BOLD}founder go${NC}"
+    echo -e "  ${DIM}Starting autonomous build loop...${NC}"
+    echo ""
+    claude "/go $*"
+}
+
+# ============================================================
+# BENCH (calibration check — run score against fixture repos)
+# ============================================================
+cmd_bench() {
+    bash "$FOUNDER_DIR/bin/bench.sh" "$@"
+}
+
+# ============================================================
+# FEATURE
+# ============================================================
+cmd_feature() {
+    bash "$FOUNDER_DIR/bin/feature.sh" "$@"
+}
+
+# ============================================================
+# SELF
+# ============================================================
+cmd_self() {
+    bash "$FOUNDER_DIR/bin/self.sh" "$@"
+}
+
+# ============================================================
+# PLAN
+# ============================================================
+cmd_plan() {
+    bash "$FOUNDER_DIR/bin/plan.sh" "$@"
+}
+
+# ============================================================
+# Backlog
+# ============================================================
+cmd_todo() {
+    bash "$FOUNDER_DIR/bin/todo.sh" "$@"
+}
+
+# ============================================================
+# TEST
+# ============================================================
+cmd_test() {
+    local total=0 passed=0 failed=0
+    local test_dir="$FOUNDER_DIR/tests"
+
+    if [[ ! -d "$test_dir" ]] || ! ls "$test_dir"/*.test.sh >/dev/null 2>&1; then
+        echo -e "  ${YELLOW}⚠${NC} No test files found in tests/"
+        return 1
+    fi
+
+    for test_file in "$test_dir"/*.test.sh; do
+        [[ ! -f "$test_file" ]] && continue
+        local name
+        name=$(basename "$test_file" .test.sh)
+        echo -e "  ${BOLD}$name${NC}"
+        if bash "$test_file" 2>&1 | sed 's/^/    /'; then
+            passed=$((passed + 1))
+        else
+            failed=$((failed + 1))
+        fi
+        total=$((total + 1))
+        echo ""
+    done
+
+    echo -e "  ${BOLD}$total suites${NC}: ${GREEN}$passed passed${NC}"
+    [[ "$failed" -gt 0 ]] && echo -e "  ${RED}$failed failed${NC}"
+    [[ "$failed" -gt 0 ]] && return 1 || return 0
+}
+
+# ============================================================
+# UPDATE
+# ============================================================
+cmd_update() {
+    local install_path_file="$HOME/.config/founder-os/install-path"
+    local install_path=""
+
+    if [[ -f "$install_path_file" ]]; then
+        install_path="$(cat "$install_path_file")"
+    else
+        # Fall back to this script's own repo
+        install_path="$FOUNDER_DIR"
+    fi
+
+    if [[ ! -d "$install_path/.git" ]]; then
+        echo -e "  ${RED}✗${NC} $install_path is not a git repo — can't update"
+        exit 1
+    fi
+
+    echo ""
+    echo -e "  ${CYAN}◆${NC} ${BOLD}founder update${NC}"
+    echo -e "  ${DIM}$install_path${NC}"
+    echo ""
+
+    # Check for dirty tree
+    if ! git -C "$install_path" diff --quiet 2>/dev/null || \
+       ! git -C "$install_path" diff --cached --quiet 2>/dev/null; then
+        echo -e "  ${YELLOW}⚠${NC} Working tree has uncommitted changes."
+        echo -e "  ${DIM}Commit or stash them first, then re-run founder update.${NC}"
+        echo ""
+        git -C "$install_path" status --short
+        exit 1
+    fi
+
+    local before
+    before="$(git -C "$install_path" rev-parse HEAD)"
+
+    if ! git -C "$install_path" pull --ff-only 2>&1; then
+        echo ""
+        echo -e "  ${RED}✗${NC} Pull failed — likely a diverged branch."
+        echo -e "  ${DIM}Try: cd $install_path && git pull --rebase${NC}"
+        exit 1
+    fi
+
+    local after
+    after="$(git -C "$install_path" rev-parse HEAD)"
+
+    echo ""
+    if [[ "$before" == "$after" ]]; then
+        echo -e "  ${GREEN}✓${NC} Already up to date."
+    else
+        echo -e "  ${BOLD}New commits:${NC}"
+        git -C "$install_path" log --oneline "${before}..${after}" | sed 's/^/    /'
+        echo ""
+        echo -e "  ${DIM}Refreshing symlinks...${NC}"
+        bash "$install_path/install.sh"
+    fi
+    echo ""
+}
+
+# ============================================================
+# DOCTOR
+# ============================================================
+cmd_doctor() {
+    echo ""
+    echo -e "  ${CYAN}◆${NC} ${BOLD}founder doctor${NC}"
+    echo ""
+
+    local pass=0 fail=0
+
+    # Helper
+    _pass() { echo -e "  ${GREEN}✓${NC} $1"; pass=$((pass + 1)); }
+    _fail() { echo -e "  ${RED}✗${NC} $1"; fail=$((fail + 1)); }
+    _warn() { echo -e "  ${YELLOW}⚠${NC} $1"; }
+
+    # 1. founder CLI on PATH
+    if command -v founder &>/dev/null; then
+        _pass "founder CLI on PATH"
+    else
+        _fail "founder CLI not on PATH"
+    fi
+
+    # 2. Install path stored
+    local install_path_file="$HOME/.config/founder-os/install-path"
+    if [[ -f "$install_path_file" ]]; then
+        _pass "install path recorded ($(cat "$install_path_file"))"
+    else
+        _fail "install path not recorded ($install_path_file missing)"
+    fi
+
+    # 3. Mind files in ~/.claude/rules/
+    local mind_ok=true
+    for mind_file in identity.md thinking.md standards.md; do
+        if [[ -L "$HOME/.claude/rules/$mind_file" ]]; then
+            if [[ -e "$HOME/.claude/rules/$mind_file" ]]; then
+                : # valid symlink
+            else
+                _fail "broken symlink: ~/.claude/rules/$mind_file"
+                mind_ok=false
+            fi
+        else
+            _fail "missing: ~/.claude/rules/$mind_file"
+            mind_ok=false
+        fi
+    done
+    $mind_ok && _pass "mind files in ~/.claude/rules/"
+
+    # 4. Skills in skills/*/SKILL.md
+    local skill_count=0
+    for f in "$FOUNDER_DIR"/skills/*/SKILL.md; do
+        [[ ! -f "$f" ]] && continue
+        skill_count=$((skill_count + 1))
+    done
+    if [[ $skill_count -ge 10 ]]; then
+        _pass "skills available ($skill_count found)"
+    else
+        _fail "only $skill_count skills found (expected 10+)"
+    fi
+
+    # 5. All symlinks valid (agents, bin tools)
+    local broken_links=0
+    for dir in "$HOME/.claude/agents" "$HOME/bin"; do
+        [[ ! -d "$dir" ]] && continue
+        for f in "$dir"/*; do
+            [[ ! -L "$f" ]] && continue
+            if [[ ! -e "$f" ]]; then
+                _fail "broken symlink: $f"
+                broken_links=$((broken_links + 1))
+            fi
+        done
+    done
+    [[ $broken_links -eq 0 ]] && _pass "all symlinks valid"
+
+    # 6. jq (warn — needed for scoring, eval, init, session boot)
+    if command -v jq &>/dev/null; then
+        _pass "jq available"
+    else
+        _warn "jq not found — needed for scoring, eval, init, session boot card"
+        echo -e "       ${DIM}Install: brew install jq  (macOS) or apt install jq  (Linux)${NC}"
+    fi
+
+    # 7. Node 18+ (warn only — needed for taste)
+    if command -v node &>/dev/null; then
+        local node_major
+        node_major="$(node -v 2>/dev/null | sed 's/^v//' | cut -d. -f1)"
+        if [[ "$node_major" -ge 18 ]] 2>/dev/null; then
+            _pass "Node $node_major (18+ for taste)"
+        else
+            _warn "Node $node_major found — 18+ recommended for founder taste"
+        fi
+    else
+        _warn "Node not found — needed for founder taste (visual eval)"
+    fi
+
+    # Summary
+    echo ""
+    if [[ $fail -eq 0 ]]; then
+        echo -e "  ${GREEN}✓${NC} ${BOLD}All checks passed${NC} ($pass/$pass)"
+    else
+        echo -e "  ${RED}✗${NC} ${BOLD}$fail issue(s)${NC} — $pass passed, $fail failed"
+    fi
+    echo ""
+
+    [[ $fail -gt 0 ]] && return 1 || return 0
+}
+
+# ============================================================
+# EVAL
+# ============================================================
+cmd_eval() {
+    require_dep "jq" "founder eval"
+    local eval_script="$FOUNDER_DIR/bin/eval.sh"
+    if [[ ! -f "$eval_script" ]]; then
+        echo -e "${RED}eval.sh not found at $eval_script${NC}"
+        exit 1
+    fi
+    bash "$eval_script" "${@:-.}"
+}
+
+# ============================================================
+# HELP
+# ============================================================
+cmd_help() {
+    echo ""
+    echo -e "  ${CYAN}◆${NC} ${BOLD}founder${NC} ${DIM}v${VERSION}${NC}"
+    echo -e "  ${DIM}a cofounder in your terminal${NC}"
+    echo ""
+    echo -e "  ${BOLD}Usage${NC}  founder <command> [args...]"
+    echo ""
+    echo -e "  ${GREEN}▸ Start here${NC}"
+    echo -e "    founder init          ${DIM}Set up founder-os in your project${NC}"
+    echo -e "    founder score .       ${DIM}See where your product stands${NC}"
+    echo -e "    ${DIM}/plan               Open in Claude Code → find the bottleneck${NC}"
+    echo ""
+    echo -e "  ${BOLD}Measure${NC}"
+    echo -e "    eval [dir]      ${DIM}Run assertions + score features 0-100${NC}"
+    echo -e "    score [dir]     ${DIM}Score for scripts/CI (--quiet for number)${NC}"
+    echo -e "    taste [dir]     ${DIM}Visual eval (Claude Vision, expensive)${NC}"
+    echo ""
+    echo -e "  ${BOLD}Features${NC}"
+    echo -e "    feature         ${DIM}List all features with pass rates${NC}"
+    echo -e "    feature <name>  ${DIM}View one feature's assertions${NC}"
+    echo -e "    feature detect  ${DIM}Auto-detect features from codebase${NC}"
+    echo ""
+    echo -e "  ${BOLD}Build${NC}"
+    echo -e "    plan            ${DIM}View/manage build plan${NC}"
+    echo -e "    todo            ${DIM}Backlog (show|add|done|edit|tag|promote|active|feature|all)${NC}"
+    echo -e "    test            ${DIM}Run test suites${NC}"
+    echo ""
+    echo -e "  ${BOLD}System${NC}"
+    echo -e "    trail           ${DIM}Evidence trail — session arc over time${NC}"
+    echo -e "    init            ${DIM}Bootstrap founder-os into any repo${NC}"
+    echo -e "    update          ${DIM}Pull latest + refresh symlinks${NC}"
+    echo -e "    doctor          ${DIM}Verify install health (symlinks, deps)${NC}"
+    echo -e "    status          ${DIM}Health overview${NC}"
+    echo -e "    config          ${DIM}Show configuration${NC}"
+    echo ""
+    echo -e "  ${BOLD}In Claude Code (21 skills, 14 agents)${NC}"
+    echo ""
+    echo -e "    ${BOLD}Build${NC}"
+    echo -e "    ${DIM}/plan             Find the bottleneck, propose what to work on${NC}"
+    echo -e "    ${DIM}/go               Build autonomously with prediction grading${NC}"
+    echo -e "    ${DIM}/eval             Score every feature 0-100 (delivery/craft/viability)${NC}"
+    echo -e "    ${DIM}/taste <url>      Visual product intelligence via Playwright${NC}"
+    echo ""
+    echo -e "    ${BOLD}Think${NC}"
+    echo -e "    ${DIM}/product          Pressure-test assumptions, name the person${NC}"
+    echo -e "    ${DIM}/strategy         Market intelligence, honest diagnosis${NC}"
+    echo -e "    ${DIM}/discover         What systems should this product have?${NC}"
+    echo -e "    ${DIM}/ideate           Evidence-weighted ideas + kill list${NC}"
+    echo -e "    ${DIM}/research         Gather evidence before deciding${NC}"
+    echo ""
+    echo -e "    ${BOLD}Business${NC}  ${DIM}(new in v9)${NC}"
+    echo -e "    ${DIM}/money            Pricing, unit economics, channels, runway${NC}"
+    echo -e "    ${DIM}/copy             Landing pages, pitch, outreach, release notes${NC}"
+    echo ""
+    echo -e "    ${BOLD}Manage${NC}"
+    echo -e "    ${DIM}/feature          Define and track features${NC}"
+    echo -e "    ${DIM}/todo             Living backlog with decay and promotion${NC}"
+    echo -e "    ${DIM}/assert           Plant testable beliefs${NC}"
+    echo -e "    ${DIM}/retro            Grade predictions, update knowledge model${NC}"
+    echo -e "    ${DIM}/roadmap          Version theses and external narrative${NC}"
+    echo -e "    ${DIM}/ship             Commit, push, deploy, GitHub releases${NC}"
+    echo -e "    ${DIM}/founder            Dashboard + system status${NC}"
+    echo ""
+    echo -e "  ${BOLD}What's new in v9${NC}"
+    echo -e "    ${DIM}5 new agents: customer, founder-coach, consolidator, gtm, copywriter${NC}"
+    echo -e "    ${DIM}2 new skills: /money (pricing + runway) and /copy (landing pages + pitch)${NC}"
+    echo -e "    ${DIM}8 startup failure mode detections loaded every session${NC}"
+    echo -e "    ${DIM}Soft gates: /go warns on no customer signal, /ship checks launch readiness${NC}"
+    echo -e "    ${DIM}/product now spawns customer + founder-coach agents${NC}"
+    echo -e "    ${DIM}Agent count: 9 → 14  ·  Skill count: 19 → 21${NC}"
+    echo ""
+}
+
+# ============================================================
+# MAIN
+# ============================================================
+case "${1:-help}" in
+    score)      shift; cmd_score "$@" ;;
+    taste)      shift; cmd_taste "$@" ;;
+    eval)       shift; cmd_eval "$@" ;;
+    bench)      shift; cmd_bench "$@" ;;
+    data)       shift; cmd_data "$@" ;;
+    plan)       shift; cmd_plan "$@" ;;
+    todo)       shift; cmd_todo "$@" ;;
+    go)         shift; cmd_go "$@" ;;
+    feature|feat) shift; cmd_feature "$@" ;;
+    self)       shift; cmd_self "$@" ;;
+    test)       shift; cmd_test "$@" ;;
+    status)     cmd_status ;;
+    config)     cmd_config ;;
+    skill)      shift; bash "$FOUNDER_DIR/bin/skill.sh" "$@" ;;
+    serve)      shift; require_dep "node" "founder serve"; node "$FOUNDER_DIR/bin/serve.mjs" "$@" ;;
+    init)       shift; bash "$FOUNDER_DIR/bin/init.sh" "$@" ;;
+    trail)      shift; bash "$FOUNDER_DIR/bin/trail.sh" "$@" ;;
+    tier)       shift; bash "$FOUNDER_DIR/bin/maturity-tier.sh" "${@:-.}" ;;
+    update)     cmd_update ;;
+    doctor)     cmd_doctor ;;
+    install)    shift; bash "$FOUNDER_DIR/install.sh" "$@" ;;
+    uninstall)  shift; bash "$FOUNDER_DIR/uninstall.sh" "$@" ;;
+    help|--help|-h) cmd_help ;;
+    version|--version|-v) echo "founder v${VERSION}" ;;
+    *)
+        echo -e "${RED}Unknown command: $1${NC}"
+        echo "Run 'founder help' for available commands."
+        exit 1
+        ;;
+esac
