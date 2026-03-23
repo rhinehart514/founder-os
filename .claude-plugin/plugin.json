@@ -15,7 +15,6 @@
     "gsd", "execution-engine", "wave-execution"
   ],
   "skills": "./skills/",
-  "hooks": "./hooks/hooks.json",
   "agents": [
     "./agents/builder.md",
     "./agents/consolidator.md",
