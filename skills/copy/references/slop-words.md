@@ -57,6 +57,18 @@ Every word on this list is banned from copy output. Each entry explains WHY it's
 | improve your workflow | What workflow? What improves? Generic to the point of meaningless. |
 | boost efficiency | By how much? Compared to what? Vague performance claim. |
 
+## 2026-specific dead language
+
+| Phrase | Why it's banned |
+|--------|----------------|
+| AI-powered | Table stakes in 2026. Everything uses AI. Saying it is like saying "internet-enabled" in 2015. |
+| AI co-pilot | 2023 framing. The market moved to autopilots and colleagues. Copilot = you still do the work. |
+| powered by [model name] | Models are commoditizing. Citing GPT-4 or Claude as a differentiator is like citing your database. |
+| 10x productivity | Overused claim with no unit economics backing. Everyone claims 10x. Nobody proves it. |
+| we use AI to... | Assumed. Leading with "we use AI" in 2026 is like leading with "we use computers" in 2005. |
+| disruptive / disrupting | Only applies retrospectively. In 2026 every AI startup claims disruption. Show displaced work instead. |
+| agentic | Only ~130 of thousands of "AI agent" vendors are genuinely agentic. The word is burned. Show what the agent does, don't label it. |
+
 ## The principle
 
 Every banned word shares the same flaw: it replaces a specific claim with a vague one. The fix is always the same: state the specific thing. What exactly changes? By how much? Compared to what?

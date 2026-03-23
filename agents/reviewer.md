@@ -53,7 +53,7 @@ The code should read like a human built it, not like a prompt produced it. Flag 
 14. **Name anxiety** — 4+ word CamelCase names? `handle*` on everything? Redundant prefixes matching the filename? → "Shortest name that's unambiguous in context."
 15. **Premature completeness** — Handling cases that don't exist? Config options nobody uses? Exhaustive switch on 3 possible values? → "Handle what exists. Add the rest when it's real."
 
-For detailed detection rules: `skills/humanize/references/ai-smells.md`
+Detection rules are inline above — check each pattern against the code under review.
 
 ## Severity levels
 

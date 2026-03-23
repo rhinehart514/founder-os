@@ -80,7 +80,7 @@ hooks: {}                                 # lifecycle hooks
 
 - **`permissionMode: bypassPermissions`** — fully autonomous agents that don't ask for permission. Dangerous but powerful for trusted loops.
 
-**Now in use:** `memory: user` (all 14 agents), `skills` preloading (builder, explorer, evaluator, reviewer, refactorer, grader), `isolation: worktree` (builder, refactorer), `maxTurns` (all agents), `background: true` (explorer, market-analyst, customer, gtm).
+**Now in use:** `memory: user` (all 14 agents), `isolation: worktree` (builder, refactorer via /go), `maxTurns` (all agents). Background execution controlled per-call by spawning skill, not in agent definitions. All agents have `skills: []` (empty arrays).
 
 ### Agent Locations (priority)
 
@@ -139,7 +139,7 @@ Shell commands, HTTP endpoints, LLM prompts, or agents that execute at lifecycle
 | `ElicitationResult` | Yes | User responds to MCP elicitation | no |
 | `SessionEnd` | No | Session terminates | YES |
 
-**We use 11 of 22 events.** 11 untapped.
+**We use 11 of 22 events.** 14 hooks registered, 15 scripts. 11 events untapped.
 
 ### Four Hook Handler Types
 
@@ -152,7 +152,7 @@ Shell commands, HTTP endpoints, LLM prompts, or agents that execute at lifecycle
 
 - **`TeammateIdle`** — in agent teams, can redirect idle agents to new work or send feedback.
 
-**Now in use:** `PreToolUse`, `PostToolUse`, `UserPromptSubmit`, `TaskCompleted`, `PostCompact`, `SessionEnd`.
+**Now in use:** `SessionStart`, `PreCompact`, `PostCompact`, `SessionEnd`, `TaskCompleted`, `SubagentStart`, `SubagentStop`, `UserPromptSubmit`, `PostToolUse` (3 matchers), `PreToolUse`, `Stop`.
 
 ### Environment Variables
 
@@ -244,7 +244,7 @@ Skills MUST choose one architecture. Having both `context: fork` AND `Agent` in 
 - ~~`/batch` pattern for /go~~ — builder + refactorer agents use worktree isolation.
 - ~~Parallel evaluator spawning~~ — /eval spawns evaluator per feature in parallel.
 - ~~Named agent references~~ — all skills use `founder-os:<agent>`, never `"general-purpose"`.
-- ~~`skills` preloading on agents~~ — builder, explorer, evaluator, reviewer, refactorer, grader have skills injected.
+- ~~`skills` preloading on agents~~ — NOT IMPLEMENTED. All agents have `skills: []`. Skills preloading is available but unused.
 - ~~`maxTurns` on agents~~ — all 14 agents have safety valves (10-30 turns).
 - ~~/calibrate merged into /taste~~ — taste owns visual intelligence + calibration.
 
@@ -262,7 +262,7 @@ Skills MUST choose one architecture. Having both `context: fork` AND `Agent` in 
 - ~~`/plan` startup pattern check~~ — runs failure mode detection before bottleneck diagnosis.
 - ~~`/ideate` customer signal~~ — spawns customer agent for signal-weighted ideation.
 - ~~2 new skills~~ — `/money` (pricing, runway, unit economics, channels) and `/copy` (landing pages, pitch, outreach, release notes). Both are rich folder skills with references + templates.
-- Agent count: 9 → 14. Skill count: 19 → 29 (including utility skills like founder-mind, product-lens, quality-check, session-summary).
+- Agent count: 9 → 14. Skill count: 25 (after audit killed humanize, build, portfolio; calibrate vestigial).
 
 ### Priority 1: Highest Leverage (would change behavior)
 

@@ -14,7 +14,7 @@ value:
   user: "Solo technical founder with multiple ideas who lives in Claude Code"
   signals:
     - name: idea_to_score
-      description: "Full lifecycle works: /discover → /decide → /build → /score produces a number"
+      description: "Full lifecycle works: /discover → /decide → /go → /score produces a number"
       target: "Complete loop in one session"
       measurable: true
     - name: portfolio_compounds
@@ -83,8 +83,8 @@ features:
   portfolio:
     delivers: "cross-venture state — track ideas, stages, patterns, accuracy across all ventures"
     for: "serial entrepreneur with multiple ideas"
-    skills: ["/portfolio", "/decide"]
-    code: ["skills/portfolio/SKILL.md", "skills/decide/SKILL.md", "config/portfolio.yml"]
+    skills: ["/founder", "/decide", "/discover"]
+    code: ["skills/founder/SKILL.md", "skills/decide/SKILL.md", "skills/discover/SKILL.md", "config/portfolio.yml"]
     status: active
     weight: 4
     depends_on: [ideation]

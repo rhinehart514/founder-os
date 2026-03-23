@@ -1,6 +1,6 @@
 ---
 name: plan
-description: "Use when starting a work session, finding the bottleneck, or capturing a task. Pulls live market signals before planning — a proactive cofounder, not a task manager."
+description: "Use when starting a work session, finding the bottleneck, or capturing a task. Pulls live market signals before planning — a proactive cofounder, not a task manager. Creates structured, wave-grouped plans for parallel execution."
 argument-hint: "[feature...|brainstorm|critique|task text]"
 allowed-tools: Read, Bash, Grep, Glob, Agent, EnterPlanMode, ExitPlanMode, AskUserQuestion, TaskCreate, TaskList, WebSearch
 ---
@@ -12,7 +12,7 @@ allowed-tools: Read, Bash, Grep, Glob, Agent, EnterPlanMode, ExitPlanMode, AskUs
 
 # /plan
 
-A cofounder planning the next move. Not a task manager — a strategist who checks the outside world before looking at code.
+A cofounder planning the next move. Not a task manager — a strategist who checks the outside world before looking at code. Creates structured plans with dependency waves for parallel execution.
 
 ## Step 0: World Check (before reading any project state)
 
@@ -32,8 +32,10 @@ If nothing shifted: proceed to bottleneck diagnosis. Don't mention the check.
 - `references/tier-routing.md` — what to recommend at each maturity tier
 - `references/prioritization-guide.md` — how to rank moves (bottleneck-first, information value, stage-appropriate)
 - `references/startup-patterns-quick.md` — condensed failure mode reference
+- `references/structured-planning.md` — XML task format and wave grouping model
 - `templates/plan-output.md` — output formatting reference
 - `templates/plan-template.yml` — valid plan.yml structure
+- `templates/plan-template.xml` — XML structured plan template for executor agents
 - `templates/move-brief.md` — move structure and quality checks
 - `gotchas.md` — real failure modes. **Read before generating moves.**
 
@@ -56,7 +58,7 @@ Parse `$ARGUMENTS`:
 
 Call EnterPlanMode. All reads, no writes until plan is approved.
 
-### Read state
+### Step 1: Read state
 
 Read these in parallel — form your own picture:
 
@@ -68,7 +70,7 @@ Read these in parallel — form your own picture:
 
 **First-run**: If no features in founder.yml or no eval-cache: skip tier routing. Show 3 steps: (1) `/score` for baseline, (2) define features in founder.yml, (3) `/plan` again. One next command.
 
-### Diagnose the bottleneck
+### Step 2: Diagnose the bottleneck
 
 This is YOUR reasoning, not a script's. Think through:
 
@@ -81,25 +83,132 @@ This is YOUR reasoning, not a script's. Think through:
 
 Verify with `bash scripts/bottleneck-report.sh` — if it disagrees, reconcile explicitly.
 
-### Tier-aware recommendations
+### Step 3: Tier-aware recommendations
 
 Read `references/tier-routing.md` for tier-appropriate recommendations. The tier determines whether to suggest build tasks, research, ideation, or strategy.
 
-### Surface opportunities
+### Step 4: Surface opportunities
 
 Run `bash scripts/opportunity-scan.sh` — unknowns, wrong predictions, market signals, stale strategy, unused capabilities. Present top 2-3 alongside your bottleneck diagnosis.
 
-### Generate moves (1-2)
+### Step 5: Context gathering (when implementation is uncertain)
 
-Each move uses the structure in `templates/move-brief.md`. Moves must target the weakest sub-score, connect to a roadmap evidence item, include a falsifiable prediction, and cite evidence or declare exploration. Read `references/prioritization-guide.md` for tiebreaking.
+If the bottleneck involves uncertain implementation — gray areas in layout, behavior, edge cases, error handling — gather context before planning.
 
-### Align and write
+**When to gather context:**
+- The move targets a feature with no prior implementation decisions documented
+- Multiple valid approaches exist and the founder's preference matters
+- The last plan for this feature failed (score flat or dropped) — new angle needed
 
-Present diagnosis + moves via AskUserQuestion. Include "Looks right — proceed" as first option. Then: TaskCreate for each move, write `.claude/plans/plan.yml` (use `templates/plan-template.yml`), promote matching todos, ExitPlanMode.
+**How to gather context:**
+Ask targeted questions about the founder's vision for the bottleneck feature. Use AskUserQuestion with concrete options, not open-ended interviews:
+
+- "How should [feature] handle [edge case]?" with 2-3 specific options
+- "When [scenario], should the product [A] or [B]?"
+- Surface gray areas: what decisions would change the outcome?
+
+**What NOT to do:**
+- Don't run a full discuss-phase interview. This is 1-3 targeted questions, not 15.
+- Don't ask about technical implementation — that's planning's job.
+- Don't ask about scope — the bottleneck already scoped the work.
+
+Capture decisions as context notes in the plan. These feed into the structured tasks so executors know the founder's intent.
+
+### Step 6: Research (when approach is unclear)
+
+If the bottleneck is in Unknown Territory (experiment-learnings has zero data on this area), spawn research before planning:
+
+- **founder-os:explorer** — for market/competitor research, technical approaches (~30s, background)
+- Research synthesis feeds directly into task generation
+
+**When to skip research:**
+- The bottleneck is in Known Territory with clear patterns
+- The last plan's approach was right but execution was incomplete
+- The founder explicitly wants to build, not research
+
+### Step 7: Generate structured plans (1-2 moves, XML tasks)
+
+Each move uses the structure in `templates/move-brief.md` for the strategic layer. Moves must target the weakest sub-score, connect to a roadmap evidence item, include a falsifiable prediction, and cite evidence or declare exploration. Read `references/prioritization-guide.md` for tiebreaking.
+
+**Then decompose each move into structured XML tasks.** Read `references/structured-planning.md` for the full format. Each move becomes a plan with:
+
+```xml
+<plan name="[move-title]" feature="[feature]" wave="1">
+  <task type="implementation">
+    <name>Descriptive task name</name>
+    <files>specific/file/paths.ext</files>
+    <read_first>files executor must read before touching anything</read_first>
+    <action>
+      Precise instructions. What to change. Why.
+      Include CONCRETE values — exact identifiers, parameters, file paths.
+      Reference context decisions from Step 5 when relevant.
+      The executor should complete the task from this text alone.
+    </action>
+    <verify>Command or check to prove it worked</verify>
+    <acceptance_criteria>
+      - Grep-verifiable: "file.ext contains 'exact string'"
+      - Measurable: "command exits 0" or "output includes X"
+    </acceptance_criteria>
+    <done>Observable outcome when complete</done>
+  </task>
+</plan>
+```
+
+**Group tasks into dependency waves:**
+- **Wave 1**: Foundation tasks — no dependencies, can run in parallel
+- **Wave 2**: Tasks that depend on Wave 1 outputs
+- **Wave 3**: Integration, verification, or tasks needing Wave 2
+
+**Task quality rules (from GSD deep-work methodology):**
+- Every task MUST have `<read_first>` — at minimum the file being modified
+- Every task MUST have `<acceptance_criteria>` with grep-verifiable conditions
+- Every `<action>` MUST contain concrete values — never "align X with Y" without specifying the target state
+- 2-3 tasks per plan, not 5-10. Complex work = multiple plans, not one large plan
+
+See `templates/plan-template.xml` for the full template.
+
+### Step 8: Plan verification (optional)
+
+If the plan involves 3+ tasks or cross-feature changes, verify before presenting:
+
+**Self-check against these criteria:**
+- Plans cover the diagnosed bottleneck gap
+- Tasks are atomic and independently executable within their wave
+- Dependencies between waves are real (shared files, type exports), not reflexive
+- Verification steps are testable — no "looks correct" or "properly configured"
+- Every task's acceptance_criteria can be checked with grep, a test command, or CLI output
+- The plan connects to the roadmap evidence item
+
+If verification fails, revise the plan before presenting. Don't show a plan you wouldn't approve.
+
+### Step 9: Align and write
+
+Present diagnosis + moves + wave structure via AskUserQuestion. Include "Looks right — proceed" as first option. Then: TaskCreate for each move, write `.claude/plans/plan.yml` (use `templates/plan-template.yml`), promote matching todos, ExitPlanMode.
 
 ## Output
 
 See `templates/plan-output.md` for formatting reference. Dense, scannable, opinionated. Also see `../OUTPUT_FORMAT.md` and `../STATE_MANIFEST.md`.
+
+**Enhanced output includes wave visualization:**
+
+```
+▸ move 1 — [title]
+  feature: [name] · dimension: [delivery | craft | viability]
+  advances: [roadmap evidence item ID]
+  informed_by: [citation or "Exploring: [what]"]
+  predict: [raise METRIC from X to Y]
+  wrong_if: [falsification condition]
+
+  wave 1 (parallel):
+    task 1: [name] — [files]
+    task 2: [name] — [files]
+  wave 2 (depends on wave 1):
+    task 3: [name] — [files]
+
+  accept: [acceptance criteria]
+```
+
+Bottom: ONE command — `/go` to execute. Add `/research [feature]` only if unknowns surfaced.
 
 ## Agent usage
 
@@ -114,6 +223,9 @@ See `templates/plan-output.md` for formatting reference. Dense, scannable, opini
 - Generate 3-5 tasks when 1-2 moves cover it
 - Ignore startup pattern warnings without naming the tradeoff
 - Delegate diagnosis to a script — scripts verify, you reason
+- Write vague task actions — "update config" without specifying the exact target state
+- Skip `<read_first>` on any task — executors must see current state before modifying
+- Use subjective acceptance criteria — "looks correct" is not verifiable
 
 ## System integration
 

@@ -155,7 +155,6 @@ Skill Catalog
   System
     /onboard [--force] [--dry]                          — bootstrap any project
     /founder [help|system|compare|health|progress]      — this dashboard
-    /portfolio [idea-name|patterns|accuracy|timeline]   — portfolio view
     /feature [name|new|detect] [name]                   — manage features
     /calibrate [profile|design-system|anti-slop|market|refresh|verify|drift] — ground taste eval
     /skill [list|create|install|remove|info|health|audit|overlap] — manage skills
@@ -222,8 +221,7 @@ If coherence is aligned, skip the section (no data = no zone). Mismatches mean t
 - **/todo** wrote `todos.yml` — /founder counts active/backlog/stale
 - **/retro** graded `predictions.tsv` — /founder reports accuracy and ungraded count
 - **/eval** wrote `eval-cache.json` feature scores — /founder computes product completion and bottleneck from these
-- **/portfolio** reads `~/.founder-os/portfolio.yml` — /founder reads the same for summary
-- **/founder** writes `founder-snapshots.json` — consumed by `/founder compare` and pattern detection
+- **/founder** reads `~/.founder-os/portfolio.yml` for portfolio summary and writes `founder-snapshots.json` — consumed by `/founder compare` and pattern detection
 
 The opinion defers to /plan for bottleneck diagnosis when plan.yml is fresh. Otherwise, /founder computes its own from eval data and flags the opinion as heuristic-based.
 

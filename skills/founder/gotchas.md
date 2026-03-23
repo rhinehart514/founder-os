@@ -14,7 +14,7 @@ Built from real failure modes across sessions. Update this when /founder fails i
 - **Opinion over-scripting**: The decision tree produces mechanical advice. The tree is a starting point — override it when judgment says otherwise. A feature at eval 31 that just jumped from 20 is momentum, not "needs work."
 - **Zombie zones**: Rendering a zone with data that's weeks old looks active but is actually dead. Check modification times. A plan from 5 days ago is not "active."
 - **Bar width rounding**: Score bars use 20-char width. Scores like 3, 7, 13 round to the same bar width. Don't rely on bar visual for small differences — always show the number.
-- **Portfolio zone bloat**: With many ideas, the portfolio summary can dominate the dashboard. Cap at 5 active ideas shown. If more exist, show top 5 by recency and note "[N] more active ideas — /portfolio for full view."
+- **Portfolio zone bloat**: With many ideas, the portfolio summary can dominate the dashboard. Cap at 5 active ideas shown. If more exist, show top 5 by recency and note "[N] more active ideas."
 
 ## Snapshot failures
 - **Snapshot bloat**: founder-snapshots.json grows unbounded if you forget to trim. Keep last 20, prune older. The script doesn't auto-trim — you must enforce this.

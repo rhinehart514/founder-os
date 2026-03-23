@@ -17,6 +17,18 @@ Names the person. "Solo founders measure their product." "Engineers who ship kno
 ### Question headline
 Ask the question the user is already thinking. "Is your product actually good?" "What should you build next?"
 
+### "We [do the work]" (2026 — outcome delivery)
+The Sequoia frame applied to headlines. Position as delivering finished work, not providing a tool.
+"We evaluate your product. You get the score." "We research your market. You get the brief."
+
+### "[Receipts first]" (2026 — anti-agent-washing)
+Lead with production evidence. "$0 to $33K MRR in 4 weeks." "40+ YC companies paying before Demo Day."
+Only use when real metrics exist. Fabricating receipts is worse than no receipts.
+
+### "Not a [dead category]" (2026 — differentiation by exclusion)
+Name the saturated category you're NOT. "Not another AI writing tool." "Not a copilot — a colleague."
+Works when the reader is fatigued by a crowded space.
+
 ## CTA Patterns
 
 ### Action-outcome

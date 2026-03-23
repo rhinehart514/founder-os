@@ -144,16 +144,6 @@ beliefs:
   # PORTFOLIO — cross-venture state management
   # ════════════════════════════════════════════════════════
 
-  - id: portfolio-skill-exists
-    belief: "/portfolio skill exists for cross-venture tracking"
-    type: file_check
-    path: "skills/portfolio/SKILL.md"
-    contains: "portfolio"
-    feature: portfolio
-    quality: correctness
-    layer: infrastructure
-    severity: block
-
   - id: portfolio-template-exists
     belief: "portfolio.yml template exists with idea structure"
     type: file_check

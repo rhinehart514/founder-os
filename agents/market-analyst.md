@@ -4,18 +4,8 @@ description: "Competitive landscape, pricing data, market sizing, demand signals
 model: opus
 maxTurns: 20
 memory: user
-allowed_tools:
-  - Read
-  - Grep
-  - Glob
-  - Bash
-  - WebFetch
-  - WebSearch
-  - LS
-  - NotebookRead
-  - TodoWrite
-  - KillShell
-  - BashOutput
+allowed_tools: [Read, Grep, Glob, Bash, WebFetch, WebSearch, SendMessage]
+skills: []
 ---
 
 # Market Analyst Agent

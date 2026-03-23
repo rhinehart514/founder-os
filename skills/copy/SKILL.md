@@ -17,9 +17,10 @@ This skill is a **folder**. Read these on demand:
 - `scripts/copy-log.sh` — persistent copy history (add, list, stats). Uses `${CLAUDE_PLUGIN_DATA}`
 - `scripts/copy-diff.sh [type]` — shows copy iteration history
 - `references/voice-guide.md` — how to write in the product's voice (optional — read when voice alignment matters, Claude has good defaults)
-- `references/slop-words.md` — the banned word list with why each is banned
-- `references/positioning-frameworks.md` — category creation, competitor wedge framing
-- `references/copy-patterns.md` — headline formulas, CTA patterns
+- `references/slop-words.md` — the banned word list with why each is banned (includes 2026 dead language)
+- `references/positioning-frameworks.md` — category creation, competitor wedge, 2026 frames (sell-the-work, bounded autonomy, evidence-first)
+- `references/copy-patterns.md` — headline formulas, CTA patterns, 2026 headline patterns
+- `references/customer-language.md` — **real founder phrases** sourced from IH, HN, dev forums. Use their words, not yours. Read before writing any founder-facing copy.
 - `templates/landing-page.md` — hero + problem + solution + proof + CTA structure
 - `templates/release-announcement.md` — release announcement template (user-facing, not changelog)
 - `templates/pitch-narrative.md` — elevator/tweet/paragraph narrative
@@ -44,7 +45,7 @@ This skill is a **folder**. Read these on demand:
 
 ## How it works
 
-**Read state first** (parallel): `config/founder.yml` (user, features), `.claude/cache/market-context.json`, `.claude/cache/customer-intel.json`, `.claude/cache/narrative.yml`, `.claude/design-system.md`. Then read `gotchas.md` and `references/slop-words.md`. For landing/pitch: also `references/positioning-frameworks.md` and `references/voice-guide.md`.
+**Read state first** (parallel): `config/founder.yml` (user, features), `.claude/cache/market-context.json`, `.claude/cache/customer-intel.json`, `.claude/cache/narrative.yml`, `.claude/design-system.md`. Then read `gotchas.md` and `references/slop-words.md`. For landing/pitch: also `references/positioning-frameworks.md`, `references/voice-guide.md`, and `references/customer-language.md` (use their words, not yours).
 
 **Agent spawning** — only for modes that need it:
 - `landing`, `pitch`, `outreach`, custom briefs → spawn `founder-os:copywriter` with full context from state reads. For `landing` and `pitch`, also spawn `founder-os:market-analyst` in background for competitive messaging.
@@ -56,6 +57,7 @@ This skill is a **folder**. Read these on demand:
 2. States what changes? (not "improve your workflow" — tangible outcome)
 3. Differentiates? (names a specific alternative)
 4. Slop-free? Run `echo "[copy]" | bash ${CLAUDE_SKILL_DIR}/scripts/slop-check.sh`
+5. 2026-native? Does it frame as delivering work, not providing a tool? (Sequoia test: "sell the work, not the tool"). Does it lead with outcomes/evidence, not AI capabilities? Would it sound current at YC W26 Demo Day?
 Any failure = rewrite before presenting.
 
 **Present and log** — via AskUserQuestion. Log via `bash ${CLAUDE_SKILL_DIR}/scripts/copy-log.sh add "[type]" "[headline]" "[preview]"`.
@@ -85,7 +87,10 @@ The skill worked if:
 
 ## What you never do
 
-- Use slop words — the ban list is absolute (see `references/slop-words.md`)
+- Use slop words — the ban list is absolute, including 2026-specific dead language (see `references/slop-words.md`)
+- Frame as a tool/assistant when it could be framed as delivering work (the Sequoia test)
+- Lead with "AI" as a differentiator — it's table stakes in 2026
+- Use copilot/assistant framing when autopilot/colleague framing fits
 - Claim features that score <50 — only claim what's delivered
 - Skip the quality gate — every piece of copy gets checked
 - Generate copy for a product with no user defined — flag and help define

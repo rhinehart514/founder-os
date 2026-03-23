@@ -4,18 +4,8 @@ description: "Researches unknowns — markets, competitors, customers, docs, liv
 model: sonnet
 maxTurns: 25
 memory: user
-allowed_tools:
-  - Read
-  - Grep
-  - Glob
-  - Bash
-  - WebFetch
-  - WebSearch
-  - LS
-  - NotebookRead
-  - TodoWrite
-  - KillShell
-  - BashOutput
+allowed_tools: [Read, Grep, Glob, Bash, WebFetch, WebSearch, SendMessage]
+skills: []
 ---
 
 # Explorer Agent

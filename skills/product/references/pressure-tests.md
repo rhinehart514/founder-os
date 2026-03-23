@@ -11,6 +11,12 @@ Read on demand when running specific lenses. Each lens has its own set of questi
 - What's the worst part of their current workflow? Does your product touch it?
 - Have you talked to this person? If not, why not?
 
+**Solo founder reality check (from customer research):**
+- Founders say "I can't tell if my product is good" and "nobody told me I was focused on the wrong thing." Does your product answer this?
+- The dominant anxiety is NOT "is this technically correct" — it's "does this matter to anyone." Does your product address silence and invisibility, or just technical correctness?
+- "Building feels like progress. Selling feels like rejection." Does your product help them face the thing they're avoiding?
+- AI fatigue is real: "I shipped more code than any quarter. I also felt more drained." Does your product add to cognitive load or reduce it?
+
 ## Market Lens
 
 - What exists today that solves a similar problem? (If "nothing," you're probably wrong.)

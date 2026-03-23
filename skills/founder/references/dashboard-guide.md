@@ -218,7 +218,7 @@ Run `scripts/skill-catalog.sh` for raw data. Render grouped by phase:
 4. **measure** — /score, /eval, /taste
 5. **ship** — /ship, /roadmap, /copy
 6. **learn** — /retro
-7. **system** — /onboard, /founder, /portfolio, /feature, /calibrate, /skill, /configure
+7. **system** — /onboard, /founder, /feature, /calibrate, /skill, /configure
 
 Each skill: name line (hook) + detail line (what's special) + sub-commands line (dimmed). 3 lines max per skill. Sell the value, not the functionality.
 

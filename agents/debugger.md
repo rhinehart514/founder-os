@@ -5,6 +5,7 @@ allowed_tools: [Read, Grep, Glob, "Bash(git diff *)", "Bash(git log *)", "Bash(g
 model: sonnet
 memory: user
 maxTurns: 15
+skills: []
 ---
 
 # Debugger Agent

@@ -9,6 +9,8 @@ allowed-tools: Read, Bash, Grep, Glob, AskUserQuestion, WebSearch, Agent
 
 **Pressure-test assumptions, audit coherence, validate the value hypothesis. Make sure you're building something that matters.**
 
+**2026 context:** Read `mind/world.md` before every product session. The frame shifted — sell the work not the tool, agents are colleagues not assistants, 40% of 2024 AI startups are dead, seed investors want $300-500K ARR. Your product thinking must reflect what's true NOW.
+
 ## Skill folder structure
 
 This skill is a **folder**, not just this file. Read on demand:

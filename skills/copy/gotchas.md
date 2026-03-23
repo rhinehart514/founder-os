@@ -34,3 +34,12 @@ Asked for a headline, produces a page. Asked for one option, produces five. **Fi
 
 ## Context amnesia
 Forgetting the market context mid-generation and defaulting to generic positioning. **Fix:** Re-read market-context.json before the quality gate check, not just at the start.
+
+## Marketer voice instead of customer voice
+Writing "boost your productivity" when founders actually say "I can't tell if my product is good." The customer language library (`references/customer-language.md`) has exact phrases. **Fix:** Read the library before writing. Use their words — "building in circles," "shipping to crickets," "nobody told me I was focused on the wrong thing." Not yours.
+
+## AI fatigue blindness
+Positioning around "AI helps you do X faster" when the target user is burned out on AI promises. Founders say: "I shipped more code than any quarter. I also felt more drained than any quarter." They don't want more AI output — they want understanding and ownership back. **Fix:** Frame around judgment, not speed. Around knowing, not producing. Never lead with "AI-powered."
+
+## The 70% problem framing
+AI tools solve 70% of the task but leave founders stranded on the hard 30%. This is a named concept in developer culture. If your product addresses the judgment/decision layer, contrast explicitly against the 70% problem. **Fix:** "We don't write your code — we tell you if you're building the right thing."

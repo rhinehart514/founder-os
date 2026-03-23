@@ -5,6 +5,7 @@ allowed_tools: [Read, Glob, Grep, "Bash(founder *)", "Bash(git log *)", "Bash(gi
 model: haiku
 memory: user
 maxTurns: 15
+skills: []
 ---
 
 # Measurer Agent

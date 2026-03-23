@@ -4,18 +4,8 @@ description: "Synthesizes customer signal from available data — reviews, forum
 model: sonnet
 maxTurns: 20
 memory: user
-allowed_tools:
-  - Read
-  - Grep
-  - Glob
-  - Bash
-  - WebFetch
-  - WebSearch
-  - LS
-  - NotebookRead
-  - TodoWrite
-  - KillShell
-  - BashOutput
+allowed_tools: [Read, Grep, Glob, Bash, WebFetch, WebSearch, SendMessage]
+skills: []
 ---
 
 # Customer Agent

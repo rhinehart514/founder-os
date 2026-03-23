@@ -24,6 +24,17 @@ SLOP_WORDS=(
   "best-in-class" "world-class" "state-of-the-art" "bleeding-edge"
   "actionable insights" "deep dive" "move the needle" "low-hanging fruit"
   "circle back" "touch base" "at the end of the day"
+  # 2026-specific dead language
+  "ai-powered" "ai co-pilot" "copilot" "10x productivity"
+  "powered by gpt" "powered by claude" "powered by llama"
+  "we use ai" "agentic" "disruptive"
+)
+
+# 2026 dead phrases (multi-word, checked separately)
+DEAD_PHRASES=(
+  "ai-powered" "ai co-pilot" "10x productivity"
+  "powered by gpt" "powered by claude"
+  "we use ai to" "our ai can"
 )
 
 FOUND=0
@@ -31,6 +42,15 @@ for word in "${SLOP_WORDS[@]}"; do
   COUNT=$(echo "$TEXT" | grep -oi "$word" | wc -l | tr -d ' ')
   if [ "$COUNT" -gt 0 ]; then
     echo "  ✗ \"$word\" × $COUNT"
+    FOUND=$((FOUND + COUNT))
+  fi
+done
+
+# Check 2026 dead phrases
+for phrase in "${DEAD_PHRASES[@]}"; do
+  COUNT=$(echo "$TEXT" | grep -oi "$phrase" | wc -l | tr -d ' ')
+  if [ "$COUNT" -gt 0 ]; then
+    echo "  ✗ \"$phrase\" × $COUNT (2026 dead language)"
     FOUND=$((FOUND + COUNT))
   fi
 done

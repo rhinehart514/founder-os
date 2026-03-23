@@ -60,3 +60,44 @@ Lead with what's different after using the product. Skip the problem — go stra
 **Rules:**
 - The outcome must be specific ("save time" = garbage, "know if your product got better in one command" = specific)
 - Must be verifiable (the user can confirm it happened)
+
+## Sell the Work, Not the Tool (2026)
+
+The defining positioning frame of 2026. From Sequoia: "If you sell the tool, you're in a race
+against the model. If you sell the work, every improvement in the model makes your service faster,
+cheaper, and harder to compete with."
+
+**Formula:** "We [do the finished work]. You [review/approve/use the result]."
+
+**Examples:**
+- "We evaluate your product. You get the score." (not "a tool to evaluate your product")
+- "We research your market. You get the brief." (not "a research assistant")
+- Corvera (YC W26): "AI agent workforce for CPG back-office" — not "AI tools for CPG"
+
+**When to use:** Always consider this frame first in 2026. The copilot/assistant frame is 2023.
+If the product can be described as delivering finished work rather than assisting with work, use this.
+
+**The test:** Does your copy position the product as a tool the user operates, or as a colleague
+that delivers results? "Tool you operate" = commodity race. "Colleague that delivers" = service moat.
+
+## Bounded Autonomy (Enterprise Trust)
+
+For enterprise or cautious buyers. Signal that the AI acts independently BUT within defined limits.
+
+**Formula:** "[Agent does X] within [governance boundary]. [Escalation path] when [uncertainty]."
+
+**When to use:** When the buyer's objection is trust/control, not capability. Enterprise sales,
+regulated industries, high-stakes workflows.
+
+## Evidence-First (Anti-Agent-Washing)
+
+2026 buyers have seen too many "agentic" claims with no production evidence. Lead with receipts.
+
+**Formula:** "[Specific metric from production]. [What the product does]. [Social proof if available]."
+
+**Examples:**
+- "Corvera: $0 to $33K MRR in 4 weeks" (not "AI-powered back-office automation")
+- "Cardinal: 40+ YC companies paying before Demo Day" (not "the future of [category]")
+
+**When to use:** When competing against vaporware or when the category is saturated with claims.
+The antidote to agent washing is evidence.

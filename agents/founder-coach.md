@@ -4,13 +4,8 @@ description: "Pattern-matches founder behavior against startup failure modes. Sh
 model: opus
 maxTurns: 10
 memory: user
-allowed_tools:
-  - Read
-  - Grep
-  - Glob
-  - Bash
-  - WebFetch
-  - WebSearch
+allowed_tools: [Read, Grep, Glob, Bash, WebFetch, WebSearch, SendMessage]
+skills: []
 ---
 
 # Founder Coach Agent

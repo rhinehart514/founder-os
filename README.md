@@ -61,14 +61,13 @@ New idea?
 /decide ai-front-office
 ```
 
-## Skills (27)
+## Skills (25)
 
 ### Ideate
 | Skill | What it does |
 |-------|-------------|
 | `/discover` | Raw idea → validated business case |
 | `/ideate` | Evidence-weighted brainstorming, kill lists, 11+ techniques |
-| `/portfolio` | Cross-venture dashboard — ideas, stages, patterns |
 
 ### Validate
 | Skill | What it does |
@@ -82,7 +81,6 @@ New idea?
 ### Build
 | Skill | What it does |
 |-------|-------------|
-| `/build` | Scaffold from validated idea → working project |
 | `/onboard` | Bootstrap any repo — detects features, generates config |
 | `/plan` | Checks the market, finds the bottleneck, proposes work |
 | `/go` | Autonomous build loop — code, measure, learn, repeat |
@@ -117,7 +115,7 @@ builder, evaluator, measurer, reviewer, explorer, market-analyst, customer, grad
 
 ## What makes it different
 
-1. **Portfolio is global.** `~/.founder-os/portfolio.yml` follows you across projects. Learnings compound.
+1. **Portfolio is global.** `~/.founder-os/portfolio.yml` follows you across projects. `/founder` shows the dashboard. Learnings compound.
 2. **Proactive, not reactive.** WebSearches markets, visits competitor sites, surfaces changes before you ask.
 3. **14 failure patterns** auto-checked every session. Building for nobody? Revenue avoidance? Portfolio sprawl? Named and caught.
 4. **Grounded in 2026.** Outcome-based pricing, MCP as infrastructure, open source at parity, solo founders as the norm. Not 2024 playbooks.

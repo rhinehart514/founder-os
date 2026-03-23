@@ -1,0 +1,103 @@
+<!-- XML Plan Template for /plan structured output -->
+<!-- Used by /go executor agents. Each move becomes one or more plans. -->
+<!-- See references/structured-planning.md for full documentation. -->
+
+<!--
+  Attributes:
+    name     — matches the move title from plan.yml
+    feature  — target feature from founder.yml
+    wave     — execution wave (1 = no dependencies, 2+ = sequential)
+    depends  — comma-separated plan names this plan requires (empty for wave 1)
+-->
+<plan name="[move-title-kebab-case]" feature="[feature]" wave="1" depends="">
+
+  <!--
+    Task types:
+      implementation — code changes, config, file creation
+      verification   — tests, behavior checks, integration validation
+      research       — code reading, approach investigation (output: decision)
+  -->
+  <task type="implementation">
+    <name>[Action-oriented: "Add X to Y", "Create Z for W"]</name>
+
+    <!-- Files this task creates or modifies -->
+    <files>[path/to/file.ext, another/file.ext]</files>
+
+    <!-- Files executor MUST read before touching anything.
+         Always include: the file being modified + source-of-truth files
+         (schemas, configs, reference implementations, pattern sources) -->
+    <read_first>[path/to/file.ext, path/to/reference.ext]</read_first>
+
+    <!-- CONCRETE instructions. Include exact values, not references.
+         The executor completes the task from this text alone. -->
+    <action>
+      [What to change. Why. Exact values.]
+
+      [BAD: "Update the config to match production"]
+      [GOOD: "Add DATABASE_URL=postgresql://..., set POOL_SIZE=20, add REDIS_URL=redis://..."]
+
+      [BAD: "Align the output format with the spec"]
+      [GOOD: "Format as: '  health: NN  eval: NN  taste: NN' using format_score_bar()"]
+    </action>
+
+    <!-- Command or check proving the task worked -->
+    <verify>[npm test | grep 'pattern' file.ext | curl localhost:3000/health]</verify>
+
+    <!-- Grep-verifiable conditions. Never subjective. -->
+    <acceptance_criteria>
+      - [file.ext contains 'exact string or pattern']
+      - [command exits 0 or produces specific output]
+      - [file.ext does NOT contain 'removed pattern']
+    </acceptance_criteria>
+
+    <!-- Observable outcome when task is complete -->
+    <done>[What changed in the world — one sentence]</done>
+  </task>
+
+  <!-- Second task in same plan (2-3 tasks per plan max) -->
+  <task type="implementation">
+    <name>[Next task name]</name>
+    <files>[files]</files>
+    <read_first>[files to read first]</read_first>
+    <action>[Concrete instructions]</action>
+    <verify>[Verification command]</verify>
+    <acceptance_criteria>
+      - [Verifiable condition]
+    </acceptance_criteria>
+    <done>[Outcome]</done>
+  </task>
+
+</plan>
+
+<!--
+  Wave 2 plan (depends on wave 1 completing):
+  Only use when there's a genuine dependency — shared files, type exports,
+  behavioral requirements. Default is parallel (same wave).
+-->
+<!--
+<plan name="[wave-2-plan]" feature="[feature]" wave="2" depends="[wave-1-plan-name]">
+  <task type="implementation">
+    <name>[Task that needs wave 1 output]</name>
+    <files>[files]</files>
+    <read_first>[wave 1 output files + files being modified]</read_first>
+    <action>[Instructions referencing wave 1 artifacts]</action>
+    <verify>[Verification]</verify>
+    <acceptance_criteria>
+      - [Conditions]
+    </acceptance_criteria>
+    <done>[Outcome]</done>
+  </task>
+
+  <task type="verification">
+    <name>[Integration check across waves]</name>
+    <files>[test files]</files>
+    <read_first>[all relevant source files]</read_first>
+    <action>[What to test and expected results]</action>
+    <verify>[Test command]</verify>
+    <acceptance_criteria>
+      - [Integration conditions]
+    </acceptance_criteria>
+    <done>[Full feature verified]</done>
+  </task>
+</plan>
+-->

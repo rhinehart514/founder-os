@@ -313,6 +313,65 @@ The output template is the SHAPE. The tools fill it with REAL DATA. Skills shoul
 
 ---
 
+## Error Display
+
+Three-part error format (the rustc standard). Every error in founder-os output follows this:
+
+```
+  ✗ what happened                        ← bold, primary signal
+    why: [explanation]                    ← normal weight, diagnostic
+    fix: [specific command or action]     ← cyan/action color, actionable
+```
+
+**Examples:**
+```
+  ✗ can't read eval-cache.json
+    why: file doesn't exist — no eval has been run
+    fix: run /eval to generate it
+```
+
+```
+  ✗ assertion regressed: "auth flow completes"
+    why: login route returns 404 after route refactor (commit a3f2c1)
+    fix: revert commit or update route in src/routes/auth.ts
+```
+
+Never: "Error occurred." Always: what + why + fix.
+
+---
+
+## Progress Display
+
+Match the pattern to the operation:
+
+```
+  ⠋ evaluating features...                ← spinner for unknown duration
+  3/7 features evaluated                   ← X/Y counter for known steps
+  scoring    ████████████░░░░░░░░  60%     ← bar for parallel/proportional
+```
+
+- Unknown duration < 5s → spinner or nothing
+- Unknown duration > 5s → spinner + status message ("evaluating 7 features...")
+- Known N steps → X/Y counter (preferred over progress bar for sequential)
+- Parallel streams → per-stream bar (Turborepo pattern)
+- Always clear progress indicators on completion — don't leave artifacts in scroll buffer
+
+---
+
+## Environment Awareness
+
+Output must adapt to context:
+
+- **TTY detected** → full formatting: colors, spinners, bars, interactive prompts
+- **Piped/CI** → no colors, no spinners, no prompts. Structured text only.
+- **`NO_COLOR` set** → strip all ANSI codes (no-color.org standard)
+- **`--json` flag** → structured JSON on stdout, progress on stderr
+- **`Ctrl-C`** → clean exit: `Cancelled.` not a stack trace
+
+The rule: decorative formatting is for humans. Pipes and CI get clean data.
+
+---
+
 ## General Rules
 
 - Dense over verbose — every line earns its place
@@ -326,3 +385,6 @@ The output template is the SHAPE. The tools fill it with REAL DATA. Skills shoul
 - Sparklines for trends, bars for quantities, comparison tables for before/after
 - Screenshot paths when visual evidence is captured
 - Confidence indicators when assessments are uncertain
+- Color is semantic, not decorative — every color carries meaning (see voice.md)
+- Default output is summary — `--verbose` adds detail, never the reverse
+- Three-part errors everywhere — what happened, why, how to fix

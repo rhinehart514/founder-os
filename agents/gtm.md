@@ -4,18 +4,8 @@ description: "Go-to-market strategy — channels, pricing, unit economics, runwa
 model: opus
 maxTurns: 25
 memory: user
-allowed_tools:
-  - Read
-  - Grep
-  - Glob
-  - Bash
-  - WebFetch
-  - WebSearch
-  - LS
-  - NotebookRead
-  - TodoWrite
-  - KillShell
-  - BashOutput
+allowed_tools: [Read, Grep, Glob, Bash, WebFetch, WebSearch, SendMessage]
+skills: []
 ---
 
 # GTM Agent
