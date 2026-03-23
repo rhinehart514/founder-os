@@ -1,6 +1,6 @@
 name: product
 description: "Web product measurement — dead ends, empty states, taste, DOM/copy/blind eval"
-version: 1.0.0
+version: 1.0.1
 author: founder-os
 provides:
   scoring: true

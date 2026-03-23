@@ -1,13 +1,29 @@
 {
   "name": "founder-os-marketplace",
   "owner": {
-    "name": "Laney Fraass"
+    "name": "Laney Fraass",
+    "email": "laney@glittercowboy.com"
+  },
+  "metadata": {
+    "description": "AI cofounder plugins for serial entrepreneurs",
+    "version": "1.0.1"
   },
   "plugins": [
     {
       "name": "founder-os",
       "source": "./",
-      "description": "AI cofounder for serial entrepreneurs. Full lifecycle from idea to shipped product: validate before you build, measure while you build, learn across ventures. 27 skills, 14 agents, proactive market intelligence, 14 failure pattern detection."
+      "version": "1.0.1",
+      "description": "AI cofounder for serial entrepreneurs. Full lifecycle from idea to shipped product: validate before you build, measure while you build, learn across ventures. 27 skills, 31 agents, GSD execution engine, proactive market intelligence, 14 failure pattern detection.",
+      "author": {
+        "name": "Laney Fraass"
+      },
+      "homepage": "https://github.com/glittercowboy/founder-os",
+      "repository": "https://github.com/glittercowboy/founder-os",
+      "license": "MIT",
+      "keywords": [
+        "founder", "startup", "serial-entrepreneur", "ai-cofounder",
+        "gsd", "execution-engine", "product-measurement"
+      ]
     }
   ]
 }
