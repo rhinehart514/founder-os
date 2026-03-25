@@ -1,7 +1,7 @@
 {
   "name": "founder-os",
-  "version": "1.0.1",
-  "description": "AI cofounder for serial entrepreneurs. Full lifecycle: ideate → validate → decide → build → measure → ship → learn. GSD execution engine, 31 agents, proactive market intelligence, 14 failure pattern detection, prediction-driven learning that compounds across ventures.",
+  "version": "2.0.0",
+  "description": "AI cofounder that helps you figure out what to build — and kill what isn't working. Demand-side product thinking: JTBD analysis, four forces, value props, then build with measurement. 28 skills, 31 agents, GSD execution engine, proactive market intelligence, 14 failure pattern detection.",
   "author": {
     "name": "Laney Fraass"
   },
@@ -9,10 +9,10 @@
   "repository": "https://github.com/glittercowboy/founder-os",
   "license": "MIT",
   "keywords": [
-    "founder", "startup", "serial-entrepreneur", "ideation", "validation",
-    "build", "measure", "ship", "learn", "product", "eval", "score",
-    "portfolio", "market-intelligence", "predictions", "ai-native", "2026",
-    "gsd", "execution-engine", "wave-execution"
+    "founder", "startup", "serial-entrepreneur", "demand-validation", "jtbd",
+    "ideation", "validation", "build", "measure", "ship", "learn", "product",
+    "eval", "score", "portfolio", "market-intelligence", "predictions",
+    "ai-native", "2026", "gsd", "execution-engine", "wave-execution"
   ],
   "skills": "./skills/",
   "agents": [

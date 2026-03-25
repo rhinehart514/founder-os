@@ -1,123 +1,69 @@
-# Standards — What Quality Means
+# Standards
 
-This is judgment, not process. What separates ideas that become businesses from ideas that stay ideas — and what separates products users love from products that merely work.
+## Demand (What to Build)
 
-## Part 1: Business Standards (Validation Phase)
-
-### The Validation Hierarchy
-
-Three tiers, in order of what kills ideas:
-
-1. **Market** — Is there demand? (most ideas die here)
-2. **Model** — Does the math work? (survivors die here)
-3. **Moat** — Can you defend it? (everything else)
-
-Most founders work bottom-up: build → price → find customers. Serial entrepreneurs work top-down: customers → price → build the minimum.
-
-### The Idea Scorecard
-
-Not a score to optimize — a lens to see clearly.
-
-**Market (does anyone want this?)**
-- **Named customer**: A real person, not a segment. You could email them today.
-- **Existing budget**: They already spend money solving this problem (even badly).
-- **Active pain**: They're doing something about this problem right now.
-- **Willingness to switch**: The switching cost is lower than the pain of staying.
-
-**Model (does the math work?)**
-- **Unit economics**: LTV > 3× CAC at steady state.
-- **Pricing power**: Can charge enough to build a real business, not just cover costs.
-- **Retention**: Customers stay long enough to recover acquisition cost.
-- **Scalable acquisition**: At least one channel that doesn't require the founder personally.
-
-**Moat (can you defend it?)**
-- **Wedge**: A specific entry point that's underserved by incumbents.
-- **Why you**: Founder-market fit (knowledge, network, or experience others lack).
-- **Why now**: A timing catalyst (regulation, technology shift, market change).
-- **Compounding**: Gets harder to compete with over time (data, network, switching costs).
-
-### Decision Standards
-
-**Go** (commit to building): Named customer who would pay, unit economics that work on paper, a wedge buildable in weeks, kill condition tested, founder has differentiated insight.
-
-**Kill** (stop pursuing): Kill condition confirmed, no named customer after 2 weeks, unit economics don't work even optimistically, wedge requires >6 months, pattern match to confirmed dead end.
-
-**Park** (revisit later): Timing isn't right but thesis is sound, market is emerging, founder capacity is the constraint.
-
-**Pivot** (change direction, keep kernel): Customer is real but problem differs, problem is real but customer differs, demand exists but pricing doesn't fit.
-
----
-
-## Part 2: Product Standards (Build Phase)
-
-### The Product Measurement Hierarchy
-
-Three tiers, in order of what matters:
-
-1. **Value** — Does the user get something they care about? (the only thing that matters)
-2. **Craft** — Is the experience well-made? (amplifies value, can't replace it)
-3. **Health** — Is the code clean and stable? (enables craft, invisible to users)
-
-Score is a SUPPORTING metric. A 100/100 score with zero value is a beautiful corpse.
-
-### The Product Journey
+**Outcome hierarchy:** Outcome → Opportunity → System → Feature → Micro-feature → Interaction
 
 ```
-FIND → UNDERSTAND → TRY → GET VALUE → COME BACK → TELL SOMEONE → PAY
+OUTCOME          What metric or behavior moves if this works?
+OPPORTUNITY      What pain, unmet need, or desire makes this worth addressing?
+SYSTEM           A coherent product domain with its own data model and ownership.
+FEATURE          A discrete, shippable unit with a clear user goal.
+MICRO-FEATURE    Behaviors that make a feature feel complete rather than 80% done.
+INTERACTION      Atomic UI moments. Invisible until absent.
 ```
 
-Every stage is a potential failure point. Measuring code quality while ignoring the journey is like tuning an engine in a car with no wheels.
+**Demand questions (answer before building):**
+- Functional job: What task is the customer trying to get done?
+- Emotional job: How do they want to feel during and after?
+- Social job: How do they want to be perceived?
+- Four forces: What pushes them away from the current solution? What pulls them toward yours? What anxiety slows the switch? What inertia keeps them where they are?
+- Hire/fire triggers: When do they "hire" this product? When do they "fire" it?
 
-### The Value Checklist
+**Evidence classes** — every demand-side output labels claims:
+- **[observed]**: User behavior data (analytics, session recordings, A/B tests)
+- **[stated]**: User said it (interviews, surveys, forum posts, reviews)
+- **[market]**: Market data (funding rounds, pricing pages, market reports)
+- **[inferred]**: LLM synthesis (pattern matching, reasoning from context)
 
-Before every feature:
-1. **Who gets value?** — Name the human.
-2. **What changes for them?** — After they use it, what's different?
-3. **How do they find it?** — Where does your target user already look?
-4. **How fast?** — Time from "I found this" to "I got value." Target: first session.
-5. **Would they notice if it disappeared?** — If not, it's not value.
-6. **What's the return trigger?** — Why come back tomorrow?
-7. **Would they tell someone?** — Is there a shareable moment?
-8. **Would they pay?** — Not "could we charge" but "would they pay to keep this."
+## Business (Validation)
 
-### UX Checklist (Craft Layer)
+**Hierarchy:** Market (demand?) → Model (math works?) → Moat (defensible?)
 
-After every feature or significant change, check your own work against these.
+**Idea scorecard:**
+- Market: named customer, existing budget, active pain, willingness to switch
+- Model: LTV > 3× CAC, pricing power, retention, scalable acquisition
+- Moat: wedge, why you, why now, compounding advantage
 
-**Universal (every product surface):**
-1. **5-second test** — Does a stranger understand what it does?
-2. **Empty state** — What does a new user with zero data see?
-3. **Dead ends** — After completing the action, where do they go?
-4. **First-time experience** — Is it obvious what to do?
-5. **User feedback** — After every action, does something visible change?
-6. **Error communication** — Does the user understand what happened AND how to fix it?
-7. **Next action clarity** — One action, not a menu.
-8. **Information density** — Match density to task and expertise level.
-9. **Consistency** — Same tone, formatting, hierarchy across touchpoints.
-10. **Return trigger** — Reason to come back?
+**Decisions:**
+- **Go:** named customer who'd pay, unit economics work, wedge buildable in weeks
+- **Kill:** kill condition confirmed, no customer after 2 weeks, economics don't work
+- **Park:** thesis sound but timing wrong
+- **Pivot:** customer real but problem differs, or vice versa
 
-### Build Discipline
+## Product (Build)
 
-- **Unit of work = one intent.** A feature, a fix, a refactor. No artificial limits.
-- **Atomicity = git commits.** Each commit is reviewable and revertable.
-- **Mechanical keep/revert** — Assertion regressed → revert the commit. No negotiation.
-- **Default ambitious.** Build whole features end-to-end, not single-file tweaks.
-- **Simplicity bias** — Deleting code for equal results is always a keep.
+**Hierarchy:** Value (do they care?) > Craft (well-made?) > Health (clean code?)
 
----
+Score is supporting. 100/100 with zero value = beautiful corpse.
 
-## Anti-Gaming (Both Phases)
+**Measurement:** `/score` (health), `/taste <url> flows` (works?), `/taste <url>` (looks?), `/eval` (features deliver?), `/score viability` (market?)
+- Score dropped → revert first, investigate second
+- Score plateaued → rethink, don't iterate
+- Founder disagrees → founder wins
 
-### Business Anti-Gaming
-- **All green flags** — You haven't looked for red ones. Seek disconfirmation.
-- **Infinite TAM** — "It's a $50B market" means nothing. What's YOUR serviceable wedge?
-- **Competitive vacuum** — "Nobody's doing this" usually means nobody wants it.
-- **Technology-first** — "AI can do X" is not a business. "Person Y will pay $Z because X" is.
+**Fix order:** wanted → works → delivers → looks good → someone would pay
 
-### Product Anti-Gaming
-- **Cosmetic-only changes** — If the user can't see the difference, the score shouldn't change.
-- **Inflation** — 15+ point jump in one commit? Something's wrong.
-- **Plateau** — Score hasn't moved in 3+ changes? Rethink, don't iterate.
-- **Stage ceiling** — An MVP scoring 95/100? The score is wrong, not the product.
+**Value check:** Who gets value? What changes? How do they find it? How fast to value? Would they notice if gone? Return trigger? Would they tell someone? Would they pay?
+
+**UX check:** 5-second test, empty state, dead ends, first-time experience, user feedback, error communication, next action clarity, information density, consistency, return trigger
+
+**Build discipline:** one intent per unit of work, atomic git commits, assertion regressed → revert, default ambitious, simplicity bias
+
+## Anti-Gaming
+- All green flags → you haven't looked for red ones
+- "Nobody's doing this" → usually nobody wants it
+- 15+ point jump in one commit → something's wrong
+- MVP scoring 95 → the score is wrong
 
 Fix the product, not the score. Fix the business, not the pitch.

@@ -1,20 +1,22 @@
 # founder-os
 
-An AI cofounder for serial entrepreneurs. A Claude Code plugin.
+An AI cofounder that helps you figure out what to build — and kill what isn't working.
 
-**Ideate → Validate → Decide → Build → Measure → Ship → Learn → Repeat**
+**Validate Demand → Ideate → Decide → Build → Measure → Ship → Learn → Repeat**
 
 Most tools do one phase. founder-os does all of them, and the learning compounds across ventures.
 
 ## What it does
 
-**Before you build:** Generate ideas, research markets, check competitors (live — not from training data), force go/kill decisions with evidence. 14 failure patterns catch the rationalizations before you waste months.
+**Before you build:** Map customer jobs (functional, emotional, social). Test value props against real market evidence. Run four forces analysis — what pushes them away from the current solution, what pulls them toward yours, what anxiety slows the switch, what inertia keeps them where they are. Kill bad ideas fast with 14 failure patterns.
 
-**While you build:** Find the bottleneck feature, build it autonomously, measure whether the product improved. Score drops → revert. Score plateaus → rethink.
+**When you commit:** Generate ideas with evidence weighting, research markets (live — not from training data), check competitors with Playwright, force go/kill decisions with cited evidence.
 
-**After you build:** Grade predictions, audit whether features still matter, update the knowledge model. The learning compounds — kill an idea in one project, the pattern applies to every future idea.
+**While you build:** Find the bottleneck feature, build it autonomously in parallel waves, measure whether the product improved. Score drops → revert. Score plateaus → rethink.
 
-**Proactively:** WebSearches markets before planning. Visits competitor sites with Playwright before strategy sessions. Checks if the world changed while you were building. A cofounder who only reacts is a bad cofounder.
+**After you build:** Grade predictions, audit whether features still serve validated customer jobs, update the knowledge model. The learning compounds — kill an idea in one project, the pattern applies to every future idea.
+
+**Proactively:** WebSearches markets before planning. Visits competitor sites before strategy sessions. Checks if the world changed while you were building.
 
 ## Install
 
@@ -48,33 +50,29 @@ claude
 ## Quick start
 
 ```
-/founder           → dashboard (portfolio + project status)
-/score             → is this product good? one number
+/discover "AI front office for local businesses"  → validate demand, map customer jobs
+/blueprint                                         → JTBD analysis, value props, feature architecture
+/decide ai-front-office                            → go/kill/pivot gate with evidence
+```
+
+Then build:
+```
 /plan              → what should I work on? finds the bottleneck
 /go                → just build it (autonomous loop)
+/score             → is this product good? one number
 ```
 
-New idea?
-```
-/discover "AI front office for local businesses"
-/research market "local business SaaS"
-/decide ai-front-office
-```
+## Skills (26)
 
-## Skills (25)
-
-### Ideate
+### Ideate + Validate
 | Skill | What it does |
 |-------|-------------|
-| `/discover` | Raw idea → validated business case |
+| `/discover` | Raw idea → validated business case with JTBD analysis |
+| `/blueprint` | Product architecture from Jobs-to-Be-Done — jobs, value props, features, tiers |
 | `/ideate` | Evidence-weighted brainstorming, kill lists, 11+ techniques |
-
-### Validate
-| Skill | What it does |
-|-------|-------------|
 | `/research` | Market intelligence, competitor teardowns, live site analysis |
 | `/strategy` | Honest diagnosis — visits competitor sites, checks real pricing |
-| `/product` | Pressure-test: is anyone going to want this? |
+| `/product` | Pressure-test: does this deliver on the demand hypothesis? |
 | `/money` | Pricing, unit economics, runway — does the math work? |
 | `/decide` | Go/kill/pivot gate with explicit evidence |
 
@@ -91,9 +89,9 @@ New idea?
 ### Measure
 | Skill | What it does |
 |-------|-------------|
-| `/score` | One honest number — health + features + design + market |
-| `/eval` | Per-feature scoring: does each feature deliver? |
-| `/taste` | Visual product intelligence — 11 design dimensions |
+| `/score` | Did the product validate the demand hypothesis? One number. |
+| `/eval` | Does each feature deliver on the customer job it serves? |
+| `/taste` | Would a customer trust this enough to try it? |
 | `/assert` | Manage what must be true about this product |
 
 ### Ship
@@ -107,7 +105,7 @@ New idea?
 | Skill | What it does |
 |-------|-------------|
 | `/retro` | Grade predictions, audit feature purpose, update knowledge |
-| `/retro audit` | Does each feature still matter? Has the market shifted? |
+| `/retro audit` | Does each feature still serve a validated customer job? |
 
 ## Agents (14)
 
@@ -115,11 +113,11 @@ builder, evaluator, measurer, reviewer, explorer, market-analyst, customer, grad
 
 ## What makes it different
 
-1. **Portfolio is global.** `~/.founder-os/portfolio.yml` follows you across projects. `/founder` shows the dashboard. Learnings compound.
-2. **Proactive, not reactive.** WebSearches markets, visits competitor sites, surfaces changes before you ask.
-3. **14 failure patterns** auto-checked every session. Building for nobody? Revenue avoidance? Portfolio sprawl? Named and caught.
-4. **Grounded in 2026.** Outcome-based pricing, MCP as infrastructure, open source at parity, solo founders as the norm. Not 2024 playbooks.
-5. **Features first.** Everything talks about what features deliver to customers, not about internal architecture.
+1. **Demand first.** Every feature traces back to a customer job. `/discover` and `/blueprint` map demand before `/go` writes code.
+2. **Portfolio is global.** `~/.founder-os/portfolio.yml` follows you across projects. `/founder` shows the dashboard. Learnings compound.
+3. **Proactive, not reactive.** WebSearches markets, visits competitor sites, surfaces changes before you ask.
+4. **14 failure patterns** auto-checked every session. Building for nobody? Revenue avoidance? Portfolio sprawl? Named and caught.
+5. **Grounded in 2026.** Outcome-based pricing, MCP as infrastructure, open source at parity, solo founders as the norm.
 6. **Kill speed.** The serial entrepreneur's edge is how fast you kill bad ideas. Speed of kill > depth of analysis.
 
 ## Requirements

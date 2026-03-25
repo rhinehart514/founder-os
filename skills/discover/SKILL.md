@@ -1,6 +1,6 @@
 ---
 name: discover
-description: "Takes 'I want to build X' to a validated business case with product spec. Research-first discovery — searches before generating, anchors to outcomes not features, pressure-tests before recommending. Also refines, pivots, and pressure-tests existing ideas."
+description: "Before commitment. Takes a raw idea and produces a validated business case with JTBD analysis, or kills it fast. Research-first discovery — searches before generating, anchors to outcomes not features, pressure-tests before recommending."
 argument-hint: "[idea description | refine | pivot | compare | kill]"
 allowed-tools: Read, Write, Edit, Bash, Grep, Glob, Agent, WebFetch, WebSearch
 ---
@@ -20,6 +20,16 @@ You tend to:
 
 Read `references/gotchas.md` before starting any discovery session. It has the failure
 patterns that show up most often and how to avoid them.
+
+## When to use
+
+Use /discover BEFORE you've committed to building. For ideas you're evaluating, not products you're already building.
+
+- Already building? → `/product`
+- Need positioning? → `/strategy`
+- Need evidence? → `/research`
+- Need options? → `/ideate`
+- Need a product blueprint? → `/blueprint`
 
 ## Skill folder structure
 
@@ -84,6 +94,16 @@ Using `references/hierarchy.md`, name:
 
 One sentence each. This grounds everything that follows.
 
+### Step 3b: Name the Three Jobs
+
+Using the demand questions from `mind/standards.md`:
+- **Functional job**: What task is the customer trying to get done?
+- **Emotional job**: How do they want to feel during and after?
+- **Social job**: How do they want to be perceived?
+
+Format each as: "When [situation], I want to [functional], so I can [emotional/social]."
+Reference `skills/blueprint/references/jtbd-method.md` for Ulwick outcome statement format.
+
 ### Step 4: Go Broad Before Narrowing
 
 Generate across three bands:
@@ -121,6 +141,7 @@ Before recommending, search for failure cases:
 - `"why [similar idea] didn't work"` or `"[similar product] problems"`
 - Surface the embedded assumptions (gotcha #7)
 - Check: is this a UI problem or an inference problem? (gotcha #4)
+- **Optional: four forces enrichment** — run `/blueprint forces` analysis if the switching dynamics are unclear. What pushes them away from current solution? What pulls toward yours? What anxiety slows the switch? What inertia keeps them where they are?
 
 ### Step 7: Synthesize into Product Spec
 
@@ -182,6 +203,7 @@ Show the idea assessment using voice.md format:
 - Any failure patterns detected
 - Key hypotheses to test
 - **Concrete recommendation** — what you'd actually push for and why. Not a menu.
+- **Evidence labeling**: Label every claim: [observed], [stated], [market], or [inferred]
 - ONE next action (usually: /research [specific unknown])
 
 ---

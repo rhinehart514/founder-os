@@ -5,15 +5,15 @@
     "email": "laney@glittercowboy.com"
   },
   "metadata": {
-    "description": "AI cofounder plugins for serial entrepreneurs",
-    "version": "1.0.1"
+    "description": "AI cofounder — demand-side product thinking for serial entrepreneurs",
+    "version": "2.0.0"
   },
   "plugins": [
     {
       "name": "founder-os",
       "source": "./",
-      "version": "1.0.1",
-      "description": "AI cofounder for serial entrepreneurs. Full lifecycle from idea to shipped product: validate before you build, measure while you build, learn across ventures. 27 skills, 31 agents, GSD execution engine, proactive market intelligence, 14 failure pattern detection.",
+      "version": "2.0.0",
+      "description": "AI cofounder that helps you figure out what to build — and kill what isn't working. Demand-side product thinking: JTBD, four forces, evidence-labeled outputs. 28 skills, 31 agents, GSD execution engine, proactive market intelligence.",
       "author": {
         "name": "Laney Fraass"
       },

@@ -1,6 +1,6 @@
 ---
 name: research
-description: "Gathers evidence for business decisions. Market intelligence, competitor teardowns, customer signals, technology landscape, live site analysis. Evidence, not opinions."
+description: "Fill knowledge gaps. Gathers evidence for decisions — findings, not recommendations. Market intelligence, competitor teardowns, customer signals, technology landscape."
 argument-hint: "[idea-name | market | competitor <name> | customer | docs <lib> | site <url> | gaps | feature <name> | history]"
 allowed-tools: Read, Write, Edit, Bash, Grep, Glob, Agent, WebFetch, WebSearch
 ---
@@ -43,7 +43,12 @@ Parse `$ARGUMENTS`:
 
 ## When to use
 
-Use `/research` when you need evidence before making a decision — filling knowledge gaps, investigating unknowns, or gathering competitive intel. Use `/ideate` instead when you already have enough evidence and need ideas for what to build. Use `/product` when the question is "should this exist?" rather than "how should it work?" Use `/strategy` when the question is about positioning, not information gathering.
+Use /research when you have a SPECIFIC question that needs evidence. Not for broad exploration.
+
+- Need a business case? → `/discover`
+- Need diagnosis? → `/strategy`
+- Need to pressure-test your product? → `/product`
+- Need ideas? → `/ideate`
 
 ---
 
@@ -207,7 +212,7 @@ Read `gotchas.md` first. Then check research history: `scripts/research-log.sh t
 **Prediction**: I predicted [X] because [Y].
 
 ### Findings
-- [finding] — source: [url/source], strength: [strong/moderate/weak]
+- [finding] — source: [url/source], strength: [strong/moderate/weak], evidence: [observed/stated/market/inferred]
 
 ### Surprises (things that challenge assumptions)
 - [surprise]

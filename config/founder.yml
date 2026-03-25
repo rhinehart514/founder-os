@@ -1,4 +1,4 @@
-# founder.yml — founder-os evaluates itself
+# founder.yml — demand-side product thinking for serial entrepreneurs
 # The product that measures products must measure itself.
 
 # ── Project ─────────────────────────────────────────
@@ -10,9 +10,13 @@ project:
 
 # ── Value Definition ───────────────────────────────
 value:
-  hypothesis: "A serial entrepreneur's product gets from idea to measurably better every session — validating before building, building with measurement, learning across ventures"
+  hypothesis: "A serial entrepreneur validates demand before building — mapping customer jobs, testing value props, killing bad ideas fast, then building what survives with measurement"
   user: "Solo technical founder with multiple ideas who lives in Claude Code"
   signals:
+    - name: demand_validated
+      description: "Demand is tested before code: /discover or /blueprint produces a validated job statement before /go"
+      target: "Every build session has a demand anchor"
+      measurable: true
     - name: idea_to_score
       description: "Full lifecycle works: /discover → /decide → /go → /score produces a number"
       target: "Complete loop in one session"
@@ -29,6 +33,12 @@ value:
       description: "Predictions are well-calibrated across ventures"
       target: "50-70% accuracy"
       measurable: true
+
+# ── Vault (Obsidian knowledge layer) ──────────────
+vault:
+  path: ~/obsidian-vault        # Obsidian vault location
+  sync_on_session_end: true     # Auto-sync learnings to vault
+  folder: founder-os            # Subfolder in vault for synced data
 
 # ── Scoring ────────────────────────────────────────
 scoring:
@@ -67,7 +77,7 @@ features:
   ideation:
     delivers: "evidence-weighted idea generation with kill lists, creative techniques, and portfolio awareness"
     for: "serial entrepreneur deciding what to build next"
-    skills: ["/ideate", "/discover", "/decide"]
+    skills: ["/ideate", "/discover", "/decide", "/blueprint"]
     code: ["skills/ideate/SKILL.md", "skills/discover/SKILL.md", "skills/decide/SKILL.md", "skills/ideate/techniques/", "skills/ideate/scripts/"]
     status: active
     weight: 4

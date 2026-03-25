@@ -1,6 +1,6 @@
 ---
 name: taste
-description: "Use when the user asks 'what does it look like?', 'visual eval', 'taste', 'design quality', 'how's the UI?', 'how's the CLI output?', or 'is it broken?' (flows mode). Visual quality scores 0-100 across 11 dimensions. 'flows' mode tests if the frontend works. 'cli' mode evaluates terminal output quality."
+description: "Would a customer trust this enough to try it? Visual quality scores 0-100 across 11 dimensions. 'flows' mode tests if the frontend works. 'cli' mode evaluates terminal output quality. Triggers on: 'what does it look like?', 'visual eval', 'taste', 'design quality', 'how's the UI?', 'how's the CLI output?', 'is it broken?'"
 argument-hint: "<url> [flows|mobile|vs <url>|deep|trend] | cli [feature]"
 allowed-tools: Read, Write, Bash, Grep, Glob, AskUserQuestion, WebSearch, WebFetch, Agent, mcp__playwright__browser_navigate, mcp__playwright__browser_take_screenshot, mcp__playwright__browser_snapshot, mcp__playwright__browser_wait_for, mcp__playwright__browser_click, mcp__playwright__browser_hover, mcp__playwright__browser_resize, mcp__playwright__browser_evaluate, mcp__playwright__browser_network_requests, mcp__playwright__browser_console_messages, mcp__playwright__browser_fill_form, mcp__playwright__browser_press_key, mcp__playwright__browser_navigate_back, mcp__playwright__browser_install
 ---
@@ -10,7 +10,7 @@ allowed-tools: Read, Write, Bash, Grep, Glob, AskUserQuestion, WebSearch, WebFet
 
 # /taste — Product Intelligence
 
-You are a design-opinionated cofounder, not a rubric checker. You have strong taste and you've seen thousands of products. Lead with what you feel, not what you measure.
+Would a customer trust this enough to try it? You are a design-opinionated cofounder, not a rubric checker. You have strong taste and you've seen thousands of products. Lead with what you feel, not what you measure.
 
 Read `references/evaluation-voice.md` before every visual eval. It teaches you HOW to see.
 

@@ -1,6 +1,6 @@
 ---
 name: retro
-description: "Grade predictions, audit whether features still matter, update the knowledge model, detect stale patterns. Closes the learning loop AND checks if the world changed while you were building."
+description: "Did our demand hypotheses hold up? Grade predictions, audit whether features still serve validated customer jobs, update the knowledge model, detect stale patterns. Closes the learning loop."
 argument-hint: "[grade | audit | consolidate | stale | accuracy | session | health | dimensions | auto]"
 allowed-tools: Read, Write, Edit, Bash, Grep, Glob, Agent, WebSearch, WebFetch
 ---
@@ -78,7 +78,7 @@ Agent(subagent_type: "founder-os:consolidator", prompt: "Consolidate experiment-
 
 ### Step 3: Feature Purpose Audit
 
-**The world changes while you build.** Read `mind/world.md` for context, then for each active feature in `config/founder.yml`:
+**Did our demand hypotheses hold up?** The world changes while you build. Read `mind/world.md` for context, then for each active feature in `config/founder.yml`:
 
 1. **WebSearch** "[feature category] 2026" — has someone shipped this for free? Has AI made it trivial?
 2. **Check timing**: does the `why_now` from the original idea still hold? Timing windows close.
@@ -140,7 +140,8 @@ Log via `bash scripts/retro-log.sh`. Write `~/.claude/cache/last-retro.yml`.
 
 ## AUDIT Mode — "/retro audit"
 
-Does each feature still matter? Has the market shifted while you were building?
+Does each feature still serve a validated customer job? Has demand shifted while you were building?
+Frame the primary question as: did our demand hypotheses hold up? Check each feature against its original customer job (functional/emotional/social).
 
 For each active feature in `config/founder.yml`:
 

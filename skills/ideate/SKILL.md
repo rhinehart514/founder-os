@@ -1,6 +1,6 @@
 ---
 name: ideate
-description: "Structured brainstorming for serial entrepreneurs. Generates business ideas with evidence weighting, kill lists, and innovation techniques. Also handles feature improvement prescriptions. Use when you need ideas or want to improve an existing one."
+description: "Generate options. Evidence-weighted brainstorming that produces ideas, not decisions. Kill lists, innovation techniques, and portfolio awareness for serial entrepreneurs."
 argument-hint: "[topic | improve <idea> | wild | kill | adjacent | deep | technique-name | \"constraint\"]"
 allowed-tools: Read, Write, Edit, Bash, Grep, Glob, Agent, WebFetch, WebSearch, AskUserQuestion
 ---
@@ -43,12 +43,12 @@ Parse `$ARGUMENTS`:
 
 ## When to use
 
-| Command | Role | Question |
-|---------|------|----------|
-| `/product` | **WHY** | Should this exist? Who cares? |
-| `/ideate` | **WHAT** | What specific things should we build next? |
-| `/ideate [feature]` | **BETTER** | How do we make this specific feature better? |
-| `/research` | **HOW** | What do we need to know before deciding? |
+Use /ideate when you need MORE options, not when you need to EVALUATE one.
+
+- Have an idea to evaluate? → `/discover`
+- Need to improve existing feature? → `/ideate [feature]`
+- Need evidence before deciding? → `/research`
+- Need to pressure-test what you're building? → `/product`
 
 ---
 
@@ -80,6 +80,7 @@ For each idea, provide:
 **Revenue model**: [how it makes money]
 **Evidence weight**: [strong/moderate/weak] — based on [known pattern/research/speculation]
 **Kill risk**: [the thing most likely to make this not work]
+**Evidence label**: [observed/stated/market/inferred]
 ```
 
 ### Step 4: Rank and Recommend

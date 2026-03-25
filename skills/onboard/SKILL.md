@@ -7,7 +7,7 @@ allowed-tools: Read, Bash, Grep, Glob, Edit, Write, AskUserQuestion
 
 # /onboard
 
-**This is the first thing a stranger does.** If this doesn't work, nothing else matters. One command, zero placeholders. Detect what the project is, understand what it does, and make the full system work.
+**This is the first thing a stranger does.** If this doesn't work, nothing else matters. One command, zero placeholders. Detect what the project is, understand what it does, map demand signals, and make the full system work. founder-os starts with demand — who wants this and what job does it do.
 
 The goal is **time to first value**. Stranger goes from `/onboard` to seeing a real score with real features in under 2 minutes.
 
@@ -93,9 +93,9 @@ Use output template from `references/onboarding-flow.md`. Show what was set up, 
 
 **Generate exactly 3 tasks:**
 
-1. **"Review generated config in config/founder.yml"** — verify features, weights, and value hypothesis match reality
-2. **"Run /plan to find the bottleneck"** — picks the first move based on scores and strategy
-3. **"Run /eval to get your first scores"** — establishes baseline eval scores per feature
+1. **"Run /discover [your idea] to map demand"** — validate who wants this and what customer job it serves
+2. **"Run /eval to baseline features"** — establishes baseline eval scores per feature
+3. **"Run /plan to find what to build next"** — picks the first move based on scores and strategy
 
 That's it. No 15-task backlog. The founder needs a clear path, not a wall of todos.
 

@@ -1,6 +1,6 @@
 ---
 name: strategy
-description: "Honest strategic diagnosis for a business idea. Positioning, timing, wedge, competitive response, stage-appropriate advice. Use when you need clarity on direction."
+description: "How to compete. Positioning, timing, wedge, competitive response — where to play and how to win. Stage-appropriate advice."
 argument-hint: "[idea-name | honest | position | compete | stage | gtm | bet <idea> | market <domain> | price | coherence | user]"
 allowed-tools: Read, Write, Edit, Bash, Grep, Glob, Agent, WebFetch, WebSearch, AskUserQuestion, mcp__playwright__browser_navigate, mcp__playwright__browser_snapshot, mcp__playwright__browser_take_screenshot
 ---
@@ -53,7 +53,12 @@ Parse `$ARGUMENTS`:
 
 ## When to use
 
-Use `/strategy` when the question is about positioning, direction, or diagnosis. Use `/research` when the question is about information gathering. Use `/money` when the question is about pricing/economics specifically. Use `/product` when the question is "should this exist?"
+Use /strategy when you know WHAT you're building but need to decide HOW to position it.
+
+- Don't know what to build? → `/discover`
+- Know what, need evidence? → `/research`
+- Need to validate demand? → `/product`
+- Need pricing/economics? → `/money`
 
 ---
 
@@ -239,6 +244,7 @@ Check stage-appropriateness, work-to-impact ratio, feature sprawl, measurement h
 For competitive data in market/compete/position modes, run `bash scripts/competitive-scan.sh`.
 
 Deliver using `templates/strategy-brief.md` for output structure.
+Label every claim: [observed], [stated], [market], or [inferred].
 
 Every recommendation is a prediction. Log to `~/.claude/knowledge/predictions.tsv`.
 

@@ -1,6 +1,6 @@
 ---
 name: product
-description: "Use when the user wants to pressure-test whether they're building the right thing — new ideas ('should we build this?'), existing products ('is this actually working?'), assumptions, user journey, pitch clarity, or product-market fit."
+description: "After commitment. Pressure-tests whether what you're building actually delivers on the demand hypothesis — assumptions, user journey, pitch clarity, product-market fit."
 argument-hint: "[user|assumptions|why|pitch|focus|signals|delight|market|coherence|refine|pivot|\"I want to build...\"]"
 allowed-tools: Read, Bash, Grep, Glob, AskUserQuestion, WebSearch, Agent
 ---
@@ -77,6 +77,8 @@ Read `gotchas.md` first. Then read state directly — you are the product thinke
 
 For specific lens questions, read `references/pressure-tests.md` on demand.
 
+**Hire/fire lens** (optional — any stage): Check if the product still matches the original hire trigger. Has the customer's reason for "hiring" this product changed? Would they "fire" it today? Reference `/blueprint switch` for structured analysis.
+
 **Agent enrichment** (optional — existing product only):
 - Do NOT auto-spawn agents. If the assessment reveals gaps that need deeper signal, ask first via AskUserQuestion: "Want deeper signal from customer research?" or "Want failure mode detection from the founder-coach?"
 - `founder-os:customer` — customer signal research. Useful when assumptions about the user are untested.
@@ -99,6 +101,8 @@ Synthesize using `templates/product-brief.md`. End with exactly 3 next commands.
 ## Output
 
 /product produces a verdict — the honest assessment of whether you're building the right thing. It names gaps between "what you claim" and "what's true."
+
+Label every claim: [observed], [stated], [market], or [inferred].
 
 For each gap found, state the gap, the evidence, and the next step (a specific command). Do NOT generate task lists. /product diagnoses; /plan and the founder decide what to act on.
 
@@ -140,7 +144,12 @@ Agent spawning is optional and user-prompted:
 
 ## When to use
 
-Use `/product` when you need to pressure-test whether you're building the right thing — for new ideas ("should we build this?") or existing products ("is this actually working?"). Use `/ideate` instead when you already know the direction and need specific feature ideas. Use `/research` when you need evidence before making a product decision. Use `/strategy` when the question is about competitive positioning or stage, not product-market fit.
+Use /product AFTER you've committed to building. For products that exist, not ideas you're still evaluating.
+
+- Still evaluating? → `/discover`
+- Need positioning? → `/strategy`
+- Need evidence? → `/research`
+- Need options? → `/ideate`
 
 ## If something breaks
 

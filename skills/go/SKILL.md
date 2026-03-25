@@ -54,7 +54,25 @@ Capture baseline:
 
 Identify bottleneck: lowest eval score among highest-weight features. This is the target.
 
-**Soft discovery gate:** If target feature has no eval data AND no customer-intel.json, present via AskUserQuestion. Skip if autonomy is autonomous/full-auto.
+### Demand Gate (soft)
+
+Before executing, check: does this feature have a demand anchor?
+
+**Check for evidence:**
+- `config/portfolio.yml` — does the target feature's idea have a validated customer job?
+- `.claude/cache/customer-intel.json` — any demand signals?
+- eval-cache.json — does the feature have prior eval data?
+
+**If no demand evidence exists**, present via AskUserQuestion:
+> "No demand evidence for [feature]. What customer job does this serve? (functional/emotional/social)"
+>
+> Evidence classes: [observed] user behavior, [stated] user said, [market] market data, [inferred] LLM synthesis.
+
+**Gate behavior:**
+- `autonomy: autonomous` or `full-auto` → skip gate, log warning
+- All other modes → ask, then proceed regardless of answer (soft gate)
+
+This gate doesn't block — it forces the demand question into consciousness before building.
 
 ### Step 2: Plan — create or load task specs (hybrid)
 

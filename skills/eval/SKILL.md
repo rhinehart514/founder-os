@@ -1,6 +1,6 @@
 ---
 name: eval
-description: "How good is each feature? Reads your code, judges whether each feature delivers what it promises, scores 0-100. Use when you want to know which features work and which don't."
+description: "Does each feature deliver on the customer job it serves? Reads your code, judges whether each feature delivers what it promises, scores 0-100."
 argument-hint: "[feature|beliefs|add-belief|health|blind|coverage|trend|slop]"
 allowed-tools: Read, Write, Bash, Grep, Glob, AskUserQuestion, WebFetch, Agent, TaskCreate
 ---
@@ -10,7 +10,7 @@ allowed-tools: Read, Write, Bash, Grep, Glob, AskUserQuestion, WebFetch, Agent, 
 
 # /eval
 
-Score features 0-100 on delivery and craft. The number IS the verdict.
+Does each feature deliver on the customer job it serves? Score 0-100 on delivery and craft. The number IS the verdict.
 
 ## Folder contents
 
