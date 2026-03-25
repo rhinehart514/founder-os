@@ -1,10 +1,10 @@
 # /ship Reference — Output Templates
 
-Loaded on demand. Flow logic and routing are in SKILL.md.
+Loaded on demand. Routing and mode logic are in SKILL.md.
 
 ---
 
-## Pre-flight output
+## Deploy — Pre-flight output
 
 ```
 ◆ ship — pre-flight
@@ -29,7 +29,7 @@ Loaded on demand. Flow logic and routing are in SKILL.md.
 /go learning         fix the warning first
 ```
 
-## Ship complete output
+## Deploy — Ship complete
 
 ```
 ◆ shipped
@@ -47,7 +47,7 @@ Loaded on demand. Flow logic and routing are in SKILL.md.
 /eval               verify assertions held
 ```
 
-## Release created output
+## Release created
 
 ```
 ◆ shipped release — v8.1
@@ -57,23 +57,14 @@ Loaded on demand. Flow logic and routing are in SKILL.md.
   url: https://github.com/[owner]/[repo]/releases/tag/v8.1
 
   ▾ release notes (published)
-    ## Eval scoring engine upgrade
-    Multi-sample median scoring, decomposed sub-scores (delivery/craft/viability),
-    per-feature rubrics, and structured output via API.
+    [evidence-traced content]
 
-    ### What's new
-    - 3-sample median reduces eval variance from ±15 to ±5 points
-    - Sub-scores break down value delivery, code quality, and UX separately
-
-    ### Known limitations
-    - /go loop untested on external projects
-
-/roadmap bump        graduate the thesis if ready
+/ship roadmap bump   graduate the thesis if ready
 /eval                verify current state
 /ship history        deployment log
 ```
 
-## PR created output
+## PR created
 
 ```
 ◆ shipped pr — #42
@@ -90,92 +81,180 @@ Loaded on demand. Flow logic and routing are in SKILL.md.
 /ship history        deployment log
 ```
 
-## Verify output
+## Verify / Rollback / History
+
+See `references/advanced-modes.md` for verify, rollback, and history output formats.
+
+---
+
+## Roadmap view
 
 ```
-◆ ship verify — [url]
+◆ ship roadmap
 
-  status: **pass**
+[2-3 sentence reflection — velocity, learning, honesty, shape]
 
-  ⎯⎯ response ⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯
+arc: identity → measurement → external validation → [?]
+velocity: v6→v7 in 1d, v7→v7.2 in 2d — [trend]
 
-  status:    200 OK
-  time:      320ms  ██████░░░░░░░░░░░░░░ (target <500ms)
-  ssl:       valid, expires 2026-12-01
+✓ **v7.0** [major] — "Score = value, not health"
+  proven 2026-03-13
 
-  ⎯⎯ content checks ⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯
+▸ **v8.0** [major] — "Someone who isn't us can complete a loop"
+  version: **43%** ████████░░░░░░░░░░░░
+  evidence  2/4  ██████████░░░░░░░░░░
+  features  3/5 working+
+  todos     8/14 done
 
-  ✓ title tag present: "[page title]"
-  ✓ headline found: "[product name or heading]"
-  ✓ no error markers (500, Application Error, Not Found)
+· **v9.0** [major] — "Plugin marketplace distribution"
+  planned · 3 evidence items
 
-  ⎯⎯ assertions (live) ⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯
+⚠ thesis health: [ok | stalled N days | predictions wrong]
 
-  ✓ 56/63 passing on deployed version
-  ⚠ response time regression: 320ms vs 180ms last deploy (+78%)
+[forward-looking question]
 
-  deploy confidence: **87%** ████████████████░░░░
-
-/ship rollback     revert if broken
-/eval              full assertion check
-/go [feature]      fix the failure
+/ship roadmap next     diagnose what's most provable
+/ship roadmap ideate   brainstorm what comes after
+/ship version v7.0     what did v7.0 teach?
 ```
 
-## Rollback output
+## Roadmap next
 
 ```
-◆ ship rollback
+◆ ship roadmap next — v8.0
 
-  reverted: [commit hash] → [previous hash]
-  pushed: origin/[branch]
-  deploy: [rebuilding/manual]
+▾ evidence diagnosis
 
-  severity: ██████████████████░░ HIGH — assertion regression in production
+  ✓ install-clean — **proven**
+  ~ reach-plan — **close** (one session away)
+  · first-go — **blocked** by reach-plan
+  · return — **unknown**
 
-  ⚠ investigation required
-  · what broke: [from deploy-history]
-  · affected features: [feature list with weights]
-  · todo created: "[feature]: investigate rollback — [reason]"
+most provable: **reach-plan**
 
-/eval              check current state
-/retro             grade the prediction
-/go [feature]      fix the root cause
+/go commands           mature the supporting feature
+/ship roadmap bump     if ready to graduate
 ```
 
-## History output
+## Roadmap bump
 
 ```
-◆ ship history — [N] deploys
+◆ ship roadmap bump — v8.0 [major] → proven
 
-  success rate: **92%** ██████████████████░░ ([M]/[N])
-  avg score delta: +3
-  rollback rate (last 5): 1/5
+  thesis: "..."
+  tier: major
+  proven: 2026-03-16
 
-  ⎯⎯ recent deploys ⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯
+  ▾ auto-summary (edit or confirm)
+  ▾ what was learned (→ experiment-learnings.md)
+  ▾ predictions during v8.0 — N total, M correct (%)
+  ▾ thesis → knowledge transfer
 
-  date        commit   score   target  status
-  2026-03-16  a1b2c3d  92→95   vercel  ✓ verified   320ms
-  2026-03-15  d4e5f6g  88→92   vercel  ✓ verified   280ms
-  2026-03-14  g7h8i9j  85→82   vercel  ✗ rolled back — assertion regression
+  current → **v9.0** [major]: "[next thesis]"
 
-  ⎯⎯ trends ⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯
-
-  scores:     ██████████████████░░ improving across last 5 deploys
-  stability:  ████████████████████ no rollbacks in last 3 deploys
-  confidence: 72% → 87% → 91% ████████████████████ trending up
-
-/ship              deploy now
-/ship dry          pre-flight check
-/eval              verify assertions
+/ship roadmap next     see what v9.0 needs
+/ship version v8.0     review what was proved
 ```
+
+## Roadmap narrative
+
+```
+◆ ship roadmap narrative
+
+  derived from: N proven theses, N Known Patterns
+
+▾ one-liner
+  "[evidence-traced one-liner]"
+
+▾ paragraph
+  [~50 words, every claim cited]
+
+▾ positioning statement
+  [For X who Y, product is Z. Unlike A, product does B.]
+
+  [Edit] / [Approve]
+
+written to .claude/cache/narrative.yml
+
+/ship roadmap changelog    generate changelog
+/ship copy landing         use narrative in landing page
+```
+
+## Version archaeology
+
+```
+◆ ship version v7.0
+
+thesis: "..."
+status: **proven** (date)
+
+▾ what it proved
+▾ what it taught
+▾ how it shaped what came after
+
+predictions during v7.0: N total, M correct (%)
+
+/ship roadmap       full roadmap
+/ship version v7.1  what came next
+```
+
+---
+
+## Copy — Landing page
+
+```
+◆ ship copy landing
+
+  for: "[specific person from demand-cache.json package]"
+
+⎯⎯ hero ⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯
+
+  # [Headline — 7 words max]
+  [Subhead — names person, states change]
+  [CTA button]
+
+⎯⎯ problem ⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯
+⎯⎯ solution ⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯
+⎯⎯ proof ⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯
+⎯⎯ CTA ⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯
+
+  quality gate: ✓ names person ✓ states change ✓ differentiates ✓ slop-free
+```
+
+## Copy — Pitch
+
+```
+◆ ship copy pitch
+
+  for: "[specific person]"
+
+⎯⎯ elevator (10s) ⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯
+⎯⎯ tweet (280c) ⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯
+⎯⎯ paragraph (50w) ⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯
+
+  quality gate: [results]
+```
+
+## Copy — Outreach / Release / Empty states
+
+See `templates/cold-outreach.md`, `templates/copy-release-notes.md`, and copy empty-states format in SKILL.md.
+
+---
 
 ## Formatting rules
 
-- Header: `◆ ship — pre-flight` or `◆ shipped` or `◆ ship verify — [url]` etc.
+- Header: `◆ ship — [mode]` or `◆ shipped` or `◆ ship roadmap` or `◆ ship copy [type]`
 - Deploy confidence: bold %, 20-char bar, parenthetical formula
-- Features affected: standard feature row with ✓/⚠ status suffix
-- Commit display: backtick-wrapped short hash + conventional commit message
-- Anti-rationalization warnings inline: `⚠ [feature] is still building — ship anyway?`
-- History: tabular format for deploys, bars for trends
-- Rollback: severity bar, mandatory investigation section
+- Versions: ✓ proven, ▸ testing, · planned — with [major]/[minor]/[patch] tier
+- Evidence: indented under version, ✓/~/· prefix
+- Copy quality gate: inline after every piece of copy
 - Bottom: exactly 3 next commands
+
+## Anti-slop rules (all external copy)
+
+- No unproven claims. Every sentence traces to proven evidence or Known Pattern.
+- Ban list: "streamline," "supercharge," "AI-powered," "revolutionary," "cutting-edge," "leverage," "unlock," "seamlessly," "robust"
+- Specificity test: replace any noun with "thing" — still makes sense? Too generic.
+- Number test: at least one specific number per paragraph.
+- Honest gaps are OK. "We haven't proven X yet" beats pretending X is true.
+- The founder edits. Always present via AskUserQuestion.

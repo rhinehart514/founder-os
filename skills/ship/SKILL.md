@@ -1,103 +1,111 @@
 ---
 name: ship
-description: "Ship measured work — push to main or create a GitHub release. Also triggers on 'deploy', 'push', 'ship it'."
-argument-hint: "[release [tag]]"
-allowed-tools: Read, Write, Edit, Bash, AskUserQuestion, WebFetch, Agent
+description: "Get it out. Deploy, release, roadmap management, version theses, product copy, pitch decks. Copy modes read demand-cache.json packages — use customer names, not internal feature names. Replaces: /ship, /roadmap, /copy. Also triggers on: 'ship', 'deploy', 'push', 'release', 'roadmap', 'what's next', 'copy', 'pitch', 'landing page'."
+argument-hint: "[deploy | release [tag] | roadmap [next|bump|ideate|narrative|changelog] | version [X.Y] | copy [landing|pitch|outreach|release|onboard|empty-states] ]"
+allowed-tools: Read, Write, Edit, Bash, Grep, Glob, AskUserQuestion, WebSearch, WebFetch, Agent
 ---
 
 # /ship
 
-Two modes: push code to main, or create a GitHub release.
-
-## Skill folder structure
-
-- `scripts/pre-flight.sh` — pre-ship gate: score, assertions, secrets, eval freshness, deploy confidence
-- `scripts/release-notes.sh` — generates release notes from git log + roadmap.yml + eval deltas
-- `references/advanced-modes.md` — dry run, hotfix, PR, changelog, verify, rollback, history
-- `references/ship-checklist.md` — full pre-ship checklist with explanations
-- `references/release-types.md` — when to use each ship type
-- `templates/release-notes.md` — release notes template (anti-slop rules included)
-- `templates/pr-body.md` — PR description template
-- `reference.md` — output formatting templates
-- `gotchas.md` — real failure modes. **Read before shipping.**
+Three jobs. One command. Deploy code, manage the roadmap, write product copy.
 
 ## Routing
 
-| Input | Mode |
-|-------|------|
-| (none) | **Ship**: pre-flight → commit → push → deploy → verify → log |
-| `release [tag]` | **Release**: pre-flight → release notes → `gh release create` |
-| anything else | Read `references/advanced-modes.md` for dry, hotfix, pr, changelog, verify, rollback, history |
+| Input | Mode | What |
+|-------|------|------|
+| (none) | DEPLOY | Pre-flight → commit → push → deploy → verify |
+| `release [tag]` | RELEASE | Release notes → `gh release create` |
+| `roadmap` | ROADMAP | Reflection + version list |
+| `roadmap next` | NEXT | Diagnose what's most provable |
+| `roadmap bump` | BUMP | Increment version, auto-synthesize, transfer thesis → Known Pattern |
+| `roadmap ideate` | THESIS | Brainstorm future theses from evidence patterns |
+| `roadmap narrative` | NARRATIVE | Generate external story from proven evidence |
+| `roadmap changelog` | CHANGELOG | Version-by-version external changelog |
+| `version [X.Y]` | VERSION | Version archaeology — thesis, proof, influence |
+| `copy [type]` | COPY | Product copy: landing, pitch, outreach, release, onboard, empty-states |
 
-## How to ship
+## Skill folder structure
 
-Read `gotchas.md` first.
-
-### 1. Pre-flight gate
-
-Run `bash scripts/pre-flight.sh`. Parse the verdict line: SHIP / BLOCK / WARN.
-
-- **BLOCK**: stop. Show blockers. Generate a task in /todo for each one (tagged `source: /ship`).
-- **WARN**: show warnings. Ask founder whether to proceed.
-- **SHIP**: continue.
-
-### 2. Execute
-
-**Ship (default):** stage → commit → push → deploy (auto-detect: Vercel, Netlify, or git-only) → verify → log.
-
-**Release:** run `bash scripts/release-notes.sh [tag]` → compose release notes from git history + roadmap context → `gh release create`. Let Claude compose the notes naturally — the template in `templates/release-notes.md` is a reference, not a form to fill.
-
-### 3. Log the ship
-
-Append a JSONL entry to `${CLAUDE_PLUGIN_DATA}/ship-log.jsonl`:
-```json
-{"timestamp":"...","type":"deploy|release","version":"v9.x","commit":"abc1234","score":85,"features":"scoring,commands","target":"vercel","pr":"","tag":""}
-```
+**Scripts:** `pre-flight.sh`, `release-notes.sh`, `ship-log.sh`, `version-history.sh`, `version-progress.sh`, `evidence-tracker.sh`, `slop-check.sh`, `copy-log.sh`, `copy-diff.sh`
+**References:** `advanced-modes.md`, `ship-checklist.md`, `release-types.md`, `version-guide.md`, `version-lifecycle.md`, `changelog-guide.md`, `customer-language.md`, `positioning-frameworks.md`, `voice-guide.md`, `slop-words.md`, `copy-patterns.md`
+**Templates:** `pr-body.md`, `release-notes.md`, `roadmap-template.yml`, `changelog-template.md`, `landing-page.md`, `release-announcement.md`, `pitch-narrative.md`, `cold-outreach.md`, `copy-release-notes.md`
 
 ## State to read
 
-- `.claude/cache/eval-cache.json` — per-feature scores, freshness
-- `.claude/cache/deploy-history.json` — last deploy, score delta
-- `.claude/plans/roadmap.yml` — current version, thesis
-- `config/founder.yml` — deploy target, features, mode
+All modes: `.claude/plans/roadmap.yml`, `config/founder.yml`, `.claude/cache/eval-cache.json`
+Deploy/release: `.claude/cache/deploy-history.json`, ship-log.jsonl
+Roadmap: `.claude/knowledge/predictions.tsv`, `.claude/knowledge/experiment-learnings.md`, `git log --oneline -20`
+Copy: `.claude/cache/demand-cache.json` (packages), `.claude/cache/market-context.json`, `.claude/cache/customer-intel.json`, `.claude/cache/narrative.yml`
 
-For release-type ships, also check (informational, non-blocking):
-- `.claude/cache/market-context.json`, `.claude/cache/customer-intel.json` — GTM/customer signal
-- `.claude/plans/todos.yml` — blocking todos tagged `source: /ship`
+## DEPLOY mode (default)
 
-## Agent usage
+Read `gotchas.md` first. Run `bash scripts/pre-flight.sh`. Parse verdict: SHIP / BLOCK / WARN.
+- **BLOCK**: stop. Show blockers.
+- **WARN**: show warnings. Ask founder.
+- **SHIP**: stage → commit → push → deploy → verify → log to ship-log.jsonl.
 
-- **founder-os:measurer** — run score checks (haiku, cheapest)
+## RELEASE mode
 
-## System integration
+Run `bash scripts/release-notes.sh [tag]`. Compose notes from git history + roadmap context. `gh release create`. Evidence-traced claims only.
 
-Reads: eval-cache.json, deploy-history.json, roadmap.yml, todos.yml, founder.yml, ship-log.jsonl
-Writes: ship-log.jsonl, deploy-history.json, todos.yml
-Triggers: /retro (grade ship predictions)
-Triggered by: /go (work complete), founder ("ship it", "deploy", "push")
+## ROADMAP mode
+
+Versions are theses, not releases. Each asks a question — proven, disproven, or abandoned.
+
+**Reflection first**: 2-3 sentences from velocity (git log), learning (prediction accuracy), honesty (evidence vs actual), shape (cross-version patterns). Run `scripts/version-progress.sh` + `scripts/version-history.sh`.
+
+**Standalone check**: No eval-cache? Completion = proven/total evidence items. No founder.yml? Evidence-only mode.
+
+### NEXT — diagnose provability
+Run `scripts/evidence-tracker.sh`. Map evidence to features, score provability (ready/close/blocked/unknown). Recommend first experiment.
+
+### BUMP — graduate thesis
+Read `references/version-guide.md`. Auto-detect tier: MAJOR (new question), MINOR (new evidence), PATCH (fixes). Synthesize from evidence + predictions + git log. Present via AskUserQuestion. Transfer thesis → Known Pattern in experiment-learnings.md.
+
+### THESIS (ideate) — brainstorm future
+Check: proven patterns, dead ends, unknown territory, gap between proven and aspirational. Generate 3-4 candidate theses. Present via AskUserQuestion.
+
+### NARRATIVE — external story
+Derive from proven evidence. Generate: one-liner, paragraph, positioning. Every claim traces to evidence. Write to `.claude/cache/narrative.yml`.
+
+### CHANGELOG — external changelog
+Read `references/changelog-guide.md` + `templates/changelog-template.md`. Translate internal → external. Write to `.claude/cache/changelog.md`.
+
+### VERSION — archaeology
+Run `scripts/version-history.sh v[X.Y]`. Show thesis, proof, lessons, influence on later versions.
+
+## COPY mode
+
+Read `gotchas.md` and `references/slop-words.md` first. **Read demand-cache.json packages** — use `customer_name` and `one_liner`, not internal feature names. If no packages exist, suggest `/ideate package` first.
+
+**Types:** `landing` (hero+problem+solution+proof+CTA), `pitch` (elevator/tweet/paragraph), `outreach` (cold email/DM), `release` (user-facing notes), `onboard` (first-screen copy), `empty-states` (all empty states).
+
+**Quality gate (mandatory):** Names a person? States what changes? Differentiates? Slop-free (`slop-check.sh`)? 2026-native (sell the work, not the tool)?
+
+For landing/pitch/outreach: also read `references/positioning-frameworks.md`, `references/customer-language.md`.
+Log via `bash scripts/copy-log.sh add "[type]" "[headline]" "[preview]"`.
+
+## Thesis health monitor (runs on every roadmap invocation)
+
+- **Contradiction**: >50% thesis predictions wrong → surface warning
+- **Stall**: no evidence movement in >14 days → diagnose
+- **Disproven**: check `if_disproven:` field, write Dead End to experiment-learnings.md
 
 ## What you never do
 
-- Push without running pre-flight (unless hotfix — see advanced-modes.md)
-- Commit secrets (.env, credentials, API keys)
-- Force push to main
-- Ship past block-severity assertion failures
-- Create releases with unproven claims
-
-## Degraded modes
-
-| Missing | Behavior |
-|---------|----------|
-| No deploy-history | Create empty, note "First tracked deployment" |
-| No `gh` CLI | Skip release: "`brew install gh` to enable" |
-| No roadmap.yml | Generate release notes from git log only |
-| No eval-cache | Warn: "Run `/eval` for full pre-flight data" |
+- Push without pre-flight (unless hotfix via `references/advanced-modes.md`)
+- Commit secrets, force push to main, ship past block-severity failures
+- Create releases or copy with unproven claims
+- Auto-bump without asking — graduating a thesis is a founder decision
+- Use slop words — the ban list is absolute
+- Frame as tool/assistant when it could be framed as delivering work
+- Skip the copy quality gate
 
 ## If something breaks
 
-- pre-flight.sh exits "no score": run `founder score .` first
-- `gh release create` fails: check `gh auth status`
-- Push rejected: check branch protection, `git pull --rebase`
-- Rollback conflicts: see `references/advanced-modes.md`
+- No score: run `/eval` first. No `gh`: `brew install gh`. Push rejected: `git pull --rebase`.
+- No roadmap.yml: create from git log. No eval-cache: standalone completion formula.
+- No demand-cache.json for copy: suggest `/ideate package` first.
+- No market-context.json: degrade to un-positioned copy, flag it.
 
 $ARGUMENTS

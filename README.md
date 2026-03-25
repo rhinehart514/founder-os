@@ -62,50 +62,17 @@ Then build:
 /score             → is this product good? one number
 ```
 
-## Skills (26)
+## Skills (7)
 
-### Ideate + Validate
-| Skill | What it does |
-|-------|-------------|
-| `/discover` | Raw idea → validated business case with JTBD analysis |
-| `/blueprint` | Product architecture from Jobs-to-Be-Done — jobs, value props, features, tiers |
-| `/ideate` | Evidence-weighted brainstorming, kill lists, 11+ techniques |
-| `/research` | Market intelligence, competitor teardowns, live site analysis |
-| `/strategy` | Honest diagnosis — visits competitor sites, checks real pricing |
-| `/product` | Pressure-test: does this deliver on the demand hypothesis? |
-| `/money` | Pricing, unit economics, runway — does the math work? |
-| `/decide` | Go/kill/pivot gate with explicit evidence |
-
-### Build
-| Skill | What it does |
-|-------|-------------|
-| `/onboard` | Bootstrap any repo — detects features, generates config |
-| `/plan` | Checks the market, finds the bottleneck, proposes work |
-| `/go` | Autonomous build loop — code, measure, learn, repeat |
-| `/push` | Push a feature toward a target score |
-| `/feature` | Define, detect, track features |
-| `/todo` | Living backlog |
-
-### Measure
-| Skill | What it does |
-|-------|-------------|
-| `/score` | Did the product validate the demand hypothesis? One number. |
-| `/eval` | Does each feature deliver on the customer job it serves? |
-| `/taste` | Would a customer trust this enough to try it? |
-| `/assert` | Manage what must be true about this product |
-
-### Ship
-| Skill | What it does |
-|-------|-------------|
-| `/ship` | Deploy measured work |
-| `/roadmap` | Version theses and evidence tracking |
-| `/copy` | Product copy — landing, pitch, onboarding |
-
-### Learn
-| Skill | What it does |
-|-------|-------------|
-| `/retro` | Grade predictions, audit feature purpose, update knowledge |
-| `/retro audit` | Does each feature still serve a validated customer job? |
+| Skill | Job | Key Modes |
+|-------|-----|-----------|
+| `/demand` | What's worth building? | new, refine, pivot, kill, jobs, forces, research, market, customer, compete, position, package |
+| `/measure` | Is it good? | unified, quick, deep, feature, evidence, beliefs, flows, visual, cli, viability |
+| `/build` | Build the right thing | plan, go, quick, push, --safe, --interactive |
+| `/learn` | What did we learn? | grade, audit, consolidate, stale, calibrate, demand |
+| `/ideate` | Generate options | topic, improve, wild, kill, deep, technique, package |
+| `/ship` | Get it out | deploy, release, roadmap, copy, pitch, landing |
+| `/founder` | Home base | dashboard, onboard, feature, decide, todo, assert, configure, money, flow, map |
 
 ## Agents (14)
 

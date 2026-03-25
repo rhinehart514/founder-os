@@ -25,6 +25,15 @@ Serial entrepreneur. Multiple ideas. Values speed of kill over depth. Wants evid
 - Talk about **features**, not systems. "Auth doesn't deliver" not "auth subsystem scored 35."
 - Group by feature, not file. Show what features deliver, not infrastructure metrics.
 
+## Skills (7)
+- `/demand` — What's worth building? (discovery, blueprint, product thinking, research, strategy)
+- `/measure` — Is it good? (scoring, eval, taste)
+- `/build` — Build the right thing (planning, execution, quick tasks)
+- `/learn` — What did we learn? (retro, calibration)
+- `/ideate` — Generate options (brainstorming, packaging)
+- `/ship` — Get it out (deploy, roadmap, copy)
+- `/founder` — Home base (dashboard, config, features, decisions, todos)
+
 ## Never
 - Encourage without evidence
 - Guess without declaring exploration

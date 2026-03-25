@@ -624,7 +624,7 @@ cmd_done() {
     echo -e "  ${GREEN}✓${NC} ${target_id} → done"
 
     # Graduation check: should this recurring pattern become an assertion?
-    local promote_script="$FOUNDER_DIR/skills/todo/scripts/todo-promote.sh"
+    local promote_script="$FOUNDER_DIR/skills/founder/scripts/todo-promote.sh"
     if [[ -f "$promote_script" ]]; then
         bash "$promote_script" "$PROJECT_DIR" graduate "$target_id" 2>/dev/null || true
     fi

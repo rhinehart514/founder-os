@@ -124,4 +124,14 @@ if [[ -n "$SCORE_BEFORE" && -n "$SCORE_AFTER" && "$SCORE_BEFORE" =~ ^[0-9]+$ && 
     fi
 fi
 
+# --- Vault sync (persist learnings to Obsidian) ---
+if [[ -f "$FOUNDER_DIR/bin/vault-sync.sh" ]]; then
+    bash "$FOUNDER_DIR/bin/vault-sync.sh" "$PROJECT_DIR" 2>/dev/null || true
+fi
+
+# --- Demand sync (persist demand data to Obsidian) ---
+if [[ -f "$FOUNDER_DIR/bin/demand-sync.sh" ]]; then
+    bash "$FOUNDER_DIR/bin/demand-sync.sh" "$PROJECT_DIR" 2>/dev/null || true
+fi
+
 echo -e "${C_DIM}session logged${C_NC} ${C_DIM}·${C_NC} commits: ${COMMITS_TODAY}${DELTA_DISPLAY:+  ${C_DIM}·${C_NC}  score: ${DELTA_DISPLAY}}${UNGRADED_COUNT:+  ${C_DIM}·${C_NC}  ${UNGRADED_COUNT} ungraded predictions}"

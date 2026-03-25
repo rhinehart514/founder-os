@@ -1,7 +1,7 @@
 ---
 name: ideate
-description: "Generate options. Evidence-weighted brainstorming that produces ideas, not decisions. Kill lists, innovation techniques, and portfolio awareness for serial entrepreneurs."
-argument-hint: "[topic | improve <idea> | wild | kill | adjacent | deep | technique-name | \"constraint\"]"
+description: "Generate options. Evidence-weighted brainstorming that produces ideas, not decisions. Kill lists, innovation techniques, and portfolio awareness for serial entrepreneurs. Also handles customer-facing packaging from demand data."
+argument-hint: "[topic | improve <idea> | wild | kill | adjacent | deep | technique-name | package | \"constraint\"]"
 allowed-tools: Read, Write, Edit, Bash, Grep, Glob, Agent, WebFetch, WebSearch, AskUserQuestion
 ---
 
@@ -36,6 +36,7 @@ Parse `$ARGUMENTS`:
 - **`adjacent [idea]`** → `ADJACENT` mode (ideas near an existing idea)
 - **`deep`** → `DEEP` mode (full brainstorm — 3+ techniques, converge, kill)
 - **`[technique-name]`** → `TECHNIQUE` mode (run a specific technique from `techniques/`)
+- **`package`** → `PACKAGE` mode (bundle internal features into customer-facing packages)
 - **`[any constraint text]`** → `CONSTRAINED` mode (ideas within a specific direction)
 - **No args** → `PORTFOLIO-AWARE` mode (ideas based on founder's patterns + gaps)
 
@@ -190,6 +191,34 @@ Suggested flow:
 Run a specific creative technique. Run `scripts/list-techniques.sh` to see all available techniques, then read the matching file from `techniques/`. Any .md file in techniques/ is a valid technique name.
 
 Available techniques include: combination, constraint, cross-domain, divergent, feature-improve, future-back, inversion, killer, market-2026, pattern-theft, user-states, yc-lens.
+
+---
+
+## PACKAGE Mode — "/ideate package"
+
+Bundle internal features into customer-facing packages that match validated jobs.
+
+1. Read `.claude/cache/demand-cache.json` — extract jobs and features
+2. If no demand-cache.json: suggest `/demand jobs` first, stop
+3. For each cluster of features serving the same job:
+   - Generate `customer_name` — what the customer would call this bundle
+   - Generate `one_liner` — one sentence from the customer's perspective
+   - Map `internal_features` — which codebase features power it
+   - Assign `tier` — core (must-have) | expansion (grows value) | delight (surprise + retain)
+4. Write packages to demand-cache.json
+5. Present packages with evidence class labels
+
+Output per package:
+```
+### [Customer Name]
+**One-liner**: [from customer's perspective]
+**Internal features**: [feature-1, feature-2]
+**Serves job**: [functional: "When..., I want to..., so I can..."]
+**Tier**: [core|expansion|delight]
+**Evidence**: [observed|stated|market|inferred]
+```
+
+Mandatory: also output a kill list of features that don't serve any validated job.
 
 ---
 

@@ -20,11 +20,23 @@ INTERACTION      Atomic UI moments. Invisible until absent.
 - Four forces: What pushes them away from the current solution? What pulls them toward yours? What anxiety slows the switch? What inertia keeps them where they are?
 - Hire/fire triggers: When do they "hire" this product? When do they "fire" it?
 
+**Package definition** — a customer-facing bundle of internal features:
+- `customer_name`: What the customer calls it ("Never Miss Another Call")
+- `one_liner`: One sentence from customer's perspective
+- `internal_features`: Which codebase features power it
+- `tier`: core (must-have) | expansion (grows value) | delight (surprise + retain)
+
 **Evidence classes** — every demand-side output labels claims:
 - **[observed]**: User behavior data (analytics, session recordings, A/B tests)
 - **[stated]**: User said it (interviews, surveys, forum posts, reviews)
 - **[market]**: Market data (funding rounds, pricing pages, market reports)
 - **[inferred]**: LLM synthesis (pattern matching, reasoning from context)
+
+**Evidence staleness thresholds:**
+- [observed]: valid 90 days (re-validate quarterly)
+- [stated]: valid 60 days (opinions shift)
+- [market]: valid 30 days (markets move fast)
+- [inferred]: valid 7 days (re-infer with new data)
 
 ## Business (Validation)
 
@@ -47,7 +59,7 @@ INTERACTION      Atomic UI moments. Invisible until absent.
 
 Score is supporting. 100/100 with zero value = beautiful corpse.
 
-**Measurement:** `/score` (health), `/taste <url> flows` (works?), `/taste <url>` (looks?), `/eval` (features deliver?), `/score viability` (market?)
+**Measurement:** `/measure` (unified score), `/measure flows` (works?), `/measure visual` (looks?), `/measure feature` (features deliver?), `/measure viability` (market?), `/measure evidence` (evidence quality)
 - Score dropped → revert first, investigate second
 - Score plateaued → rethink, don't iterate
 - Founder disagrees → founder wins

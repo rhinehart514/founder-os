@@ -286,6 +286,53 @@ if [[ -f "$FOUNDER_DIR/bin/maturity-tier.sh" ]] && [[ "$HAS_PROJECT" == true ]];
     fi
 fi
 
+# ========== DEMAND SUMMARY ==========
+DEMAND_CACHE="$PROJECT_DIR/.claude/cache/demand-cache.json"
+if [[ -f "$DEMAND_CACHE" ]] && command -v jq &>/dev/null; then
+    _demand_feat_count=$(jq '.features | length' "$DEMAND_CACHE" 2>/dev/null || echo "0")
+    if [[ "$_demand_feat_count" -gt 0 ]]; then
+        echo ""
+        # Job → Feature tree
+        _job_lines=$(jq -r '
+            .features | to_entries[] |
+            .key as $feat |
+            .value.jobs // [] | .[] |
+            "\(.type // "?"): \(.statement // "unnamed") → \($feat) [\(.evidence_class // "inferred")]"
+        ' "$DEMAND_CACHE" 2>/dev/null)
+
+        if [[ -n "$_job_lines" ]]; then
+            _job_count=$(echo "$_job_lines" | wc -l | tr -d ' ')
+            echo -e "  ${C_DIM}demand${C_NC}      ${_job_count} jobs mapped"
+            _first=true
+            while IFS= read -r _jl; do
+                if [[ "$_first" == true ]]; then
+                    echo -e "              ${C_DIM}┌${C_NC} ${_jl}"
+                    _first=false
+                else
+                    echo -e "              ${C_DIM}├${C_NC} ${_jl}"
+                fi
+            done <<< "$_job_lines"
+        fi
+
+        # Package summary
+        _pkg_count=$(jq '[.features[].packages // [] | .[]] | length' "$DEMAND_CACHE" 2>/dev/null || echo "0")
+        if [[ "$_pkg_count" -gt 0 ]]; then
+            _pkg_names=$(jq -r '[.features[].packages // [] | .[].customer_name] | join(", ")' "$DEMAND_CACHE" 2>/dev/null)
+            echo -e "  ${C_DIM}packages${C_NC}    ${_pkg_count}: ${_pkg_names}"
+        fi
+
+        # Evidence distribution
+        _obs=$(jq '[.features[].evidence_summary.observed // 0] | add // 0' "$DEMAND_CACHE" 2>/dev/null || echo "0")
+        _sta=$(jq '[.features[].evidence_summary.stated // 0] | add // 0' "$DEMAND_CACHE" 2>/dev/null || echo "0")
+        _mkt=$(jq '[.features[].evidence_summary.market // 0] | add // 0' "$DEMAND_CACHE" 2>/dev/null || echo "0")
+        _inf=$(jq '[.features[].evidence_summary.inferred // 0] | add // 0' "$DEMAND_CACHE" 2>/dev/null || echo "0")
+        _total=$((_obs + _sta + _mkt + _inf))
+        if [[ "$_total" -gt 0 ]]; then
+            echo -e "  ${C_DIM}evidence${C_NC}    ${_obs} observed · ${_sta} stated · ${_mkt} market · ${_inf} inferred"
+        fi
+    fi
+fi
+
 # --- Alerts ---
 if [[ $UNGRADED_COUNT -gt 0 ]]; then
     echo ""
@@ -319,6 +366,11 @@ fi
 
 echo -e "${SEP}"
 echo ""
+
+# --- GSD Priority Injection (refresh .claude/rules/founder-priorities.md) ---
+if [[ -f "$FOUNDER_DIR/bin/gsd-priority-inject.sh" ]]; then
+    bash "$FOUNDER_DIR/bin/gsd-priority-inject.sh" "$PROJECT_DIR" 2>/dev/null || true
+fi
 
 # --- Compaction recovery ---
 if [[ "$SESSION_TYPE" == "compact" ]]; then

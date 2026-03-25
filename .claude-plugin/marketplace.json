@@ -6,14 +6,14 @@
   },
   "metadata": {
     "description": "AI cofounder — demand-side product thinking for serial entrepreneurs",
-    "version": "2.0.0"
+    "version": "2.0.1"
   },
   "plugins": [
     {
       "name": "founder-os",
       "source": "./",
-      "version": "2.0.0",
-      "description": "AI cofounder that helps you figure out what to build — and kill what isn't working. Demand-side product thinking: JTBD, four forces, evidence-labeled outputs. 28 skills, 31 agents, GSD execution engine, proactive market intelligence.",
+      "version": "2.0.1",
+      "description": "AI cofounder that helps you figure out what to build — and kill what isn't working. Demand-side product thinking with 7 consolidated skills (/demand, /measure, /build, /learn, /ideate, /ship, /founder), demand-cache.json data layer, evidence class tracking, customer-facing packaging. 31 agents, GSD execution engine, Obsidian vault sync.",
       "author": {
         "name": "Laney Fraass"
       },
@@ -22,7 +22,8 @@
       "license": "MIT",
       "keywords": [
         "founder", "startup", "serial-entrepreneur", "ai-cofounder",
-        "gsd", "execution-engine", "product-measurement"
+        "gsd", "execution-engine", "product-measurement",
+        "demand-cache", "evidence-class", "7-skills", "packaging"
       ]
     }
   ]

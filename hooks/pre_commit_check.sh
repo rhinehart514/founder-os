@@ -39,7 +39,7 @@ if [[ -n "$SECRETS_FOUND" ]]; then
 fi
 
 # Check for eval harness modifications
-HARNESS_FILES="bin/score.sh bin/eval.sh lens/product/eval/taste.mjs skills/taste/SKILL.md"
+HARNESS_FILES="bin/score.sh bin/eval.sh lens/product/eval/taste.mjs skills/measure/SKILL.md"
 for harness in $HARNESS_FILES; do
     if echo "$STAGED" | grep -q "^${harness}$" 2>/dev/null; then
         echo "{\"decision\": \"block\", \"reason\": \"Eval harness file staged: $harness — these are immutable during builds\"}"

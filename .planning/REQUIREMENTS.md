@@ -37,42 +37,38 @@ Requirements for demand-side product thinking repositioning. Each maps to roadma
 
 ---
 
-## v2.0.1 Requirements
+## v2.0.1 Requirements (Skill Consolidation + Demand Plumbing)
 
-Wiring the demand infrastructure into the actual product loop. v2.0 changed what we say — v2.0.1 makes the system actually behave differently.
+### Packaging (PKG)
+- **PKG-01**: `/ideate package` bundles internal features into customer-facing packages with customer_name, one_liner, tier
+- **PKG-02**: `/ship copy` reads demand-cache.json packages and generates copy using customer names, not internal feature names
 
-### Demand Plumbing
+### Visualization (VIZ)
+- **VIZ-01**: demand-cache.json syncs to Obsidian vault as Dataview-queryable notes (jobs.md, forces.md, packages.md, evidence.md)
+- **VIZ-02**: Session start hook shows demand summary (job→feature tree, packages, evidence distribution)
 
-- [ ] **PIPE-01**: `/feature bundle` mode — maps existing features to customer jobs, identifies merge candidates (same job), kill candidates (no job), and gaps (job with no feature)
-- [ ] **PIPE-02**: Blueprint → founder.yml pipeline — `/blueprint` outputs auto-wire into founder.yml feature definitions (jobs, evidence, hierarchy tier)
-- [ ] **PIPE-03**: Job statement fields in portfolio.yml schema — `functional_job`, `emotional_job`, `social_job` fields per idea, populated by /discover
-- [ ] **PIPE-04**: `/discover` → `/blueprint` handoff — discover business case passes context to blueprint automatically, no re-entering the idea
-- [ ] **PIPE-05**: Cross-skill job tracing — given a feature name, trace back to which customer job it serves and what evidence supports it
+### Consolidation (CONSOLIDATE)
+- **CONSOLIDATE-01**: 28 skills → 7 consolidated skills (demand, measure, build, learn, ideate, ship, founder)
 
-### Evidence Enforcement
+### Demand Integration (DINT)
+- **DINT-01**: `/founder` dashboard shows demand status with job→feature mapping
+- **DINT-02**: `/learn demand` mode presents jobs/forces to founder, adjusts demand_tier
+- **DINT-03**: Killed jobs recorded to experiment-learnings.md
 
-- [ ] **EVID-01**: Evidence class enforcement — `/eval` or `/assert` mode that flags demand claims with no evidence class label
-- [ ] **EVID-02**: Evidence quality stats in `/retro` — report % observed vs stated vs market vs inferred across all demand outputs
-- [ ] **EVID-03**: Evidence staleness — flag [market] evidence older than 30 days, [stated] evidence older than 90 days
+### Evidence (EVID)
+- **EVID-01**: `/measure evidence` audits evidence class distribution
+- **EVID-02**: Evidence quality stats in `/learn` output
+- **EVID-03**: Evidence staleness flags (observed 90d, stated 60d, market 30d, inferred 7d)
 
-### Demand-Aware Measurement
+### Demand Measurement (DMEAS)
+- **DMEAS-01**: Demand tier (Tier 6) added to scoring engine with 15% weight
+- **DMEAS-02**: demand-cache.json schema with jobs, forces, packages, evidence_summary
+- **DMEAS-03**: Graceful fallback when demand-cache.json missing (+10% delivery, +5% viability)
+- **DMEAS-04**: `/learn audit` includes four forces re-check
 
-- [ ] **DMEAS-01**: Demand tier in `/score` — actual scoring dimension for demand validation (jobs mapped? forces analyzed? evidence exists?) alongside health/delivery/craft/visual/viability
-- [ ] **DMEAS-02**: `/plan` demand-aware bottleneck — bottleneck detection considers demand validation gaps, not just score gaps. Feature with no job statement ranks as bottleneck regardless of score.
-- [ ] **DMEAS-03**: `/go` demand gate in `/quick` — quick skill currently bypasses /go's demand gate. Add the same soft gate.
-- [ ] **DMEAS-04**: Four forces in `/retro` — re-run four forces analysis during audit to detect if push/pull/anxiety/inertia shifted since last check
-
-### Demand Intelligence
-
-- [ ] **DINT-01**: Demand evidence dashboard in `/founder` — show demand status per idea (jobs mapped? forces analyzed? evidence classes? hire/fire identified?)
-- [ ] **DINT-02**: `/calibrate demand` — calibrate eval weights against what customers actually said matters (stated importance), not just founder preference
-- [ ] **DINT-03**: Job pattern compounding — when a job is killed in one venture, the pattern (job type + why it failed) propagates to experiment-learnings.md for cross-venture learning
-
-### Housekeeping
-
-- [ ] **HOUSE-01**: TOC insertion for 19 reference files >100 lines (deferred from v2.0 Phase 3)
-- [ ] **HOUSE-02**: v2.0 traceability table updated to Complete
-- [ ] **HOUSE-03**: Update /flow skill to reference demand gate and evidence classes
+### Housekeeping (HOUSE)
+- **HOUSE-01**: TOCs added to reference files >100 lines
+- **HOUSE-02**: All requirements mapped to phases
 
 ## Future Requirements (v2.1+)
 
@@ -123,28 +119,27 @@ Wiring the demand infrastructure into the actual product loop. v2.0 changed what
 
 | Requirement | Category | Status |
 |-------------|----------|--------|
-| PIPE-01 | Demand Plumbing | Pending |
-| PIPE-02 | Demand Plumbing | Pending |
-| PIPE-03 | Demand Plumbing | Pending |
-| PIPE-04 | Demand Plumbing | Pending |
-| PIPE-05 | Demand Plumbing | Pending |
-| EVID-01 | Evidence Enforcement | Pending |
-| EVID-02 | Evidence Enforcement | Pending |
-| EVID-03 | Evidence Enforcement | Pending |
-| DMEAS-01 | Demand-Aware Measurement | Pending |
-| DMEAS-02 | Demand-Aware Measurement | Pending |
-| DMEAS-03 | Demand-Aware Measurement | Pending |
-| DMEAS-04 | Demand-Aware Measurement | Pending |
-| DINT-01 | Demand Intelligence | Pending |
-| DINT-02 | Demand Intelligence | Pending |
-| DINT-03 | Demand Intelligence | Pending |
+| PKG-01 | Packaging | Pending |
+| PKG-02 | Packaging | Pending |
+| VIZ-01 | Visualization | Pending |
+| VIZ-02 | Visualization | Pending |
+| CONSOLIDATE-01 | Consolidation | Pending |
+| DINT-01 | Demand Integration | Pending |
+| DINT-02 | Demand Integration | Pending |
+| DINT-03 | Demand Integration | Pending |
+| EVID-01 | Evidence | Pending |
+| EVID-02 | Evidence | Pending |
+| EVID-03 | Evidence | Pending |
+| DMEAS-01 | Demand Measurement | Pending |
+| DMEAS-02 | Demand Measurement | Pending |
+| DMEAS-03 | Demand Measurement | Pending |
+| DMEAS-04 | Demand Measurement | Pending |
 | HOUSE-01 | Housekeeping | Pending |
 | HOUSE-02 | Housekeeping | Pending |
-| HOUSE-03 | Housekeeping | Pending |
 
 **Coverage:**
 - v2.0: 16/16 complete ✅
-- v2.0.1: 18 requirements defined, 0 mapped to phases
+- v2.0.1: 17 requirements defined, 0 mapped to phases
 - v2.1+: 6 future requirements parked
 
 ---

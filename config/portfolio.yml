@@ -35,3 +35,53 @@ ideas: {}
 #     kill_condition: "Office managers don't control the budget — need owner sign-off every time"
 #     decision: null
 #     patterns_detected: []
+#     demand_tier: unknown  # unknown|hypothesized|observed|validated
+#     jobs:
+#       - type: functional
+#         statement: "When I get a call during a procedure, I want it answered and logged, so I can focus on patients"
+#         importance: 9
+#         satisfaction: 3
+#         opportunity_score: 15  # importance + max(importance - satisfaction, 0), capped at 20
+#         evidence_class: stated  # observed|stated|market|inferred
+#       - type: emotional
+#         statement: "When managing the office alone, I want to feel in control, so I can stop worrying about missed leads"
+#         importance: 8
+#         satisfaction: 4
+#         opportunity_score: 12
+#         evidence_class: inferred
+#       - type: social
+#         statement: "When the dentist asks about new patients, I want to show growth, so I can be seen as indispensable"
+#         importance: 7
+#         satisfaction: 5
+#         opportunity_score: 9
+#         evidence_class: inferred
+#     forces:
+#       push:
+#         description: "Podium costs $400/mo and still requires manual work"
+#         strength: 7
+#       pull:
+#         description: "Auto-answered calls + site in 15 min = immediate value"
+#         strength: 8
+#       anxiety:
+#         description: "Will AI sound robotic? Will it lose patients?"
+#         strength: 6
+#       habit:
+#         description: "Current workflow is known; staff trained on Podium"
+#         strength: 5
+#       net_switching_energy: 4  # (push + pull) - (anxiety + habit), range -20 to 20
+#     evidence_summary:
+#       observed: 0
+#       stated: 2
+#       market: 3
+#       inferred: 4
+#     packages:
+#       - customer_name: "Never Miss Another Call"
+#         one_liner: "Every call answered, every lead captured"
+#         internal_features: [voice-ai, call-routing]
+#         serves_job: "functional:0"
+#         tier: core  # core|expansion|delight
+#       - customer_name: "Instant Online Presence"
+#         one_liner: "A professional site from your Google listing in 15 minutes"
+#         internal_features: [gbp-sync, site-gen]
+#         serves_job: "functional:0"
+#         tier: core

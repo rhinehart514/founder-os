@@ -77,24 +77,24 @@ features:
   ideation:
     delivers: "evidence-weighted idea generation with kill lists, creative techniques, and portfolio awareness"
     for: "serial entrepreneur deciding what to build next"
-    skills: ["/ideate", "/discover", "/decide", "/blueprint"]
-    code: ["skills/ideate/SKILL.md", "skills/discover/SKILL.md", "skills/decide/SKILL.md", "skills/ideate/techniques/", "skills/ideate/scripts/"]
+    skills: ["/ideate", "/demand", "/founder"]
+    code: ["skills/ideate/SKILL.md", "skills/demand/SKILL.md", "skills/ideate/techniques/", "skills/ideate/scripts/"]
     status: active
     weight: 4
 
   validation:
     delivers: "structured research that produces go/kill decisions with cited evidence"
     for: "serial entrepreneur evaluating an idea"
-    skills: ["/research", "/strategy", "/product", "/money"]
-    code: ["skills/research/SKILL.md", "skills/strategy/SKILL.md", "skills/product/SKILL.md", "skills/money/SKILL.md", "skills/research/scripts/", "skills/strategy/scripts/"]
+    skills: ["/demand", "/founder"]
+    code: ["skills/demand/SKILL.md", "skills/founder/SKILL.md", "skills/demand/scripts/", "skills/demand/references/"]
     status: active
     weight: 5
 
   portfolio:
     delivers: "cross-venture state — track ideas, stages, patterns, accuracy across all ventures"
     for: "serial entrepreneur with multiple ideas"
-    skills: ["/founder", "/decide", "/discover"]
-    code: ["skills/founder/SKILL.md", "skills/decide/SKILL.md", "skills/discover/SKILL.md", "config/portfolio.yml"]
+    skills: ["/founder", "/demand"]
+    code: ["skills/founder/SKILL.md", "skills/demand/SKILL.md", "config/portfolio.yml"]
     status: active
     weight: 4
     depends_on: [ideation]
@@ -104,8 +104,8 @@ features:
   scoring:
     delivers: "honest number that tells a founder if their product improved"
     for: "solo founder who just made changes"
-    skills: ["/score", "/eval"]
-    code: ["skills/score/SKILL.md", "skills/eval/SKILL.md", "bin/score.sh", "bin/eval.sh", "bin/lib/config.sh", "skills/shared/product-topology.sh", "skills/shared/claim-verify.sh", "skills/score/scripts/synthesize.sh"]
+    skills: ["/measure"]
+    code: ["skills/measure/SKILL.md", "bin/score.sh", "bin/eval.sh", "bin/lib/config.sh", "skills/shared/product-topology.sh", "skills/shared/claim-verify.sh", "skills/measure/scripts/synthesize.sh"]
     internal: ["founder score .", "founder eval ."]
     status: active
     weight: 5
@@ -113,8 +113,8 @@ features:
   build-loop:
     delivers: "autonomous build cycle — plan the bottleneck, build it, measure improvement, learn"
     for: "solo founder who wants progress every session"
-    skills: ["/plan", "/go", "/push"]
-    code: ["skills/plan/SKILL.md", "skills/go/SKILL.md", "skills/push/SKILL.md", "skills/plan/scripts/", "skills/go/scripts/"]
+    skills: ["/build"]
+    code: ["skills/build/SKILL.md", "skills/build/scripts/", "skills/build/references/"]
     status: active
     weight: 5
     depends_on: [scoring]
@@ -122,16 +122,16 @@ features:
   skills-system:
     delivers: "every command a founder needs — from onboarding to shipping, backlog to taste testing, features to deployment"
     for: "solo founder working in Claude Code"
-    skills: ["/founder", "/onboard", "/feature", "/todo", "/taste", "/ship", "/roadmap", "/copy", "/calibrate", "/configure", "/skill", "/retro"]
-    code: ["skills/founder/SKILL.md", "skills/onboard/SKILL.md", "skills/feature/SKILL.md", "skills/todo/SKILL.md", "skills/taste/SKILL.md", "skills/ship/SKILL.md", "skills/roadmap/SKILL.md", "skills/copy/SKILL.md"]
+    skills: ["/founder", "/measure", "/ship", "/learn"]
+    code: ["skills/founder/SKILL.md", "skills/measure/SKILL.md", "skills/ship/SKILL.md", "skills/learn/SKILL.md"]
     status: active
     weight: 4
 
   learning:
     delivers: "a model that gets smarter every session — predictions, grading, feature purpose audits, knowledge updates across ventures"
     for: "the system itself — compounds over time"
-    skills: ["/retro"]
-    code: ["skills/retro/SKILL.md", "hooks/session_start.sh", "bin/grade.sh", "bin/trail.sh", "~/.claude/knowledge/predictions.tsv"]
+    skills: ["/learn"]
+    code: ["skills/learn/SKILL.md", "hooks/session_start.sh", "bin/grade.sh", "bin/trail.sh", "~/.claude/knowledge/predictions.tsv"]
     status: active
     weight: 4
     depends_on: [scoring]
@@ -139,8 +139,8 @@ features:
   world-awareness:
     delivers: "proactive market intelligence — checks competitors, pricing, platform changes, regulation before the founder asks"
     for: "serial entrepreneur who needs to know if the world changed while they were building"
-    skills: ["/strategy", "/research", "/plan", "/retro"]
-    code: ["mind/world.md", "skills/strategy/SKILL.md", "skills/plan/SKILL.md", "skills/retro/SKILL.md"]
+    skills: ["/demand", "/build", "/learn"]
+    code: ["mind/world.md", "skills/demand/SKILL.md", "skills/build/SKILL.md", "skills/learn/SKILL.md"]
     status: active
     weight: 4
     depends_on: [validation]

@@ -1,31 +1,92 @@
 # /founder Gotchas
 
-Built from real failure modes across sessions. Update this when /founder fails in a new way.
+Merged from: founder, onboard, feature, todo, assert, configure, skill, money. Update when any mode fails in a new way.
 
-## Data failures
-- **Missing jq**: system-pulse.sh needs jq for JSON parsing. If jq is missing, score/eval/bottleneck sections silently fail. Check `command -v jq` at the top and warn.
-- **Stale score-cache**: score-cache.json is only updated when `founder score .` runs. The dashboard shows the cached score, not the real one. If last commit changed code, the cached score may be wrong. Note the cache age.
-- **eval-cache without founder.yml weights**: eval-cache has scores but bottleneck computation needs weights from founder.yml. Missing weights default to 1, which makes the bottleneck wrong for any project with intentional weighting.
-- **predictions.tsv fallback path**: The script checks project-local first, then `~/.claude/knowledge/`. If both exist, it reads the project-local one. This is correct but surprising — a project can shadow the global predictions file.
-- **Portfolio file location**: `~/.founder-os/portfolio.yml` is global (cross-project). `config/portfolio.yml` is local. The dashboard reads the global file for the portfolio summary zone. If only the local file exists, no portfolio zone renders.
+## Dashboard
 
-## Rendering failures
-- **Dashboard addiction**: Checking /founder repeatedly without building. The dashboard shows state, it doesn't change state. If someone runs /founder 3+ times in a session without a commit between them, note it.
-- **Opinion over-scripting**: The decision tree produces mechanical advice. The tree is a starting point — override it when judgment says otherwise. A feature at eval 31 that just jumped from 20 is momentum, not "needs work."
-- **Zombie zones**: Rendering a zone with data that's weeks old looks active but is actually dead. Check modification times. A plan from 5 days ago is not "active."
-- **Bar width rounding**: Score bars use 20-char width. Scores like 3, 7, 13 round to the same bar width. Don't rely on bar visual for small differences — always show the number.
-- **Portfolio zone bloat**: With many ideas, the portfolio summary can dominate the dashboard. Cap at 5 active ideas shown. If more exist, show top 5 by recency and note "[N] more active ideas."
+- **Missing jq**: system-pulse.sh needs jq. Check `command -v jq` and warn.
+- **Stale score-cache**: only updated when `founder score .` runs. Note cache age.
+- **eval-cache without weights**: missing weights default to 1, making bottleneck wrong for weighted projects.
+- **predictions.tsv fallback**: project-local shadows `~/.claude/knowledge/`. Correct but surprising.
+- **Portfolio file location**: `~/.founder-os/portfolio.yml` is global. `config/portfolio.yml` is local. Dashboard reads global.
+- **Dashboard addiction**: /founder 3+ times without a commit between = avoidance, not progress.
+- **Opinion over-scripting**: decision tree is a starting point. Override when judgment says so.
+- **Zombie zones**: data weeks old looks active but is dead. Check modification times.
+- **Bar width rounding**: scores 3, 7, 13 round to same bar. Always show the number.
+- **Portfolio zone bloat**: cap at 5 active ideas. Note "[N] more" if exceeded.
+- **Snapshot bloat**: keep last 20, trim older.
+- **Pattern detection false positives**: not every bottleneck stall is wrong. Check if score is moving slowly.
+- **Score-product divergence**: score improves while product doesn't (gaming) or vice versa (formula lag).
+- **Health grade inflation**: zero predictions is worse than 30% accuracy. Weight learning loop heavily.
 
-## Snapshot failures
-- **Snapshot bloat**: founder-snapshots.json grows unbounded if you forget to trim. Keep last 20, prune older. The script doesn't auto-trim — you must enforce this.
-- **Snapshot-less compare**: `/founder compare` with 0 snapshots should say "First snapshot" and stop. Don't try to diff against nothing.
-- **Pattern detection false positives**: "Bottleneck stagnation" fires when working on a hard problem that legitimately takes multiple sessions. Not every stall is wrong. Check if the bottleneck score is actually moving (even slowly).
+## Onboard
 
-## Anti-rationalization failures
-- **Score-product divergence**: Score improves while product doesn't (assertion gaming) or product improves while score doesn't (formula lag). Both are real. Flag both.
-- **Health grade inflation**: The A-F grade can show A when the learning loop is broken (predictions ungraded for weeks). Weight the learning loop subsystem heavily — a system that doesn't learn is grade C at best regardless of other subsystems.
-- **Prediction avoidance masking**: If there are zero predictions, accuracy shows "--" which looks neutral. Zero predictions is worse than 30% accuracy — the system is blind.
+- **Monorepo blindness**: detect-project.sh finds root package.json, misses apps/. Check for workspaces, turborepo.json.
+- **Framework false negatives**: custom frameworks match nothing. If src/ has 50+ files, ask.
+- **CLI-as-web mistake**: check bin/ in package.json before assuming web.
+- **Placeholder generation**: "TODO" or vague text defeats the purpose. Every field needs real content.
+- **Value hypothesis vagueness**: must be testable: "[person] can [action] without [pain]."
+- **Missing value.user**: "developers" is not a person. Name the situation.
+- **Stage mis-assessment**: code polish != maturity. Check git history, tests, deploy config.
+- **Feature over-detection**: modules != features. Features deliver user value.
+- **Weight inflation**: every feature at w:5 means nothing is prioritized.
+- **llm_judge overuse**: mechanical assertions have zero variance. Use them first.
+- **Assertions that always pass**: test something that could fail and would matter.
+- **Skipping strategy.yml**: without it, /plan has no bottleneck context.
 
-## Script failures
-- **skill-catalog.sh on non-standard layouts**: The script expects `skills/*/SKILL.md` convention. Skills installed in non-standard paths (nested, different naming) won't appear. This is by design but confusing when a skill exists but doesn't show in help.
-- **compute-bottleneck.sh missing**: If the shared bin script isn't executable or doesn't exist, bottleneck falls back to "none computed." The opinion then has no bottleneck to act on — it should fall through to plan-based or thesis-based opinions instead.
+## Feature
+
+- **Generic "for" field**: "developers" makes viability scoring meaningless. Name the situation.
+- **Solution-as-delivers**: "dashboard" is implementation, not value.
+- **Zombie weight-1**: if it barely matters, kill it.
+- **Overlapping code paths**: two features claiming same file confuses eval.
+- **Maturity wishful thinking**: maturity is COMPUTED from eval scores, never manual.
+- **Kill avoidance**: 3+ sessions with no score movement = kill or rethink.
+- **Undeclared dependencies**: check dependency-graph.sh before building.
+- **Prescribing without seeing**: read the actual code before generating ideas.
+- **Wrong sub-score focus**: fix delivery before craft. Always check which sub-score is lowest.
+
+## Todo
+
+- **Todo as procrastination**: growing backlog with nothing done = avoidance.
+- **Vague titles**: "fix auth" is not actionable. Describe the done state.
+- **Never running decay**: stale items accumulate. Default view must include decay.
+- **Promoting without capacity**: 5+ active = nothing is active. Cap at 1-3.
+- **Source-blind promotion**: regression todos deserve faster promotion than speculative ones.
+- **Never killing**: 60+ days with nobody caring = delete.
+
+## Assert
+
+- **Defaulting to llm_judge**: if you can grep for it, don't judge it. ~15 point variance.
+- **file_check theater**: 10 file_checks all passing = you know files exist, not that they work.
+- **command_check on flaky commands**: network/timing deps will flap. Pin or mock.
+- **Vague beliefs**: "auth works" is not testable. One claim per assertion.
+- **Removing failing assertions**: failing = signal, not problem. Removing hides bugs.
+- **Piling on well-covered features**: cover uncovered features before deepening.
+- **Severity inflation**: default to warn. Reserve block for things that break scoring.
+
+## Configure
+
+- **Economy when quality matters**: economy is for exploration, not core features.
+- **Config-as-fix antipattern**: scores are low because the product needs work, not config.
+- **Overwriting preferences.yml**: always read-modify-write, never truncate.
+- **Editing founder.yml**: /configure writes ONLY to preferences.yml.
+
+## Skill
+
+- **Creating without evidence**: 3+ sessions of the pattern recurring, or push back.
+- **SKILL.md as the entire skill**: split into scripts, references, templates.
+- **Overlap blindness**: add a route to existing skill instead of creating a new one.
+- **Structure without measurement**: 400-line SKILL.md with 0 assertions = theater.
+- **Unmeasured survival**: flag at 30 days, kill or measure at 60.
+- **Route keyword collision**: catch semantic synonyms, not just exact matches.
+
+## Money
+
+- **Anchoring to cost, not value**: price is about value to user, not infrastructure cost.
+- **Free tier too generous**: free should create desire for paid, not satisfy it.
+- **Assuming zero churn**: use 5% monthly as default. Zero churn = fantasy.
+- **CAC = $0 because "organic"**: founder time has opportunity cost.
+- **LTV fantasy**: without retention data, use 12 months conservative.
+- **Ignoring per-user API costs**: AI products especially. Margin = revenue minus ALL costs.
+- **Over-modeling with no data**: at stage one, the only question is "will one person pay?"

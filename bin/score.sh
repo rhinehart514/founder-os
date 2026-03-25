@@ -739,7 +739,7 @@ SYNTHESIZED_JSON=""
 SYNTHESIZED_SCORE=""
 SYNTHESIZED_CONFIDENCE=""
 SYNTHESIZED_TIERS=""
-_synth_script="$SCRIPT_DIR/../skills/score/scripts/synthesize.sh"
+_synth_script="$SCRIPT_DIR/../skills/measure/scripts/synthesize.sh"
 if [[ -x "$_synth_script" || -f "$_synth_script" ]] && [[ "$SCORING_MODE" == "assertions" ]] && [[ "$BUILD_GATE" != "FAIL" ]] && [[ "$HEALTH_MIN" -ge "$HEALTH_GATE_THRESHOLD" ]]; then
     start_spinner "synthesizing unified score..."
     _synth_err=$(mktemp /tmp/founder-synth-err.XXXXXX)

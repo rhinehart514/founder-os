@@ -73,6 +73,25 @@ Decimal phases appear between their surrounding integers in numeric order.
   3. Both tools produce outputs that connect to job statements from Phase 2 — they are not standalone diagnostics
 **Plans**: TBD
 
+## v2.0.1 — Skill Consolidation + Demand Plumbing
+
+**Thesis**: Consolidating 28 skills → 7 with demand-cache.json as the unifying data layer improves both UX (fewer commands to learn) and product quality (demand evidence flows through every skill).
+
+### Phases
+1. **Foundation** — Schema + scripts + mind files (demand-cache.json, scoring engine, Obsidian sync)
+2. **Core 3 Skills** — /demand, /measure, /build (highest-value consolidations)
+3. **Remaining 4 Skills** — /learn, /ideate, /ship, /founder
+4. **Wiring + Cleanup** — Delete old skills, update config, hook up visualization
+
+### Evidence Items
+- [ ] `ls skills/` shows exactly 7 directories
+- [ ] Each SKILL.md under 120 lines
+- [ ] `/demand` writes demand-cache.json
+- [ ] `/measure` includes demand tier in scoring
+- [ ] `/build` checks demand gate before building
+- [ ] Session start shows demand summary
+- [ ] Obsidian vault synced with demand notes
+
 ## Progress
 
 **Execution Order:**
