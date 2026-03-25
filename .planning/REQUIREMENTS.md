@@ -61,28 +61,28 @@ Requirements for demand-side product thinking repositioning. Each maps to roadma
 
 | Requirement | Phase | Status |
 |-------------|-------|--------|
-| DEMAND-01 | — | Pending |
-| DEMAND-02 | — | Pending |
-| DEMAND-03 | — | Pending |
-| DEMAND-04 | — | Pending |
-| DEMAND-05 | — | Pending |
-| DEMAND-06 | — | Pending |
-| DEMAND-07 | — | Pending |
-| NARR-01 | — | Pending |
-| NARR-02 | — | Pending |
-| NARR-03 | — | Pending |
-| NARR-04 | — | Pending |
-| MEAS-01 | — | Pending |
-| MEAS-02 | — | Pending |
-| MEAS-03 | — | Pending |
-| ADV-01 | — | Pending |
-| ADV-02 | — | Pending |
+| DEMAND-01 | Phase 1 | Pending |
+| DEMAND-02 | Phase 1 | Pending |
+| DEMAND-03 | Phase 1 | Pending |
+| DEMAND-04 | Phase 1 | Pending |
+| DEMAND-05 | Phase 2 | Pending |
+| DEMAND-06 | Phase 2 | Pending |
+| DEMAND-07 | Phase 2 | Pending |
+| NARR-01 | Phase 3 | Pending |
+| NARR-02 | Phase 3 | Pending |
+| NARR-03 | Phase 3 | Pending |
+| NARR-04 | Phase 3 | Pending |
+| MEAS-01 | Phase 4 | Pending |
+| MEAS-02 | Phase 4 | Pending |
+| MEAS-03 | Phase 4 | Pending |
+| ADV-01 | Phase 5 | Pending |
+| ADV-02 | Phase 5 | Pending |
 
 **Coverage:**
 - v2.0 requirements: 16 total
-- Mapped to phases: 0
-- Unmapped: 16 ⚠️
+- Mapped to phases: 16
+- Unmapped: 0 ✓
 
 ---
 *Requirements defined: 2026-03-25*
-*Last updated: 2026-03-25 after initial definition*
+*Last updated: 2026-03-25 after roadmap creation*
