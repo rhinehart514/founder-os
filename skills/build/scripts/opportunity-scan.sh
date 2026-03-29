@@ -2,7 +2,7 @@
 # opportunity-scan.sh — Surfaces opportunities the founder isn't seeing.
 # Runs as part of /plan and session_start. Cross-references multiple sources.
 # Output: structured opportunities, ranked by information value.
-set -uo pipefail
+set -euo pipefail
 
 PROJECT_DIR="${1:-.}"
 SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
