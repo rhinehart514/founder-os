@@ -205,7 +205,7 @@ detect_stale_entries() {
                 if [[ "$stale_line" != *"(stale)"* ]]; then
                     local escaped_snippet
                     escaped_snippet=$(printf '%s\n' "$snippet" | sed 's/[[\.*^$()+?{|]/\\&/g')
-                    sed -i '' "s|${escaped_snippet}|${snippet} (stale)|" "$learnings_file" 2>/dev/null && demoted=$((demoted + 1))
+                    sed "s|${escaped_snippet}|${snippet} (stale)|" "$learnings_file" > "$learnings_file.tmp" 2>/dev/null && mv "$learnings_file.tmp" "$learnings_file" && demoted=$((demoted + 1))
                 fi
             fi
         done <<< "$(echo -e "$stale_list")"
