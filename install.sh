@@ -260,6 +260,8 @@ else
     warn "no skills found in skills/"
 fi
 
+agent_count="${agent_count:-?}"
+
 echo ""
 
 # --- Summary ---
