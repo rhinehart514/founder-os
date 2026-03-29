@@ -1,14 +1,15 @@
 #!/usr/bin/env bash
 # plateau-check.sh — Detect N consecutive flat moves.
-# Usage: bash scripts/plateau-check.sh [threshold] [--verbose]
+# Usage: bash scripts/plateau-check.sh [project-dir] [threshold] [--verbose]
 # Exit 0 = no plateau, Exit 1 = plateau detected
 set -euo pipefail
 
 SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
-PROJECT_DIR="$(cd "$SCRIPT_DIR/../.." && pwd)"
-THRESHOLD="${1:-3}"
+PROJECT_DIR="${1:-.}"
+PROJECT_DIR="$(cd "$PROJECT_DIR" && pwd)"
+THRESHOLD="${2:-3}"
 VERBOSE=false
-[[ "${2:-}" == "--verbose" ]] && VERBOSE=true
+[[ "${3:-}" == "--verbose" ]] && VERBOSE=true
 
 HISTORY="$PROJECT_DIR/.claude/scores/history.tsv"
 
