@@ -75,11 +75,11 @@ else
         # Check for related predictions
         if [[ -f "$PRED_FILE" ]]; then
             SEARCH_TERM=$(echo "$EV_Q" | cut -c1-30)
-            RELATED=$(grep -i -c -E "$EV_ID|$SEARCH_TERM" "$PRED_FILE" 2>/dev/null || true)
+            RELATED=$(grep -i -c -F -e "$EV_ID" -e "$SEARCH_TERM" "$PRED_FILE" 2>/dev/null || true)
             RELATED=$(echo "$RELATED" | tr -d '[:space:]')
             RELATED=${RELATED:-0}
             if [[ "$RELATED" -gt 0 ]]; then
-                CORRECT=$(grep -i -E "$EV_ID|$SEARCH_TERM" "$PRED_FILE" 2>/dev/null | awk -F'\t' '$5 == "yes"' | wc -l | tr -d ' ' || echo "0")
+                CORRECT=$(grep -i -F -e "$EV_ID" -e "$SEARCH_TERM" "$PRED_FILE" 2>/dev/null | awk -F'\t' '$5 == "yes"' | wc -l | tr -d ' ' || echo "0")
                 echo "    predictions: $RELATED related ($CORRECT correct)"
             fi
         fi
