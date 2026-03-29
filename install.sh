@@ -62,8 +62,10 @@ else
     exit 1
 fi
 
-# Claude Code is required
-if command -v claude &>/dev/null; then
+# Claude Code is required (skip with SKIP_CLAUDE_CHECK=1 for testing)
+if [[ "${SKIP_CLAUDE_CHECK:-0}" == "1" ]]; then
+    action "Claude Code check skipped (SKIP_CLAUDE_CHECK=1)"
+elif command -v claude &>/dev/null; then
     action "Claude Code available"
 else
     echo -e "    ${RED}✗${NC} claude CLI is required — founder-os is a Claude Code plugin"
