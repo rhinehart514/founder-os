@@ -1,7 +1,7 @@
 {
   "_schema": "market-context.json — structured output from /research market",
   "_version": "1.0",
-  "updated": "YYYY-MM-DD",
+  "last_updated": "YYYY-MM-DD",
   "domain": "description of the market/problem space",
   "competitors": [
     {
