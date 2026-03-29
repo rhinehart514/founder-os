@@ -108,3 +108,6 @@ echo ""
 # --- 6. Recovery hint ---
 echo -e "  ${C_GREEN}▸${C_NC} Continue with the next task in the plan."
 echo ""
+
+# Vault sync (async — persist state before context is lost)
+[[ -f "$FOUNDER_DIR/bin/vault-sync.sh" ]] && bash "$FOUNDER_DIR/bin/vault-sync.sh" "$PROJECT_DIR" &>/dev/null &

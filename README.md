@@ -1,6 +1,9 @@
 # founder-os
 
-An AI cofounder that helps you figure out what to build — and kill what isn't working.
+Cursor for PM — product thinking that lives inside Claude Code.
+
+Figure out what to build before you build it. Map customer jobs, test value props,
+kill bad ideas fast — then build what survives with measurement.
 
 **Validate Demand → Ideate → Decide → Build → Measure → Ship → Learn → Repeat**
 
@@ -50,9 +53,9 @@ claude
 ## Quick start
 
 ```
-/discover "AI front office for local businesses"  → validate demand, map customer jobs
-/blueprint                                         → JTBD analysis, value props, feature architecture
-/decide ai-front-office                            → go/kill/pivot gate with evidence
+/demand new "AI front office for local businesses"  → validate demand
+/demand jobs                                         → JTBD analysis, four forces
+/founder decide ai-front-office                      → go/kill/pivot gate
 ```
 
 Then build:
@@ -80,7 +83,7 @@ builder, evaluator, measurer, reviewer, explorer, market-analyst, customer, grad
 
 ## What makes it different
 
-1. **Demand first.** Every feature traces back to a customer job. `/discover` and `/blueprint` map demand before `/go` writes code.
+1. **Demand first.** Every feature traces back to a customer job. `/demand` maps demand before `/build` writes code.
 2. **Portfolio is global.** `~/.founder-os/portfolio.yml` follows you across projects. `/founder` shows the dashboard. Learnings compound.
 3. **Proactive, not reactive.** WebSearches markets, visits competitor sites, surfaces changes before you ask.
 4. **14 failure patterns** auto-checked every session. Building for nobody? Revenue avoidance? Portfolio sprawl? Named and caught.

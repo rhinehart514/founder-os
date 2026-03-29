@@ -1,0 +1,87 @@
+# founder-os portfolio
+# Each idea tracks the full validation journey: raw → researching → validating → committed → building → shipped → killed
+
+ideas: {}
+
+# Example idea structure:
+# ideas:
+#   ai-front-office:
+#     name: AI Front Office for Local Businesses
+#     stage: researching
+#     created: 2026-03-22
+#     customer:
+#       name: Chelsea (office manager, dental practice)
+#       pain: Spends 10hrs/week managing GBP, calls, reviews manually
+#       current_solution: Spreadsheets + Podium ($400/mo)
+#       budget: $200-400/mo (already paying for Podium)
+#     wedge: GBP optimization → auto-generated landing page in 15 min
+#     why_now: Google Business Profile API matured, AI can generate quality sites cheaply
+#     why_you: Built the prototype, have client zero
+#     model:
+#       pricing: $199/mo
+#       channel: Direct outreach to office managers
+#       retention: Ongoing GBP management + site hosting
+#     competition:
+#       - name: Podium
+#         pricing: $400/mo
+#         weakness: Expensive, no site generation
+#     hypotheses:
+#       - statement: Office managers will pay $199/mo for automated GBP + site
+#         status: untested
+#         evidence: []
+#       - statement: 15-minute site generation is fast enough to close on first call
+#         status: untested
+#         evidence: []
+#     kill_condition: "Office managers don't control the budget — need owner sign-off every time"
+#     decision: null
+#     patterns_detected: []
+#     demand_tier: unknown  # unknown|hypothesized|observed|validated
+#     jobs:
+#       - type: functional
+#         statement: "When I get a call during a procedure, I want it answered and logged, so I can focus on patients"
+#         importance: 9
+#         satisfaction: 3
+#         opportunity_score: 15  # importance + max(importance - satisfaction, 0), capped at 20
+#         evidence_class: stated  # observed|stated|market|inferred
+#       - type: emotional
+#         statement: "When managing the office alone, I want to feel in control, so I can stop worrying about missed leads"
+#         importance: 8
+#         satisfaction: 4
+#         opportunity_score: 12
+#         evidence_class: inferred
+#       - type: social
+#         statement: "When the dentist asks about new patients, I want to show growth, so I can be seen as indispensable"
+#         importance: 7
+#         satisfaction: 5
+#         opportunity_score: 9
+#         evidence_class: inferred
+#     forces:
+#       push:
+#         description: "Podium costs $400/mo and still requires manual work"
+#         strength: 7
+#       pull:
+#         description: "Auto-answered calls + site in 15 min = immediate value"
+#         strength: 8
+#       anxiety:
+#         description: "Will AI sound robotic? Will it lose patients?"
+#         strength: 6
+#       habit:
+#         description: "Current workflow is known; staff trained on Podium"
+#         strength: 5
+#       net_switching_energy: 4  # (push + pull) - (anxiety + habit), range -20 to 20
+#     evidence_summary:
+#       observed: 0
+#       stated: 2
+#       market: 3
+#       inferred: 4
+#     packages:
+#       - customer_name: "Never Miss Another Call"
+#         one_liner: "Every call answered, every lead captured"
+#         internal_features: [voice-ai, call-routing]
+#         serves_job: "functional:0"
+#         tier: core  # core|expansion|delight
+#       - customer_name: "Instant Online Presence"
+#         one_liner: "A professional site from your Google listing in 15 minutes"
+#         internal_features: [gbp-sync, site-gen]
+#         serves_job: "functional:0"
+#         tier: core

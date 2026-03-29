@@ -47,15 +47,16 @@ The skill that makes serial entrepreneurs' judgment compound.
 
 ## FULL mode (default)
 
-1. **Grade** ungraded predictions in `~/.claude/knowledge/predictions.tsv`. For each: check outcome, grade yes/no/partial, write model_update if wrong. Read `references/grading-guide.md` first.
+1. **Grade** ungraded predictions in `~/.claude/knowledge/predictions.tsv`. For each: check outcome, grade yes/no/partial, write model_update if wrong. **Tag each prediction with its hierarchy level** (outcome/opportunity/system/feature/micro-feature/interaction). Track accuracy by level — low accuracy at a particular level = calibration signal. Read `references/grading-guide.md` first.
 2. **Consolidate** `~/.claude/knowledge/experiment-learnings.md`: promote uncertain patterns with 3+ confirmations, add boundary conditions to wrong Known patterns, track new territory.
-3. **Audit** each active feature against its original customer job. WebSearch domain. Check four forces: has push/pull changed? New anxiety or inertia factors? Check why_now, competition, pricing model, platform risk. Output: still matters / needs pivot / audit failed.
-4. **Stale check**: run `bash scripts/stale-knowledge.sh`. Flag Known >30d unreferenced, Dead Ends >6mo, Uncertain >14d unresolved. Evidence staleness: observed 90d, stated 60d, market 30d, inferred 7d.
-5. **Output** with evidence quality stats. Log via `bash scripts/retro-log.sh`. Write `~/.claude/cache/last-retro.yml`.
+3. **Audit** each active feature against its original customer job. WebSearch domain. Check four forces: has push/pull changed? New anxiety or inertia factors? Check why_now, competition, pricing model, platform risk. **Also audit at outcome level**: does the portfolio's claimed outcome still match reality? Have outcome metrics moved? **At system level**: are systems that were built still the right decomposition? Read `skills/shared/hierarchy-lens.md` for per-level audit questions. Output: still matters / needs pivot / audit failed.
+4. **Hierarchy coverage audit**: check experiment-learnings.md for patterns at each hierarchy level. Flag levels with no patterns as blind spots. Flag levels with only [inferred] evidence as unvalidated.
+5. **Stale check**: run `bash scripts/stale-knowledge.sh`. Flag Known >30d unreferenced, Dead Ends >6mo, Uncertain >14d unresolved. Evidence staleness: observed 90d, stated 60d, market 30d, inferred 7d.
+6. **Output** with evidence quality stats. Log via `bash scripts/retro-log.sh`. Write `~/.claude/cache/last-retro.yml`.
 
-## GRADE mode — Read `references/grading-guide.md` first. Grade ungraded only.
+## GRADE mode — Read `references/grading-guide.md` first. Grade ungraded only. Tag each prediction with its hierarchy level. Surface accuracy breakdowns by level — domains with 3+ graded predictions below 40% accuracy are overconfident at that altitude.
 
-## AUDIT mode — Four forces re-check per feature. WebSearch domain. Check functional/emotional/social jobs still hold. Killed jobs record to `experiment-learnings.md`.
+## AUDIT mode — Four forces re-check per feature. WebSearch domain. Check functional/emotional/social jobs still hold. Killed jobs record to `experiment-learnings.md`. **Also audit at outcome level** (did the metric actually move?) **and system level** (was the decomposition right? did boundaries hold?). Read `skills/shared/hierarchy-lens.md` for per-level audit questions.
 
 ## CONSOLIDATE mode — Merge duplicates, promote 3+ confirmed, flag stale per `references/knowledge-maintenance.md`.
 

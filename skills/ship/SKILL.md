@@ -52,18 +52,18 @@ Run `bash scripts/release-notes.sh [tag]`. Compose notes from git history + road
 
 Versions are theses, not releases. Each asks a question — proven, disproven, or abandoned.
 
-**Reflection first**: 2-3 sentences from velocity (git log), learning (prediction accuracy), honesty (evidence vs actual), shape (cross-version patterns). Run `scripts/version-progress.sh` + `scripts/version-history.sh`.
+**Reflection first**: 2-3 sentences from velocity (git log), learning (prediction accuracy), honesty (evidence vs actual), shape (cross-version patterns). Run `scripts/version-progress.sh` + `scripts/version-history.sh`. **Tag each thesis by hierarchy level** (read `skills/shared/hierarchy-lens.md`). An outcome-level thesis ("does this product improve retention?") requires different evidence than a system-level thesis ("does the auth system work reliably?").
 
 **Standalone check**: No eval-cache? Completion = proven/total evidence items. No founder.yml? Evidence-only mode.
 
 ### NEXT — diagnose provability
-Run `scripts/evidence-tracker.sh`. Map evidence to features, score provability (ready/close/blocked/unknown). Recommend first experiment.
+Run `scripts/evidence-tracker.sh`. Map evidence to features, score provability (ready/close/blocked/unknown). **Consider hierarchy level of each evidence item**: outcome-level evidence is hardest to prove but most valuable; system-level evidence is provable through architecture review; feature-level evidence is provable through eval scores. Recommend first experiment.
 
 ### BUMP — graduate thesis
-Read `references/version-guide.md`. Auto-detect tier: MAJOR (new question), MINOR (new evidence), PATCH (fixes). Synthesize from evidence + predictions + git log. Present via AskUserQuestion. Transfer thesis → Known Pattern in experiment-learnings.md.
+Read `references/version-guide.md`. Auto-detect tier: MAJOR (new question), MINOR (new evidence), PATCH (fixes). Synthesize from evidence + predictions + git log. Present via AskUserQuestion. Transfer thesis → Known Pattern in experiment-learnings.md. **After bumping: run `bash bin/sync-version.sh <new-version>` to update marketplace.json and plugin.json.**
 
 ### THESIS (ideate) — brainstorm future
-Check: proven patterns, dead ends, unknown territory, gap between proven and aspirational. Generate 3-4 candidate theses. Present via AskUserQuestion.
+Check: proven patterns, dead ends, unknown territory, gap between proven and aspirational. Generate 3-4 candidate theses. **Ensure at least 1 candidate at each of the top 3 hierarchy levels** (outcome, opportunity, system) — read `skills/shared/hierarchy-lens.md`. A roadmap with only feature-level theses is a todo list, not a strategy. Present via AskUserQuestion.
 
 ### NARRATIVE — external story
 Derive from proven evidence. Generate: one-liner, paragraph, positioning. Every claim traces to evidence. Write to `.claude/cache/narrative.yml`.
@@ -80,7 +80,7 @@ Read `gotchas.md` and `references/slop-words.md` first. **Read demand-cache.json
 
 **Types:** `landing` (hero+problem+solution+proof+CTA), `pitch` (elevator/tweet/paragraph), `outreach` (cold email/DM), `release` (user-facing notes), `onboard` (first-screen copy), `empty-states` (all empty states).
 
-**Quality gate (mandatory):** Names a person? States what changes? Differentiates? Slop-free (`slop-check.sh`)? 2026-native (sell the work, not the tool)?
+**Quality gate (mandatory):** Names a person? States what changes? Differentiates? Slop-free (`slop-check.sh`)? 2026-native (sell the work, not the tool)? **Addresses outcome level** (what changes for the customer), not just feature level (what the product does)? Read `skills/shared/hierarchy-lens.md` — the outcome questions ("what metric moves?") translate directly to copy headlines.
 
 For landing/pitch/outreach: also read `references/positioning-frameworks.md`, `references/customer-language.md`.
 Log via `bash scripts/copy-log.sh add "[type]" "[headline]" "[preview]"`.

@@ -279,6 +279,6 @@ else
     echo -e "  ${BOLD}Next:${NC}"
     echo -e "    ${BOLD}cd your-project && claude${NC}, then type ${BOLD}/onboard${NC}"
     echo ""
-    echo -e "  ${DIM}Or run /founder to see your dashboard, /discover to start a new idea.${NC}"
+    echo -e "  ${DIM}Or run /founder to see your dashboard, /demand new to start a new idea.${NC}"
 fi
 echo ""

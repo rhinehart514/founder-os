@@ -81,4 +81,7 @@ if echo "$COMMAND" | grep -q 'git commit' 2>/dev/null; then
     else
         echo -e "${GREEN}✓${NC} committed ${BOLD}$HASH${NC} ${DIM}— score cache cleared${NC}"
     fi
+
+    # Vault sync (async, non-blocking)
+    [[ -f "$FOUNDER_DIR/bin/vault-sync.sh" ]] && bash "$FOUNDER_DIR/bin/vault-sync.sh" "$(pwd)" &>/dev/null &
 fi

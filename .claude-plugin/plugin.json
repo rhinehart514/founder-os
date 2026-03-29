@@ -1,7 +1,7 @@
 {
   "name": "founder-os",
-  "version": "2.0.1",
-  "description": "AI cofounder that helps you figure out what to build — and kill what isn't working. Demand-side product thinking with 7 consolidated skills (/demand, /measure, /build, /learn, /ideate, /ship, /founder), demand-cache.json data layer, evidence class tracking, customer-facing packaging. 31 agents, GSD execution engine, Obsidian vault sync.",
+  "version": "2.1.0",
+  "description": "Cursor for PM — product thinking inside Claude Code. Figure out what to build before you build it. 7 skills (/demand, /measure, /build, /learn, /ideate, /ship, /founder), demand-cache.json, evidence tracking, customer packaging. 31 agents, GSD engine.",
   "author": {
     "name": "Laney Fraass"
   },
@@ -9,11 +9,31 @@
   "repository": "https://github.com/glittercowboy/founder-os",
   "license": "MIT",
   "keywords": [
-    "founder", "startup", "serial-entrepreneur", "demand-validation", "jtbd",
-    "ideation", "validation", "build", "measure", "ship", "learn", "product",
-    "eval", "score", "portfolio", "market-intelligence", "predictions",
-    "ai-native", "2026", "gsd", "execution-engine",
-    "demand-cache", "evidence-class", "7-skills", "packaging"
+    "founder",
+    "startup",
+    "serial-entrepreneur",
+    "demand-validation",
+    "jtbd",
+    "ideation",
+    "validation",
+    "build",
+    "measure",
+    "ship",
+    "learn",
+    "product",
+    "eval",
+    "score",
+    "portfolio",
+    "market-intelligence",
+    "predictions",
+    "ai-native",
+    "2026",
+    "gsd",
+    "execution-engine",
+    "demand-cache",
+    "evidence-class",
+    "7-skills",
+    "packaging"
   ],
   "skills": "./skills/",
   "agents": [

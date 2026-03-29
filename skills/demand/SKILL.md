@@ -11,7 +11,7 @@ Demand-side product thinking. Takes raw ideas to validated business cases, runs 
 
 ## Folder contents (read on demand)
 
-- `references/` — hierarchy, research-playbook, jtbd-method, four-lens, framing-angles, interview-guide, product-thinking, pressure-tests, yc-readiness, research-methods, evidence-hierarchy, strategy-frameworks, honest-diagnosis, market-2026
+- `references/` — hierarchy, research-playbook, diversity-forcing, jtbd-method, four-lens, framing-angles, interview-guide, product-thinking, pressure-tests, yc-readiness, research-methods, evidence-hierarchy, strategy-frameworks, honest-diagnosis, market-2026
 - `scripts/` — research-log, competitive-scan, market-scan, source-quality, product-scan, assumption-audit, stage-check, strategy-freshness
 - `patterns/` — job-statements, value-props, hire-fire-triggers
 - `templates/` — blueprint-output, product-brief, research-brief, market-context.json, strategy-brief, business-case
@@ -59,17 +59,17 @@ Demand-side product thinking. Takes raw ideas to validated business cases, runs 
 
 ## Modes
 
-**NEW**: Kill check (5 questions) -> research playbook -> hierarchy anchor (`references/hierarchy.md`) -> 3 jobs (`references/jtbd-method.md`) -> spawn 3 agents -> pressure test (`references/pressure-tests.md`) -> synthesize to `config/portfolio.yml` + `demand-cache.json`. Output per `templates/business-case.md`.
-**REFINE**: Read idea from `portfolio.yml`. Re-run research for weakest dimension. Spawn targeted agent. Update spec.
+**NEW**: Stage detect (check `portfolio.yml` + `founder.yml` — if already building, route to REFINE not NEW) -> kill check (5 questions) -> research playbook -> **diversity forcing** (`references/diversity-forcing.md` — 4 axes: different customer, mechanism, model, devil's advocate — BEFORE convergence) -> hierarchy anchor (`references/hierarchy.md`) -> **hierarchy depth** (read `skills/shared/hierarchy-lens.md` — also identify: which system(s) would own this? What micro-features would signal completeness? What interaction-level expectations exist?) -> 3 jobs (`references/jtbd-method.md`) -> spawn 3 agents -> pressure test (`references/pressure-tests.md`) -> synthesize to `config/portfolio.yml` + `demand-cache.json`. Output per `templates/business-case.md`.
+**REFINE**: Read idea from `portfolio.yml`. Check stage — apply stage-appropriate diversity axes from `references/diversity-forcing.md` (building = expand customers + challenge mechanism; shipped = segment + optimize model). Re-run research for weakest dimension. Spawn targeted agent. Update spec.
 **PIVOT**: Read idea. "What's still true?" 3 bands of pivot directions. New entry linked to original.
 **COMPARE**: 2+ ideas. Compare at OUTCOME level. Score market/model/moat. Recommend with reasoning.
 **KILL**: Document why, what learned. Update `experiment-learnings.md`. Stage to `killed`.
-**JOBS**: Parallel research -> Ulwick statements (`references/jtbd-method.md`, `patterns/job-statements.md`) -> four forces -> opportunity scores.
+**JOBS**: Parallel research -> Ulwick statements (`references/jtbd-method.md`, `patterns/job-statements.md`) -> four forces -> opportunity scores. **Tag each job with its hierarchy level** (outcome-level job about metrics, opportunity-level about pain, feature-level about tasks). Prevents comparing outcome-level jobs with feature-level jobs as peers.
 **FORCES**: Four forces per `references/jtbd-method.md`. Push/pull/anxiety/inertia, net switching energy.
 **SWITCH**: Hire/fire triggers per `patterns/hire-fire-triggers.md`. Timeline format. Switch destination map.
 **VALUEPROP**: Per job. Pressure test per `patterns/value-props.md`. Repeatable, outcome-first, peer-worthy.
 **FRAMING**: 3-7 angles per `references/framing-angles.md`. Peer test. Recommend acquisition + retention frames.
-**FEATURES**: 4-lens grid per `references/four-lens.md`. 3 solutions per opportunity. Kill list mandatory.
+**FEATURES**: 4-lens grid per `references/four-lens.md`. **Before feature grid, group features by owning system** (read `skills/shared/hierarchy-lens.md`). Flag features that span multiple systems. 3 solutions per opportunity. **After grid, name 3+ micro-features for top 2-3 features** — what makes each feel complete vs 80% done? Kill list mandatory.
 **TIERS**: 3 tiers with displacement math and price points. Moat growth over time.
 **PACKAGE**: Read `demand-cache.json` jobs -> bundle into customer-facing packages -> write to `demand-cache.json`.
 **RESEARCH**: Predict -> spawn explorer + market-analyst -> synthesize per `templates/research-brief.md` -> update `experiment-learnings.md`.
@@ -101,7 +101,7 @@ Triggered by: `/plan`, `/score`, `/eval`, `/retro`, `/decide`
 
 ## Self-evaluation
 
-Succeeded if: research ran before generation, every idea anchored to outcome + opportunity, assumptions named, evidence labeled, output ends with concrete recommendation (not a menu), prediction logged.
+Succeeded if: research ran before generation, **diversity forcing ran before convergence** (4 axes explored with genuine alternatives, not restatements), every idea anchored to outcome + opportunity, assumptions named, evidence labeled, output ends with concrete recommendation (not a menu), prediction logged. **Stage detected correctly** — built products get REFINE not NEW.
 
 ## What you never do
 
@@ -114,5 +114,8 @@ Succeeded if: research ran before generation, every idea anchored to outcome + o
 - Score all BET dimensions above 5
 - Research without a prediction
 - Dump raw results without synthesis
+- Skip diversity forcing — confirming the obvious idea is not discovery
+- Run NEW mode on a product that's already building — route to REFINE
+- Generate "alternatives" that are the same idea with different words
 
 $ARGUMENTS

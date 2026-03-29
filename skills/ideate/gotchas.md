@@ -32,6 +32,12 @@ Built from real failure modes across sessions. Update this when /ideate fails in
 - **Missing the simplification pass**: Feature improvement isn't just adding things. Every improvement session should remove or simplify at least one thing. Attention is finite, screen space is finite.
 - **Abstract options instead of concrete ones**: "Option 1: simple approach. Option 2: complex approach." is lazy. "Option 1: static thumbnail grid with lazy load (2hrs, hierarchy +10pts). Option 2: hover-to-preview with video playback (1 session, hierarchy +15pts, distinctiveness +12pts)." is useful.
 
+## Hierarchy failures
+- **Altitude clustering**: If all 5-7 ideas are at feature level, you haven't ideated — you've made a backlog. Force at least one idea at outcome level, one at system level, one at micro-feature level. The altitude diversity check in Step 3b exists for this reason.
+- **System ideation without seeing the code**: `/ideate system` must read actual code and data models before generating boundary ideas. "Merge these systems" is meaningless if you haven't mapped what data each owns.
+- **Micro-feature ideation as polish**: micro-features aren't polish — they're the behaviors that make features feel complete vs 80% done. Empty states, undo, validation are not nice-to-haves if users expect them.
+- **Labeling everything as feature-level**: a system boundary redesign is not a feature. An outcome metric change is not a feature. Label ideas by their actual hierarchy level — it changes what evidence they need and how they're evaluated.
+
 ## Materialization failures
 - **Idea without assertion**: If you can't write 2 mechanical assertions for an idea, it's not testable. Not testable = not buildable.
 - **Committing without killing**: Every commit should pair with a kill. Attention is finite. You can't add without removing.

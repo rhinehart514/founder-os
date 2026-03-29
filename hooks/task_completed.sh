@@ -84,4 +84,7 @@ if [[ "$CURRENT_PASS" -gt "$BASELINE_PASS" && "$BASELINE_PASS" -gt 0 ]]; then
     echo -e "${C_GREEN}✓${C_NC} assertions: ${CURRENT_PASS} passing ${C_DIM}(+${GAINED})${C_NC}" >&2
 fi
 
+# Vault sync (async — persist after task completes)
+[[ -f "$FOUNDER_DIR/bin/vault-sync.sh" ]] && bash "$FOUNDER_DIR/bin/vault-sync.sh" "$PROJECT_DIR" &>/dev/null &
+
 echo '{"decision": "allow"}'

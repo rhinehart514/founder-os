@@ -34,6 +34,13 @@ Merged from: founder, onboard, feature, todo, assert, configure, skill, money. U
 - **Assertions that always pass**: test something that could fail and would matter.
 - **Skipping strategy.yml**: without it, /plan has no bottleneck context.
 
+## Hierarchy
+
+- **Feature without system assignment**: every feature needs a `system:` field. Orphan features create invisible coupling because nobody owns the boundary. On `feature new`, always require system assignment.
+- **All work at feature level**: if the dashboard hierarchy widget shows ✗ at outcome, opportunity, and system — you're executing a backlog, not building a product. Surface it.
+- **System as afterthought**: system boundaries set during onboard become load-bearing architecture. Getting them wrong early compounds. Review on every `bundle` invocation.
+- **Decide without checking level**: outcome-level decisions need [observed] or [stated] evidence. Feature-level decisions can proceed with [market] or [inferred]. Applying the wrong threshold wastes time or ships bad ideas.
+
 ## Feature
 
 - **Generic "for" field**: "developers" makes viability scoring meaningless. Name the situation.

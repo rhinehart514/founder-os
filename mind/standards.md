@@ -13,6 +13,8 @@ MICRO-FEATURE    Behaviors that make a feature feel complete rather than 80% don
 INTERACTION      Atomic UI moments. Invisible until absent.
 ```
 
+**Hierarchy lens:** All 7 skills operate across this hierarchy. See `skills/shared/hierarchy-lens.md` for per-level questions, level detection, and per-skill guidance. See `skills/shared/system-thinking.md` for system-level methodology. Every skill should check one level up and one level down from where it's working.
+
 **Demand questions (answer before building):**
 - Functional job: What task is the customer trying to get done?
 - Emotional job: How do they want to feel during and after?

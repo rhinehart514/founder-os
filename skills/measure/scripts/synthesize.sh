@@ -605,7 +605,7 @@ if [[ "$OUTPUT_MODE" == "text" ]]; then
 
     # --- Formula line ---
     # Determine which formula variant is active based on available tiers
-    _has_vis_global=true _has_beh_global=true
+    _has_vis_global=false _has_beh_global=true
     _vis_global=$(get_visual_score)
     _beh_global=$(get_behavioral_score)
     [[ "$_vis_global" == "-1" ]] && _has_vis_global=false

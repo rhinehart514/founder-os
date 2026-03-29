@@ -4,6 +4,7 @@
 
   v0.0:
     thesis: "[One question this version is trying to answer]"
+    hierarchy_level: feature  # outcome | opportunity | system | feature — what altitude is this thesis?
     tier: major  # major | minor | patch
     status: testing  # testing | proven | disproven | abandoned
     # parent: v0.0  # only for minor/patch — which major version this belongs to

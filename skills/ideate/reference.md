@@ -168,6 +168,72 @@ Which improvements to build? Which simplifications to confirm? (pick numbers or 
 /eval dashboard       verify sub-score movement
 ```
 
+## System-ideate mode (`/ideate system [name]`)
+
+```
+◆ ideate system — measurement
+
+  systems detected: measurement (4 features), discovery (3 features),
+  execution (2 features), learning (1 feature)
+
+  measurement system: scoring + evaluation + taste + assertions
+  boundary: owns eval-cache.json, score-cache.json, beliefs.yml
+  coupling: evaluation reads demand-cache.json (discovery system)
+  health: 3/5 — boundary mostly intact, one coupling point
+
+▾ system-level ideas
+
+  ▸ **Merge scoring + evaluation into one system** — from coupling
+    evidence: scoring and evaluation always change together. 80% of
+    commits that touch eval-cache also touch score-cache. They share
+    the same data model (per-feature scores with sub-dimensions).
+    boundary change: single "measurement" system with one cache file
+    instead of two. Simpler state, fewer staleness bugs.
+    affects: scoring feature, evaluation feature, /measure unified mode
+    impact: reduces state management complexity, eliminates cache
+    staleness bugs between score-cache and eval-cache
+    kills it: scoring needs 5-min cache while eval needs 24h cache —
+    different freshness requirements may justify separation
+    hierarchy level: SYSTEM
+
+  ▸ **Extract "evidence" as its own system** — from pattern
+    evidence: evidence classification ([observed/stated/market/inferred])
+    is used by demand, measure, learn, and ideate. Currently scattered
+    across demand-cache.json, eval-cache.json, and predictions.tsv.
+    No single owner.
+    boundary change: new "evidence" system owns all evidence metadata.
+    Other systems reference evidence IDs instead of duplicating labels.
+    affects: demand, measure, learn — all skills that label evidence
+    impact: single source of truth for evidence freshness and class
+    kills it: overhead of indirection may exceed benefit for a small product
+    hierarchy level: SYSTEM
+
+  ▸ **Kill the learning system boundary** — from over-decomposition
+    evidence: learning has 1 feature (learning) with craft_score 40.
+    It's the weakest system by far. Its data (predictions.tsv,
+    experiment-learnings.md) is consumed by every other system.
+    boundary change: dissolve learning into measurement (predictions
+    are measurement of accuracy) and discovery (learnings inform
+    demand research).
+    affects: /learn skill, prediction grading, experiment-learnings.md
+    impact: simplifies architecture, removes the weakest system
+    kills it: learning has a distinct lifecycle (grade → consolidate →
+    prune) that doesn't fit measurement or discovery rhythms
+    hierarchy level: SYSTEM
+
+▾ kill list
+
+  ✗ **Kill separate score-cache and eval-cache**
+    reason: two caches for the same domain creates staleness bugs.
+    One system, one cache.
+
+Which ideas to commit? Which kills to confirm?
+
+/measure systems        audit all system boundaries
+/founder bundle         see jobs-to-features-to-systems map
+/demand features        re-run feature grid grouped by system
+```
+
 ## Wild mode
 
 ```

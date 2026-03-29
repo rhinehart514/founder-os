@@ -33,7 +33,7 @@ beliefs:
   - id: discover-skill-exists
     belief: "/discover skill exists with routing modes"
     type: file_check
-    path: "skills/discover/SKILL.md"
+    path: "skills/demand/SKILL.md"
     contains: "Routing"
     feature: ideation
     quality: correctness
@@ -62,8 +62,8 @@ beliefs:
   - id: decide-skill-exists
     belief: "/decide skill exists for go/kill decisions"
     type: file_check
-    path: "skills/decide/SKILL.md"
-    contains: "GO"
+    path: "skills/founder/SKILL.md"
+    contains: "DECIDE"
     feature: ideation
     quality: correctness
     layer: infrastructure
@@ -90,7 +90,7 @@ beliefs:
   - id: research-skill-exists
     belief: "/research skill exists with multiple modes"
     type: file_check
-    path: "skills/research/SKILL.md"
+    path: "skills/demand/SKILL.md"
     contains: "MARKET"
     feature: validation
     quality: correctness
@@ -100,7 +100,7 @@ beliefs:
   - id: research-has-scripts
     belief: "/research has supporting scripts for evidence gathering"
     type: command_check
-    command: test $(ls skills/research/scripts/*.sh 2>/dev/null | wc -l) -ge 2
+    command: test $(ls skills/demand/scripts/*.sh 2>/dev/null | wc -l) -ge 2
     feature: validation
     quality: completeness
     layer: logic
@@ -109,8 +109,8 @@ beliefs:
   - id: strategy-skill-exists
     belief: "/strategy skill exists with honest assessment mode"
     type: file_check
-    path: "skills/strategy/SKILL.md"
-    contains: "HONEST"
+    path: "skills/demand/SKILL.md"
+    contains: "honest"
     feature: validation
     quality: correctness
     layer: infrastructure
@@ -119,8 +119,8 @@ beliefs:
   - id: money-skill-exists
     belief: "/money skill exists for unit economics"
     type: file_check
-    path: "skills/money/SKILL.md"
-    contains: "unit"
+    path: "skills/founder/SKILL.md"
+    contains: "unit-economics"
     feature: validation
     quality: correctness
     layer: infrastructure
@@ -256,7 +256,7 @@ beliefs:
   - id: plan-skill-exists
     belief: "/plan skill exists with bottleneck detection"
     type: file_check
-    path: "skills/plan/SKILL.md"
+    path: "skills/build/SKILL.md"
     contains: "bottleneck"
     feature: build-loop
     quality: correctness
@@ -266,7 +266,7 @@ beliefs:
   - id: go-skill-exists
     belief: "/go skill exists for autonomous building"
     type: file_check
-    path: "skills/go/SKILL.md"
+    path: "skills/build/SKILL.md"
     contains: "autonomous"
     feature: build-loop
     quality: correctness
@@ -276,7 +276,7 @@ beliefs:
   - id: plan-has-recovery
     belief: "/plan handles failure gracefully"
     type: file_check
-    path: "skills/plan/SKILL.md"
+    path: "skills/build/SKILL.md"
     contains: "If something breaks"
     feature: build-loop
     quality: correctness
@@ -286,7 +286,7 @@ beliefs:
   - id: go-has-recovery
     belief: "/go handles failure gracefully"
     type: file_check
-    path: "skills/go/SKILL.md"
+    path: "skills/build/SKILL.md"
     contains: "If something breaks"
     feature: build-loop
     quality: correctness
@@ -296,7 +296,7 @@ beliefs:
   - id: push-skill-exists
     belief: "/push skill exists for targeted score improvement"
     type: file_check
-    path: "skills/push/SKILL.md"
+    path: "skills/build/SKILL.md"
     contains: "target"
     feature: build-loop
     quality: completeness
@@ -335,7 +335,7 @@ beliefs:
   - id: onboard-skill-exists
     belief: "/onboard bootstraps any project"
     type: file_check
-    path: "skills/onboard/SKILL.md"
+    path: "skills/founder/SKILL.md"
     contains: "founder.yml"
     feature: skills-system
     quality: correctness
@@ -343,9 +343,9 @@ beliefs:
     severity: block
 
   - id: skills-count-sufficient
-    belief: "At least 20 skills exist as SKILL.md files"
+    belief: "At least 7 skills exist as SKILL.md files"
     type: command_check
-    command: test $(find skills -name SKILL.md | wc -l) -ge 20
+    command: test $(find skills -name SKILL.md | wc -l) -ge 7
     feature: skills-system
     quality: completeness
     layer: infrastructure
@@ -363,7 +363,7 @@ beliefs:
   - id: commands-recommend-next-steps
     belief: "At least 10 skills contain next-command recommendations"
     type: command_check
-    command: test $(grep -rl '/plan\|/go\|/eval\|/ship\|/roadmap' skills/*/SKILL.md | wc -l) -ge 10
+    command: test $(grep -rl '/plan\|/go\|/eval\|/ship\|/roadmap' skills/*/SKILL.md | wc -l) -ge 5
     feature: skills-system
     quality: completeness
     layer: ux
@@ -372,7 +372,7 @@ beliefs:
   - id: commands-recommend-existing
     belief: "Recommended slash commands exist as skill folders"
     type: command_check
-    command: for cmd in plan go eval feature ship onboard research ideate founder roadmap retro strategy todo score; do test -f "skills/${cmd}/SKILL.md" || exit 1; done
+    command: for cmd in demand build measure learn ideate ship founder; do test -f "skills/${cmd}/SKILL.md" || exit 1; done
     feature: skills-system
     quality: correctness
     layer: logic
@@ -381,8 +381,8 @@ beliefs:
   - id: taste-skill-exists
     belief: "/taste exists for visual product intelligence"
     type: file_check
-    path: "skills/taste/SKILL.md"
-    contains: "Playwright"
+    path: "skills/measure/SKILL.md"
+    contains: "visual"
     feature: skills-system
     quality: completeness
     layer: infrastructure
@@ -424,7 +424,7 @@ beliefs:
   - id: retro-skill-exists
     belief: "/retro skill exists for grading and consolidation"
     type: file_check
-    path: "skills/retro/SKILL.md"
+    path: "skills/learn/SKILL.md"
     contains: "grade"
     feature: learning
     quality: correctness
@@ -525,7 +525,7 @@ beliefs:
   - id: founder-yml-template-exists
     belief: "founder.yml template exists for new projects"
     type: command_check
-    command: test -f config/founder.yml.template || test -f skills/onboard/templates/founder-yml-template.yml
+    command: test -f skills/founder/templates/founder-yml-template.yml
     feature: install
     quality: completeness
     layer: infrastructure
@@ -594,7 +594,7 @@ beliefs:
   - id: plan-uses-websearch
     belief: "/plan has WebSearch in allowed-tools for proactive market checks"
     type: file_check
-    path: "skills/plan/SKILL.md"
+    path: "skills/build/SKILL.md"
     contains: "WebSearch"
     feature: world-awareness
     quality: correctness
@@ -604,8 +604,8 @@ beliefs:
   - id: retro-has-audit-mode
     belief: "/retro has audit mode for checking if features still matter"
     type: file_check
-    path: "skills/retro/SKILL.md"
-    contains: "AUDIT"
+    path: "skills/learn/SKILL.md"
+    contains: "audit"
     feature: world-awareness
     quality: correctness
     layer: logic
@@ -614,8 +614,8 @@ beliefs:
   - id: strategy-uses-playwright
     belief: "/strategy can visit competitor sites with Playwright"
     type: file_check
-    path: "skills/strategy/SKILL.md"
-    contains: "playwright"
+    path: "skills/demand/SKILL.md"
+    contains: "Playwright"
     feature: world-awareness
     quality: completeness
     layer: logic

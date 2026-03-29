@@ -22,9 +22,9 @@ Home screen + 12 absorbed skills. Route by first argument.
 | health | HEALTH | System health audit |
 | progress | PROGRESS | Score trajectory, velocity |
 | onboard | ONBOARD | Bootstrap any project (demand mapping first) |
-| feature [args] | FEATURE | Define, view, detect, improve features |
+| feature [args] | FEATURE | Define, view, detect, improve features (new features require system assignment) |
 | bundle | BUNDLE | Map features to customer jobs, identify merge/kill/gap |
-| decide [idea] | DECIDE | Go/kill/pivot gate |
+| decide [idea] | DECIDE | Go/kill/pivot gate (hierarchy-level-aware evidence thresholds) |
 | todo [args] | TODO | Living backlog management |
 | assert [args] | ASSERT | Manage beliefs.yml assertions |
 | configure [args] | CONFIGURE | Tune founder-os settings |
@@ -44,8 +44,8 @@ Each mode has a dedicated source SKILL.md with full protocol. Read the original 
 |------|-------------------|-------------|
 | DASHBOARD | (inline below) | `scripts/system-pulse.sh`, `scripts/skill-catalog.sh` |
 | ONBOARD | `skills/onboard/SKILL.md` | `scripts/detect-project.sh`, `scripts/onboard-checklist.sh`, `scripts/first-score.sh` |
-| FEATURE | `skills/feature/SKILL.md` | `scripts/feature-map.sh`, `scripts/feature-health.sh`, `scripts/dependency-graph.sh` |
-| DECIDE | `skills/decide/SKILL.md` | — |
+| FEATURE | `skills/feature/SKILL.md` | `scripts/feature-map.sh`, `scripts/feature-health.sh`, `scripts/dependency-graph.sh` (system-aware: groups by system, flags orphans) |
+| DECIDE | `skills/decide/SKILL.md` | — (hierarchy-level-aware evidence thresholds) |
 | TODO | `skills/todo/SKILL.md` | `scripts/todo-decay.sh`, `scripts/todo-promote.sh`, `scripts/todo-stats.sh` |
 | ASSERT | `skills/assert/SKILL.md` | `scripts/assertion-stats.sh`, `scripts/belief-lint.sh`, `scripts/assertion-diff.sh` |
 | CONFIGURE | `skills/configure/SKILL.md` | `scripts/config-diff.sh` |
@@ -74,6 +74,13 @@ Evidence: 3 observed · 5 stated · 2 market
 
 **Rendering**: read `references/dashboard-guide.md` for full spec. Read `templates/dashboard.md` for format. Portfolio first (if exists), then project dashboard, then opinion. Save snapshot to `.claude/cache/founder-snapshots.json` (keep last 20).
 
+**Hierarchy coverage widget** (NEW — render after demand status):
+```
+◆ hierarchy reach
+  OUTCOME ✓ · OPPORTUNITY ✓ · SYSTEM ✗ · FEATURE ✓ · MICRO ✓ · INTERACTION ~
+```
+Derive from: portfolio.yml (outcome/opportunity), feature system assignments (system), eval-cache (feature), taste/flows reports (micro/interaction). Flag any level with ✗ as a blind spot. Read `skills/shared/hierarchy-lens.md` for level definitions.
+
 **Coherence check**: cross-check strategy vs eval vs plan. Render warnings only when misaligned.
 
 ## BUNDLE mode (NEW)
@@ -85,6 +92,12 @@ Map features to customer jobs (from demand mapping). For each job:
 - Gap: jobs with no features
 
 Output as a jobs-to-features matrix with action recommendations.
+
+**System map** (hierarchy-aware extension): after the jobs-to-features matrix, read `skills/shared/system-thinking.md` and also produce:
+- Group features by owning system (data domain)
+- Flag orphan features (no system), dead systems (no active features), over-decomposed systems (1 feature)
+- Flag cross-system features (coupling smell — feature spans multiple systems)
+- Recommend: merge, split, kill, or leave systems as-is
 
 ## HELP mode
 
@@ -107,7 +120,8 @@ Starts with demand mapping — who wants this, what job, what today? Then detect
 
 - **DASHBOARD**: all non-empty zones rendered, snapshot saved, opinion stated
 - **HELP**: Start Here shown BEFORE catalog, shows 7 skills not 28
-- **BUNDLE**: jobs-to-features matrix rendered with merge/kill/gap actions
+- **BUNDLE**: jobs-to-features matrix rendered with merge/kill/gap actions + system map with ownership
+- **DASHBOARD**: hierarchy coverage widget rendered with per-level status
 - **All absorbed modes**: check source SKILL.md self-evaluation criteria
 
 ## What you never do

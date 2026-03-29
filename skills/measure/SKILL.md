@@ -1,7 +1,7 @@
 ---
 name: measure
 description: "Is it good? Unified 6-tier scoring (health, delivery, craft, visual, behavioral, viability + demand), feature evaluation, visual quality, flow auditing, evidence class auditing. Replaces: /score, /eval, /taste. Also triggers on: 'score', 'eval', 'evaluate', 'taste', 'is this good', 'how's it look', 'quality check'."
-argument-hint: "[quick | deep | <feature> | evidence | beliefs | health | blind | slop | flows <url> | visual <url> | cli | trend | breakdown | viability]"
+argument-hint: "[quick | deep | <feature> | systems | evidence | beliefs | health | blind | slop | flows <url> | visual <url> | cli | trend | breakdown | viability]"
 allowed-tools: Read, Write, Bash, Grep, Glob, AskUserQuestion, WebSearch, WebFetch, Agent, mcp__playwright__browser_navigate, mcp__playwright__browser_take_screenshot, mcp__playwright__browser_snapshot, mcp__playwright__browser_wait_for, mcp__playwright__browser_click, mcp__playwright__browser_hover, mcp__playwright__browser_resize, mcp__playwright__browser_evaluate, mcp__playwright__browser_network_requests, mcp__playwright__browser_console_messages, mcp__playwright__browser_fill_form, mcp__playwright__browser_press_key, mcp__playwright__browser_navigate_back, mcp__playwright__browser_install
 ---
 
@@ -27,7 +27,7 @@ One skill to answer every quality question. Reads code, visits the product, chec
 | (none) | UNIFIED | All tiers synthesized — one number |
 | `quick` | QUICK | Cached data only, no agents, flag staleness |
 | `deep` | DEEP | Fresh all tiers (expensive — confirm first) |
-| `<feature>` | FEATURE | Deep eval of one feature (delivery + craft + rubric) |
+| `<feature>` | FEATURE | Deep eval of one feature (delivery + craft + rubric + system ownership + micro-feature completeness) |
 | `evidence` | EVIDENCE | Evidence class audit — label every claim [observed/stated/market/inferred] |
 | `beliefs` | BELIEFS | Mechanical assertion checks (beliefs.yml) |
 | `health` | HEALTH | Assertion coverage — type distribution, gaps per feature |
@@ -38,6 +38,7 @@ One skill to answer every quality question. Reads code, visits the product, chec
 | `cli` | CLI | Terminal output quality — 5 dimensions |
 | `trend` | TREND | Score trajectory over time |
 | `breakdown` | BREAKDOWN | Per-tier detail, no synthesis |
+| `systems` | SYSTEMS | System boundary audit — data model, coupling, ownership |
 | `viability` | VIABILITY | Market viability only (agent-backed) |
 
 ## 6-tier scoring
@@ -66,6 +67,19 @@ See `references/scoring-methodology.md` for full details. Summary:
 4. **Evidence class audit (NEW).** `measure evidence` labels every feature claim as [observed], [stated], [market], or [inferred]. Inferred-only features get delivery capped at 60.
 5. **Caps apply.** Slop = overall cap 40. Layout/IA < 30 = overall cap 30. Stage caps enforced.
 6. **Score = synthesize.sh output**, cross-checked against your own reading.
+7. **Hierarchy check (after unified score).** Read `skills/shared/hierarchy-lens.md`. Assess: (a) Outcome alignment — does the product move the claimed outcome metric in `portfolio.yml`? If no outcome is named, flag it. (b) System coherence — are system boundaries clean? Do features respect ownership? Surface as supplementary signal, not a tier.
+
+## SYSTEMS mode — `/measure systems`
+
+System boundary audit. Read `skills/shared/system-thinking.md` for full methodology.
+
+1. **Identify systems**: scan `config/founder.yml` features, group by shared data entities. Each group = candidate system.
+2. **Map boundaries**: for each system, document: data owned, features inside, dependencies, coupling points.
+3. **Score health**: per system — data model coherence, boundary integrity, independent evolution, feature coverage, right size, ownership clarity.
+4. **Flag issues**: orphan features (no system), cross-system features (coupling smell), dead systems (no active features), over-decomposed systems (1 feature).
+5. **Output**: per-system health report with verdicts (healthy / needs attention / redesign candidate).
+
+No script needed — LLM-driven code reading and analysis.
 
 ## State
 
@@ -81,6 +95,7 @@ One next command. Pick the biggest gap:
 - Behavioral confidence low -> `/measure flows <url>`
 - Viability weakest -> `/research` or `/strategy`
 - Score 65+ -> `/measure <feature>` for micro-feature ideas
+- System boundaries unclear -> `/measure systems`
 - Score 80+ all tiers high -> `/ship`
 
 ## Self-evaluation

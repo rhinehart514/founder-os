@@ -57,6 +57,20 @@ What could this become?
 - What assumption are we making that might be wrong?
 - If we could only build ONE more thing, what would it be?
 
+## Hierarchy cross-reference
+
+The five rings map to the product hierarchy (see `skills/shared/hierarchy-lens.md`):
+
+| Ring | Hierarchy Level | Questions to borrow |
+|------|----------------|---------------------|
+| CODE | Interaction / Micro-feature | "What atomic moment is missing? What behavior makes this feel complete?" |
+| FEATURE | Feature | "What user goal is unmet? Can it ship independently?" |
+| PRODUCT | System | "Are system boundaries right? What domain is missing?" |
+| MARKET | Opportunity | "What pain drives this? What are the four forces?" |
+| VISION | Outcome | "What metric moves? What changes for the customer?" |
+
+When ideating at Ring 3+ (product/market/vision), read the hierarchy lens for level-appropriate questions. Code-ring thinking at market-ring problems wastes work. Market-ring thinking at code-ring problems is over-engineering.
+
 ## Tagging
 
 Tag ideated tasks by ring:

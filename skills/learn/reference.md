@@ -282,10 +282,19 @@ product_completion: 64
 accuracy: 63
 accuracy_trend: improving
 graded_count: 3
+accuracy_by_level:  # hierarchy-level accuracy breakdown
+  outcome: { graded: 2, correct: 1, accuracy: 50 }
+  opportunity: { graded: 3, correct: 2, accuracy: 67 }
+  system: { graded: 0, correct: 0, accuracy: null }  # blind spot
+  feature: { graded: 8, correct: 5, accuracy: 63 }
+  micro_feature: { graded: 1, correct: 1, accuracy: 100 }
+  interaction: { graded: 0, correct: 0, accuracy: null }  # blind spot
+hierarchy_blind_spots: [system, interaction]  # levels with 0 predictions
 wrong_predictions:
   - prediction: "auto-grade via hook"
     feature: learning
     dimension: craft_score
+    hierarchy_level: feature  # which level this prediction operated at
     todo_created: "rethink auto-grade approach"
 stale_patterns:
   - "copy changes have 80% keep rate — 45 days"

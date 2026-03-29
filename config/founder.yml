@@ -14,7 +14,7 @@ value:
   user: "Solo technical founder with multiple ideas who lives in Claude Code"
   signals:
     - name: demand_validated
-      description: "Demand is tested before code: /discover or /blueprint produces a validated job statement before /go"
+      description: "Demand is tested before code: /demand new produces a validated job statement before /build go"
       target: "Every build session has a demand anchor"
       measurable: true
     - name: idea_to_score
@@ -141,7 +141,7 @@ features:
     for: "serial entrepreneur who needs to know if the world changed while they were building"
     skills: ["/demand", "/build", "/learn"]
     code: ["mind/world.md", "skills/demand/SKILL.md", "skills/build/SKILL.md", "skills/learn/SKILL.md"]
-    status: active
+    status: planned
     weight: 4
     depends_on: [validation]
 

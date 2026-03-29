@@ -1,7 +1,7 @@
 ---
 name: ideate
 description: "Generate options. Evidence-weighted brainstorming that produces ideas, not decisions. Kill lists, innovation techniques, and portfolio awareness for serial entrepreneurs. Also handles customer-facing packaging from demand data."
-argument-hint: "[topic | improve <idea> | wild | kill | adjacent | deep | technique-name | package | \"constraint\"]"
+argument-hint: "[topic | improve <idea> | wild | kill | adjacent | deep | system [name] | technique-name | package | \"constraint\"]"
 allowed-tools: Read, Write, Edit, Bash, Grep, Glob, Agent, WebFetch, WebSearch, AskUserQuestion
 ---
 
@@ -36,6 +36,7 @@ Parse `$ARGUMENTS`:
 - **`adjacent [idea]`** → `ADJACENT` mode (ideas near an existing idea)
 - **`deep`** → `DEEP` mode (full brainstorm — 3+ techniques, converge, kill)
 - **`[technique-name]`** → `TECHNIQUE` mode (run a specific technique from `techniques/`)
+- **`system [name]`** → `SYSTEM-IDEATE` mode (system-level ideas: boundaries, merges, splits, new systems)
 - **`package`** → `PACKAGE` mode (bundle internal features into customer-facing packages)
 - **`[any constraint text]`** → `CONSTRAINED` mode (ideas within a specific direction)
 - **No args** → `PORTFOLIO-AWARE` mode (ideas based on founder's patterns + gaps)
@@ -46,10 +47,10 @@ Parse `$ARGUMENTS`:
 
 Use /ideate when you need MORE options, not when you need to EVALUATE one.
 
-- Have an idea to evaluate? → `/discover`
+- Have an idea to evaluate? → `/demand new`
 - Need to improve existing feature? → `/ideate [feature]`
-- Need evidence before deciding? → `/research`
-- Need to pressure-test what you're building? → `/product`
+- Need evidence before deciding? → `/demand research`
+- Need to pressure-test what you're building? → `/demand honest`
 
 ---
 
@@ -68,7 +69,25 @@ What problems exist? Who's underserved? What's changing? What are people complai
 Focus on gaps and pain points, not solutions.", run_in_background: true)
 ```
 
-### Step 3: Generate Ideas (5-7)
+### Step 3: Diversity Forcing (before convergence)
+
+Read `skills/demand/references/diversity-forcing.md`. For the target space, generate at least one alternative per axis:
+- **Different customer** — who else has this job besides the obvious buyer?
+- **Different mechanism** — what if it's not software/not CLI/not AI/not a tool at all?
+- **Different model** — what if outcome-priced, or 10x more expensive, or free-forever?
+- **Devil's advocate** — what's the best argument that this entire space is a waste of time?
+
+This prevents generating 7 ideas that are all the same idea wearing different hats.
+
+### Step 3b: Altitude Diversity (after diversity forcing)
+
+Read `skills/shared/hierarchy-lens.md`. Force ideas at multiple hierarchy levels — don't cluster everything at feature level:
+- At least 1 **outcome-level** idea: "What metric could move differently?"
+- At least 1 **system-level** idea: "What product domain is missing or broken?"
+- At least 1 **micro-feature** idea: "What behavior in an existing feature would change perception?"
+- Label each generated idea with its hierarchy level.
+
+### Step 4: Generate Ideas (5-7)
 
 For each idea, provide:
 ```
@@ -84,12 +103,12 @@ For each idea, provide:
 **Evidence label**: [observed/stated/market/inferred]
 ```
 
-### Step 4: Rank and Recommend
+### Step 5: Rank and Recommend
 Rank by: evidence weight x founder fit x market timing.
 Flag any that match Dead Ends.
 Recommend top 1-2 for /discover deep-dive.
 
-### Step 5: Mandatory Kill List
+### Step 6: Mandatory Kill List
 For EVERY ideation session, also output:
 ```
 ## Kill List
@@ -110,8 +129,13 @@ The PRODUCT IMPROVEMENT ENGINE. Not abstract ideas — concrete, specific prescr
 3. Read the feature's actual code — components, pages, routes, styles
 4. Read eval-cache sub-scores (delivery vs craft), taste prescriptions, flow issues, backlog items
 5. Read market-context.json and competitor data — what do best-in-class products do?
-6. Generate **3-5 improvement prescriptions** using `templates/improvement-brief.md`
-7. Kill list still mandatory — what should be removed, simplified, or stopped for this feature?
+6. **Categorize gaps by hierarchy level.** Read `skills/shared/hierarchy-lens.md`. Each gap is one of:
+   - **Feature-level:** capability missing — needs new code
+   - **Micro-feature-level:** behavior missing (empty states, validation, undo) — needs behavior additions
+   - **Interaction-level:** atomic moment missing (feedback, timing, transitions) — needs polish
+   Different levels get different prescriptions. Don't prescribe interaction polish when the feature doesn't work.
+7. Generate **3-5 improvement prescriptions** using `templates/improvement-brief.md`
+8. Kill list still mandatory — what should be removed, simplified, or stopped for this feature?
 
 The output should feel like a design-minded cofounder sketching improvements on a whiteboard. Not "improve the UX" but "add a video preview grid above the data table."
 
@@ -194,6 +218,26 @@ Available techniques include: combination, constraint, cross-domain, divergent, 
 
 ---
 
+## SYSTEM-IDEATE Mode — "/ideate system [name]"
+
+System-level ideation. Not feature improvements — structural rethinking of product domains. Read `skills/shared/system-thinking.md` for the full methodology.
+
+1. **Identify current systems**: scan `config/founder.yml` features, group by data domain. Map system boundaries.
+2. **If [name] given**: focus on that system. Read its code, its features, its dependencies.
+3. **If no name**: audit all systems. Which are healthy? Which are coupling smells? Which are missing?
+4. **Generate 3-5 system-level ideas** from these angles:
+   - **Boundary redesign**: should this system split or merge with another?
+   - **New systems**: what product domain is missing entirely?
+   - **System kills**: what system exists but serves no current job?
+   - **Data model rethink**: what if the core entity was structured differently?
+   - **Platform extraction**: what system could become a shared service or API?
+5. **For each idea**: name the affected features, the boundary change, the expected impact on feature scores, and the kill risk.
+6. **Kill list**: which current system boundaries should die? (Over-decomposed, vestigial, coupling sources.)
+
+Output uses `templates/idea-brief.md` adapted for system level — `who` becomes "which features/jobs are affected" and `changes` becomes "which boundaries move."
+
+---
+
 ## PACKAGE Mode — "/ideate package"
 
 Bundle internal features into customer-facing packages that match validated jobs.
@@ -237,6 +281,8 @@ Generate ideas that:
 - Explore unknown territory (low confidence, highest learning value)
 
 Label each idea with its zone.
+
+**Altitude diversity check**: read `skills/shared/hierarchy-lens.md`. Categorize existing ideas by hierarchy level. If all cluster at feature level, explicitly force ideation at outcome and system levels. A portfolio with only feature-level ideas is a backlog, not a strategy.
 
 Run `scripts/evidence-scan.sh` for data, then `scripts/idea-log.sh stats` to show ideation history.
 
@@ -294,12 +340,13 @@ Read `gotchas.md` first. Then gather evidence:
 
 ## System integration
 
-Triggers: `/discover` (commit an idea for deep-dive), `/go` (build committed idea), `/research` (fill evidence gap)
-Triggered by: `/plan` (needs ideas for bottleneck), `/strategy` (strategic gaps need solutions), `/retro` (wrong predictions suggest new approaches)
+Triggers: `/demand new` (commit an idea for deep-dive), `/build go` (build committed idea), `/demand research` (fill evidence gap)
+Triggered by: `/build` (needs ideas for bottleneck), `/demand honest` (strategic gaps need solutions), `/learn` (wrong predictions suggest new approaches)
 
 ## Self-evaluation
 
 /ideate succeeded if:
+- **Diversity forcing ran** — ideas span at least 2 different customers, 2 different mechanisms, or 2 different models (not 7 variations of the same thing)
 - Every proposed idea has an evidence source (not "wouldn't it be cool if")
 - The kill list is non-empty — something was argued for removal
 - Committed ideas are materialized (in portfolio.yml, prediction logged)
@@ -320,6 +367,8 @@ Agent spawning is mode-dependent:
 - Skip the failure mode — every idea includes what kills it
 - Generate ideas with no evidence — "wouldn't it be cool if" is not ideation
 - Ignore the backlog — existing todos are captured intent
+- Generate 7 ideas that are all the same customer + same mechanism + same model — that's one idea, not seven
+- Skip diversity forcing — if all ideas look alike, you haven't ideated
 
 ## If something breaks
 
