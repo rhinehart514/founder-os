@@ -859,7 +859,11 @@ $(format_execution_context "$exec_results")"
             continue
         fi
         # Normalize: if score came back on 1-5 scale, convert to 0-100
-        if [[ "$feat_score" -le 5 ]]; then
+        # Heuristic: only scores <= 3 are treated as 1-5 scale, because
+        # a genuinely low score of 4 or 5 out of 100 would be inflated
+        # to 80-100 by the old threshold of <= 5. Scores of 1-3 are
+        # almost never valid on a 0-100 scale (they'd mean <3% quality).
+        if [[ "$feat_score" -le 3 ]]; then
             feat_score=$((feat_score * 20))
         fi
         GENERATIVE_SCORES="${GENERATIVE_SCORES}${feat_name}:${feat_score}
