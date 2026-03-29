@@ -149,7 +149,7 @@ features:
     delivers: "install.sh + /onboard gets everything working on any project"
     for: "new user trying founder-os for the first time"
     skills: ["/onboard"]
-    code: ["skills/onboard/SKILL.md", "install.sh"]
+    code: ["skills/founder/skills/onboard/SKILL.md", "install.sh"]
     internal: ["founder init"]
     status: active
     weight: 3
