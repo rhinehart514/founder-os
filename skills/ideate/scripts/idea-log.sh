@@ -20,20 +20,35 @@ case "$ACTION" in
         EVIDENCE="${2:-none}"
         STATUS="${3:-proposed}"
         DATE=$(date -u +%Y-%m-%dT%H:%M:%SZ)
-        echo "{\"date\":\"$DATE\",\"action\":\"add\",\"name\":\"$NAME\",\"evidence\":\"$EVIDENCE\",\"status\":\"$STATUS\"}" >> "$LOG_FILE"
+        if command -v jq &>/dev/null; then
+            jq -n --arg date "$DATE" --arg action "add" --arg name "$NAME" --arg evidence "$EVIDENCE" --arg status "$STATUS" \
+                '{date:$date,action:$action,name:$name,evidence:$evidence,status:$status}' >> "$LOG_FILE"
+        else
+            echo "{\"date\":\"$DATE\",\"action\":\"add\",\"name\":\"$NAME\",\"evidence\":\"$EVIDENCE\",\"status\":\"$STATUS\"}" >> "$LOG_FILE"
+        fi
         echo "Logged: $NAME ($STATUS)"
         ;;
     kill)
         NAME="${1:-unnamed}"
         REASON="${2:-no reason}"
         DATE=$(date -u +%Y-%m-%dT%H:%M:%SZ)
-        echo "{\"date\":\"$DATE\",\"action\":\"kill\",\"name\":\"$NAME\",\"reason\":\"$REASON\"}" >> "$LOG_FILE"
+        if command -v jq &>/dev/null; then
+            jq -n --arg date "$DATE" --arg action "kill" --arg name "$NAME" --arg reason "$REASON" \
+                '{date:$date,action:$action,name:$name,reason:$reason}' >> "$LOG_FILE"
+        else
+            echo "{\"date\":\"$DATE\",\"action\":\"kill\",\"name\":\"$NAME\",\"reason\":\"$REASON\"}" >> "$LOG_FILE"
+        fi
         echo "Killed: $NAME — $REASON"
         ;;
     commit)
         NAME="${1:-unnamed}"
         DATE=$(date -u +%Y-%m-%dT%H:%M:%SZ)
-        echo "{\"date\":\"$DATE\",\"action\":\"commit\",\"name\":\"$NAME\"}" >> "$LOG_FILE"
+        if command -v jq &>/dev/null; then
+            jq -n --arg date "$DATE" --arg action "commit" --arg name "$NAME" \
+                '{date:$date,action:$action,name:$name}' >> "$LOG_FILE"
+        else
+            echo "{\"date\":\"$DATE\",\"action\":\"commit\",\"name\":\"$NAME\"}" >> "$LOG_FILE"
+        fi
         echo "Committed: $NAME"
         ;;
     list)
