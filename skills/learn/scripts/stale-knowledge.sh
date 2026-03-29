@@ -55,10 +55,10 @@ if [[ -f "$LEARNINGS" && -f "$PRED_FILE" ]]; then
         if $IN_DEAD && [[ "$line" =~ ^[[:space:]]*-[[:space:]] ]]; then
             # Extract key phrase (first 40 chars after the dash)
             PHRASE=$(echo "$line" | sed 's/^[[:space:]]*-[[:space:]]*//' | cut -c1-40 | tr '[:upper:]' '[:lower:]')
-            # Check if any word from the phrase appears in recent predictions
-            FIRST_WORD=$(echo "$PHRASE" | awk '{print $1}' | sed 's/[^a-z0-9]//g')
-            if [[ -n "$FIRST_WORD" && ${#FIRST_WORD} -gt 2 ]]; then
-                HITS=$(tail -n +2 "$PRED_FILE" | awk -F'\t' -v w="$FIRST_WORD" 'tolower($3) ~ w { c++ } END { print c+0 }')
+            # Match on 2+ word phrase to avoid false positives (e.g. "multi-channel" matching "multi")
+            MATCH_PATTERN=$(echo "$PHRASE" | awk '{if (NF >= 2) print $1" "$2; else print $1}' | sed 's/[^a-z0-9 -]//g')
+            if [[ -n "$MATCH_PATTERN" && ${#MATCH_PATTERN} -gt 4 ]]; then
+                HITS=$(tail -n +2 "$PRED_FILE" | awk -F'\t' -v w="$MATCH_PATTERN" 'tolower($3) ~ w { c++ } END { print c+0 }')
                 if [[ "$HITS" -gt 0 ]]; then
                     echo "  ⚠ zombie: $line ($HITS recent prediction refs)"
                     ZOMBIE_COUNT=$((ZOMBIE_COUNT + 1))
