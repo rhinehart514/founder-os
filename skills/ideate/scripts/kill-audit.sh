@@ -9,11 +9,11 @@ NOW=$(date +%s)
 echo "=== KILL CANDIDATES ==="
 echo ""
 
-# --- Stale todos (>14 days without movement) ---
+# --- Open todos (no date comparison — listed for manual review) ---
 TODOS="$PROJECT_DIR/.claude/plans/todos.yml"
 if [[ -f "$TODOS" ]]; then
-    echo "▸ Stale todos (>14 days):"
-    # Find todos with dates and check age
+    echo "▸ Open todos (age unknown — no date comparison):"
+    # Note: no date parsing implemented; listing open items for manual review
     grep -B2 'status: todo\|status: captured' "$TODOS" 2>/dev/null | grep 'title:' | sed 's/.*title: */  /' | head -5
     echo ""
 fi
