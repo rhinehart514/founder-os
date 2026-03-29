@@ -31,6 +31,18 @@ if [[ -f "$STATUSLINE_SRC" ]] && [[ -f "$STATUSLINE_DST" ]]; then
     fi
 fi
 
+# --- world.md staleness check ---
+WORLD_FILE="$PROJECT_DIR/mind/world.md"
+WORLD_STALE_WARNING=""
+if [[ -f "$WORLD_FILE" ]]; then
+    WORLD_MTIME=$(stat -f %m "$WORLD_FILE" 2>/dev/null || stat -c %Y "$WORLD_FILE" 2>/dev/null || echo 0)
+    WORLD_NOW=$(date +%s)
+    WORLD_AGE_DAYS=$(( (WORLD_NOW - WORLD_MTIME) / 86400 ))
+    if (( WORLD_AGE_DAYS > 30 )); then
+        WORLD_STALE_WARNING="world.md last updated ${WORLD_AGE_DAYS} days ago. Run /learn market to refresh."
+    fi
+fi
+
 if ! command -v jq &>/dev/null; then
     echo -e "  \033[1;33m⚠\033[0m jq not found — boot card degraded. Install: brew install jq" >&2
 fi
@@ -334,6 +346,10 @@ if [[ -f "$DEMAND_CACHE" ]] && command -v jq &>/dev/null; then
 fi
 
 # --- Alerts ---
+if [[ -n "${WORLD_STALE_WARNING:-}" ]]; then
+    echo ""
+    echo -e "  ${C_YELLOW}⚠${C_NC} ${WORLD_STALE_WARNING}"
+fi
 if [[ $UNGRADED_COUNT -gt 0 ]]; then
     echo ""
     echo -e "  ${C_RED}●${C_NC} ${UNGRADED_COUNT} ungraded predictions — run /retro"
