@@ -27,7 +27,7 @@ echo "  correct: $CORRECT · partial: $PARTIAL · wrong: $WRONG"
 
 # Accuracy + calibration
 if [[ "$GRADED" -gt 0 ]]; then
-    EFFECTIVE=$(python3 -c "print(f'{($CORRECT + $PARTIAL * 0.5) / $GRADED * 100:.0f}')" 2>/dev/null || echo "?")
+    EFFECTIVE=$(echo "$CORRECT $PARTIAL $GRADED" | awk '{printf "%.0f", ($1 + $2 * 0.5) / $3 * 100}' 2>/dev/null || echo "?")
     echo "  accuracy: ${EFFECTIVE}%"
     if [[ "$EFFECTIVE" != "?" ]]; then
         ACC=${EFFECTIVE%.*}
