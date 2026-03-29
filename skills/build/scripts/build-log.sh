@@ -93,7 +93,7 @@ case "$COMMAND" in
         echo "=== CURRENT STREAK ==="
         STREAK=0
         STREAK_TYPE=""
-        tac "$LOG_FILE" 2>/dev/null | while IFS= read -r line; do
+        while IFS= read -r line; do
             DELTA=$(echo "$line" | jq -r '(.score_after // 0) - (.score_before // 0)' 2>/dev/null || echo "0")
             if [[ "$STREAK_TYPE" == "" ]]; then
                 if [[ "$DELTA" -gt 0 ]]; then
@@ -113,8 +113,10 @@ case "$COMMAND" in
             else
                 break
             fi
+        done < <(tac "$LOG_FILE" 2>/dev/null)
+        if [[ "$STREAK" -gt 0 ]]; then
             echo "$STREAK_TYPE streak: $STREAK sessions"
-        done | tail -1
+        fi
         echo ""
         ;;
 
