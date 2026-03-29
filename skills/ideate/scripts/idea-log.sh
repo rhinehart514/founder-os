@@ -54,16 +54,20 @@ case "$ACTION" in
     list)
         if [[ -f "$LOG_FILE" ]]; then
             echo "=== IDEATION HISTORY ==="
-            tail -20 "$LOG_FILE" | while IFS= read -r line; do
-                DATE=$(echo "$line" | sed -n 's/.*"date":"\([^"]*\)".*/\1/p' | cut -d'T' -f1)
-                ACTION=$(echo "$line" | sed -n 's/.*"action":"\([^"]*\)".*/\1/p')
-                NAME=$(echo "$line" | sed -n 's/.*"name":"\([^"]*\)".*/\1/p')
-                case "$ACTION" in
-                    add) echo "  + $DATE $NAME" ;;
-                    kill) echo "  x $DATE $NAME" ;;
-                    commit) echo "  > $DATE $NAME" ;;
-                esac
-            done
+            if command -v jq &>/dev/null; then
+                tail -20 "$LOG_FILE" | jq -r '"\(.action | if . == "add" then "  + " elif . == "kill" then "  x " else "  > " end)\(.date[:10]) \(.name)"'
+            else
+                tail -20 "$LOG_FILE" | while IFS= read -r line; do
+                    DATE=$(echo "$line" | sed -n 's/.*"date":"\([^"]*\)".*/\1/p' | cut -d'T' -f1)
+                    ACTION=$(echo "$line" | sed -n 's/.*"action":"\([^"]*\)".*/\1/p')
+                    NAME=$(echo "$line" | sed -n 's/.*"name":"\([^"]*\)".*/\1/p')
+                    case "$ACTION" in
+                        add) echo "  + $DATE $NAME" ;;
+                        kill) echo "  x $DATE $NAME" ;;
+                        commit) echo "  > $DATE $NAME" ;;
+                    esac
+                done
+            fi
         else
             echo "No ideation history yet."
         fi

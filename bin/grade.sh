@@ -170,30 +170,30 @@ while IFS= read -r line; do
 
     if [[ "$grade_verdict" == "SKIP" ]]; then
         # Closure enforcement: expire predictions older than 14 days
-        local pred_age_days=0
-        local today_epoch pred_epoch
-        today_epoch=$(date '+%s' 2>/dev/null)
-        pred_epoch=$(date -j -f '%Y-%m-%d' "$date" '+%s' 2>/dev/null || date -d "$date" '+%s' 2>/dev/null || echo "")
-        if [[ -n "$pred_epoch" && -n "$today_epoch" ]]; then
-            pred_age_days=$(( (today_epoch - pred_epoch) / 86400 ))
+        _pred_age_days=0
+        _today_epoch="" _pred_epoch=""
+        _today_epoch=$(date '+%s' 2>/dev/null)
+        _pred_epoch=$(date -j -f '%Y-%m-%d' "$date" '+%s' 2>/dev/null || date -d "$date" '+%s' 2>/dev/null || echo "")
+        if [[ -n "$_pred_epoch" && -n "$_today_epoch" ]]; then
+            _pred_age_days=$(( (_today_epoch - _pred_epoch) / 86400 ))
         fi
 
-        if [[ "$pred_age_days" -ge 14 ]]; then
+        if [[ "$_pred_age_days" -ge 14 ]]; then
             # Expire old ungraded predictions — they'll never have data
             if ! $DRY_RUN; then
                 printf "%s\t%s\t%s\t%s\t%s\t%s\t%s\n" \
                     "$date" "$agent" "$prediction" "$evidence" \
-                    "Expired: no gradable signal after ${pred_age_days}d" "expired" \
+                    "Expired: no gradable signal after ${_pred_age_days}d" "expired" \
                     "Ungradable prediction — make future predictions more specific (include numbers/targets)" >> "$TEMP_FILE"
             else
                 echo "$line" >> "$TEMP_FILE"
             fi
             GRADED_COUNT=$((GRADED_COUNT + 1))
-            $QUIET || echo "  ⏰ \"${prediction:0:60}\" → expired (${pred_age_days}d, no signal)"
+            $QUIET || echo "  ⏰ \"${prediction:0:60}\" → expired (${_pred_age_days}d, no signal)"
             continue
-        elif [[ "$pred_age_days" -ge 10 ]]; then
+        elif [[ "$_pred_age_days" -ge 10 ]]; then
             # Pre-expiration warning: prediction will expire in 4 days
-            $QUIET || echo "  ⚠ \"${prediction:0:60}\" → expiring in $((14 - pred_age_days))d — run /retro to grade manually"
+            $QUIET || echo "  ⚠ \"${prediction:0:60}\" → expiring in $((14 - _pred_age_days))d — run /retro to grade manually"
             echo "$line" >> "$TEMP_FILE"
             continue
         fi
