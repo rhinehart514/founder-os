@@ -13,6 +13,9 @@
 
 set -uo pipefail
 
+# Clean up temp files on exit (normal or error)
+trap 'rm -f /tmp/founder-synthesis-* /tmp/founder-eval-* /tmp/founder-score-*' EXIT
+
 # Resolve founder-os root (for sourcing shared libs)
 _SYNTH_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 _FOUNDER_ROOT="${CLAUDE_PLUGIN_ROOT:-$(cd "$_SYNTH_DIR/../../.." && pwd)}"
