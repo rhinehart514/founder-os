@@ -74,7 +74,7 @@ PORTFOLIO_FILE="$HOME/.founder-os/portfolio.yml"
 HAS_PORTFOLIO=false
 if [[ -f "$PORTFOLIO_FILE" ]]; then
     HAS_PORTFOLIO=true
-    _p_total=$(grep -c "^  [a-z]" "$PORTFOLIO_FILE" 2>/dev/null || echo 0)
+    _p_total=$(sed -n '/^ideas:/,/^[^ ]/p' "$PORTFOLIO_FILE" | grep -c "^  [a-z][a-z_-]*:$" 2>/dev/null || echo 0)
     _p_killed=$(grep -c "stage: killed" "$PORTFOLIO_FILE" 2>/dev/null || echo 0)
     _p_active=$((_p_total - _p_killed))
     _p_building=$(grep -c "stage: building" "$PORTFOLIO_FILE" 2>/dev/null || echo 0)
