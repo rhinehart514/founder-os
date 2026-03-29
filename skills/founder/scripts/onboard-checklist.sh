@@ -34,7 +34,7 @@ fi
 
 # 2. beliefs.yml
 if [[ -f "$PROJECT_DIR/beliefs.yml" ]]; then
-    BELIEF_COUNT=$(grep -c "^  - claim:" "$PROJECT_DIR/beliefs.yml" 2>/dev/null || echo 0)
+    BELIEF_COUNT=$(grep -c "^  - id:" "$PROJECT_DIR/beliefs.yml" 2>/dev/null || echo 0)
     echo "  ✓ beliefs.yml — $BELIEF_COUNT assertions"
     SETUP_COUNT=$((SETUP_COUNT + 1))
 else
