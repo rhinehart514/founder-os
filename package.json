@@ -1,6 +1,6 @@
 {
   "name": "@rhinehart514/founder-os",
-  "version": "8.2.0",
+  "version": "8.2.1",
   "description": "Multi-agent primitives for Claude Code: /stochastic (consensus), /model-chat (debate), /fanout (research), /skillbuilder (skill-craft), /autoresearch (hill-climb).",
   "author": "Jacob Rhinehart",
   "license": "MIT",
@@ -27,6 +27,7 @@
   },
   "files": [
     ".claude-plugin/",
+    "SKILL.md",
     "skills/",
     "agents/",
     "bin/",

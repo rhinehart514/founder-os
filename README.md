@@ -36,6 +36,13 @@ claude plugin install rhinehart514/founder-os
 
 Skills become `/founder-os:stochastic`, `/founder-os:model-chat`, `/founder-os:fanout`, `/founder-os:skillbuilder`, `/founder-os:autoresearch`.
 
+### Marketplace install
+
+```bash
+claude plugin marketplace add rhinehart514/founder-os
+claude plugin install founder-os@founder-os
+```
+
 ### Direct install (short skill names)
 
 ```bash
