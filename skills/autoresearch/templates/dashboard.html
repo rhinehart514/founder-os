@@ -1,0 +1,250 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>autoresearch</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+      background: #0a0a0a;
+      color: #e5e5e5;
+      min-height: 100vh;
+      padding: 2rem;
+    }
+    h1 { font-size: 1.5rem; margin-bottom: 0.5rem; font-weight: 500; }
+    .subtitle { color: #666; font-size: 0.875rem; margin-bottom: 1.5rem; }
+
+    .status {
+      display: flex; align-items: center; gap: 0.5rem;
+      margin-bottom: 1.5rem; font-size: 0.875rem;
+    }
+    .status-dot { width: 8px; height: 8px; border-radius: 50%; background: #666; }
+    .status-dot.running { background: #22c55e; animation: pulse 1s infinite; }
+    .status-dot.completed { background: #3b82f6; }
+    .status-dot.error { background: #ef4444; }
+    @keyframes pulse { 50% { opacity: 0.5; } }
+
+    .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 1rem; margin-bottom: 2rem; }
+    .metric {
+      background: #141414; border: 1px solid #222; border-radius: 8px; padding: 1.25rem;
+    }
+    .metric-label { font-size: 0.75rem; color: #666; text-transform: uppercase; letter-spacing: 0.05em; }
+    .metric-value { font-size: 2.5rem; font-weight: 600; margin: 0.25rem 0; font-variant-numeric: tabular-nums; }
+    .metric-delta { font-size: 0.875rem; }
+    .metric-delta.positive { color: #22c55e; }
+    .metric-delta.negative { color: #ef4444; }
+    .metric-delta.neutral { color: #666; }
+
+    .chart-container {
+      background: #141414; border: 1px solid #222; border-radius: 8px;
+      padding: 1.5rem; margin-bottom: 2rem;
+    }
+    .chart-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem; }
+    .chart-title { font-size: 0.875rem; color: #888; }
+    .chart-legend { display: flex; gap: 1rem; font-size: 0.75rem; }
+    .legend-item { display: flex; align-items: center; gap: 0.375rem; }
+    .legend-dot { width: 8px; height: 8px; border-radius: 50%; }
+    .legend-dot.score { background: #3b82f6; }
+    .legend-dot.best { background: #22c55e; }
+    .chart-svg { width: 100%; height: 220px; }
+
+    .experiments {
+      background: #141414; border: 1px solid #222; border-radius: 8px;
+      overflow: hidden; max-height: 480px; overflow-y: auto;
+    }
+    .exp-header, .exp-row {
+      display: grid;
+      grid-template-columns: 50px 100px 80px 1fr;
+      padding: 0.75rem 1rem;
+      font-size: 0.875rem;
+      font-variant-numeric: tabular-nums;
+    }
+    .exp-header {
+      background: #1a1a1a; color: #666; font-size: 0.75rem;
+      text-transform: uppercase; letter-spacing: 0.05em;
+      position: sticky; top: 0;
+    }
+    .exp-row { border-top: 1px solid #222; }
+    .exp-row.keep { background: rgba(34, 197, 94, 0.08); border-left: 3px solid #22c55e; }
+    .exp-row.discard { color: #666; }
+    .exp-row.skip { color: #555; }
+    .exp-row.crash { background: rgba(239, 68, 68, 0.08); color: #888; }
+  </style>
+</head>
+<body>
+  <h1 id="title">autoresearch</h1>
+  <p class="subtitle" id="subtitle">autonomous optimization loop</p>
+
+  <div class="status">
+    <div class="status-dot" id="statusDot"></div>
+    <span id="statusText">connecting...</span>
+  </div>
+
+  <div class="grid" id="metricsGrid"></div>
+
+  <div class="chart-container">
+    <div class="chart-header">
+      <span class="chart-title" id="chartTitle">score over time</span>
+      <div class="chart-legend">
+        <div class="legend-item"><div class="legend-dot score"></div> score</div>
+        <div class="legend-item"><div class="legend-dot best"></div> best</div>
+      </div>
+    </div>
+    <svg class="chart-svg" id="chart"></svg>
+  </div>
+
+  <div class="experiments">
+    <div class="exp-header">
+      <span>#</span>
+      <span id="expHeaderScore">score</span>
+      <span>status</span>
+      <span>change</span>
+    </div>
+    <div id="expList"></div>
+  </div>
+
+  <script>
+    let baseline = null;
+    let configCache = null;
+
+    function fmt(v) {
+      if (v === null || v === undefined) return '--';
+      if (typeof v !== 'number') return String(v);
+      if (Math.abs(v) >= 1000) return v.toFixed(0);
+      if (Math.abs(v) >= 10) return v.toFixed(1);
+      return v.toFixed(2);
+    }
+
+    function delta(curr, base, maximize) {
+      if (base == null || curr == null) return { text: 'vs baseline', cls: 'neutral' };
+      const diff = curr - base;
+      const pct = base !== 0 ? ((diff / Math.abs(base)) * 100).toFixed(0) : '∞';
+      const improved = maximize ? diff > 0 : diff < 0;
+      const sign = diff > 0 ? '+' : '';
+      return {
+        text: `${sign}${pct}% vs baseline`,
+        cls: Math.abs(parseFloat(pct)) < 1 ? 'neutral' : (improved ? 'positive' : 'negative'),
+      };
+    }
+
+    function drawChart(experiments, maximize) {
+      const svg = document.getElementById('chart');
+      const scores = experiments.filter(e => e.score !== null && e.score !== undefined).map(e => e.score);
+      if (scores.length === 0) {
+        svg.innerHTML = '<text x="50%" y="50%" text-anchor="middle" fill="#444">no data yet</text>';
+        return;
+      }
+      const width = svg.clientWidth || 800;
+      const height = 220;
+      const padding = { top: 20, right: 40, bottom: 30, left: 50 };
+      const chartW = width - padding.left - padding.right;
+      const chartH = height - padding.top - padding.bottom;
+      const min = Math.min(...scores);
+      const max = Math.max(...scores);
+      const range = max - min || 1;
+      const minY = min - range * 0.1;
+      const maxY = max + range * 0.1;
+      const best = maximize ? Math.max(...scores) : Math.min(...scores);
+      const xScale = (i) => padding.left + (i / Math.max(scores.length - 1, 1)) * chartW;
+      const yScale = (v) => padding.top + chartH - ((v - minY) / (maxY - minY)) * chartH;
+      const pathD = scores.map((s, i) => `${i === 0 ? 'M' : 'L'} ${xScale(i)} ${yScale(s)}`).join(' ');
+      const areaD = pathD + ` L ${xScale(scores.length - 1)} ${yScale(minY)} L ${xScale(0)} ${yScale(minY)} Z`;
+      const ticks = 5;
+      const gridLines = Array.from({ length: ticks + 1 }, (_, i) => minY + (i * (maxY - minY)) / ticks);
+      let html = `
+        <defs>
+          <linearGradient id="areaGrad" x1="0" y1="0" x2="0" y2="1">
+            <stop offset="0%" stop-color="#3b82f6" stop-opacity="0.3"/>
+            <stop offset="100%" stop-color="#3b82f6" stop-opacity="0"/>
+          </linearGradient>
+        </defs>
+      `;
+      gridLines.forEach(v => {
+        html += `<line x1="${padding.left}" y1="${yScale(v)}" x2="${width - padding.right}" y2="${yScale(v)}" stroke="#222" stroke-dasharray="4"/>`;
+        html += `<text x="${padding.left - 8}" y="${yScale(v) + 4}" text-anchor="end" fill="#444" font-size="11">${fmt(v)}</text>`;
+      });
+      html += `<line x1="${padding.left}" y1="${yScale(best)}" x2="${width - padding.right}" y2="${yScale(best)}" stroke="#22c55e" stroke-dasharray="4" opacity="0.5"/>`;
+      html += `<path d="${areaD}" fill="url(#areaGrad)"/>`;
+      html += `<path d="${pathD}" fill="none" stroke="#3b82f6" stroke-width="2"/>`;
+      scores.forEach((s, i) => {
+        const color = s === best ? '#22c55e' : '#3b82f6';
+        html += `<circle cx="${xScale(i)}" cy="${yScale(s)}" r="4" fill="${color}"/>`;
+      });
+      const last = scores[scores.length - 1];
+      html += `<text x="${xScale(scores.length - 1) + 8}" y="${yScale(last) + 4}" fill="#e5e5e5" font-size="12" font-weight="600">${fmt(last)}</text>`;
+      svg.innerHTML = html;
+    }
+
+    function renderMetricCards(latest, baseline, config) {
+      const grid = document.getElementById('metricsGrid');
+      const fields = [config.metric, ...(config.subMetrics || [])];
+      grid.innerHTML = fields.map(f => {
+        const isPrimary = f === config.metric;
+        const val = latest ? (isPrimary ? latest.score : latest[f]) : null;
+        const baseVal = baseline ? (isPrimary ? baseline.score : baseline[f]) : null;
+        const maximize = isPrimary ? config.maximize : false;
+        const d = delta(val, baseVal, maximize);
+        return `
+          <div class="metric">
+            <div class="metric-label">${f}</div>
+            <div class="metric-value">${fmt(val)}</div>
+            <div class="metric-delta ${d.cls}">${d.text}</div>
+          </div>
+        `;
+      }).join('');
+    }
+
+    function update(data) {
+      const { experiments, status, config } = data;
+      configCache = config;
+      const valid = experiments.filter(e => e.score !== null && e.score !== undefined);
+      const latest = valid[valid.length - 1];
+
+      document.getElementById('title').textContent = `autoresearch — ${config.metric}`;
+      document.getElementById('subtitle').textContent = `${config.maximize ? 'maximize' : 'minimize'} ${config.metric}`;
+      document.getElementById('chartTitle').textContent = `${config.metric} over time`;
+      document.getElementById('expHeaderScore').textContent = config.metric;
+
+      document.getElementById('statusDot').className = `status-dot ${status}`;
+      document.getElementById('statusText').textContent =
+        status === 'running' ? `running experiment ${experiments.length + 1}...` :
+        status === 'completed' ? `completed — ${experiments.length} experiments` :
+        status === 'error' ? 'error — see console' :
+        'idle';
+
+      if (!baseline && valid.length > 0) baseline = valid[0];
+
+      renderMetricCards(latest, baseline, config);
+      drawChart(experiments, config.maximize);
+
+      const expList = document.getElementById('expList');
+      expList.innerHTML = experiments.slice().reverse().map((exp, i) => {
+        const num = experiments.length - i;
+        return `
+          <div class="exp-row ${exp.status}">
+            <span>${num}</span>
+            <span>${fmt(exp.score)}</span>
+            <span>${exp.status}</span>
+            <span>${exp.name || ''}</span>
+          </div>
+        `;
+      }).join('');
+    }
+
+    function poll() {
+      fetch('results.json?t=' + Date.now())
+        .then(r => r.json())
+        .then(update)
+        .catch(() => {
+          document.getElementById('statusText').textContent = 'disconnected';
+          document.getElementById('statusDot').className = 'status-dot';
+        });
+    }
+
+    setInterval(poll, 500);
+    poll();
+  </script>
+</body>
+</html>

@@ -1,0 +1,11 @@
+node_modules/
+*.log
+.DS_Store
+projects/
+.planning/
+.mcp.json
+*.tgz
+.claude/settings.local.json
+.claude/agent-memory*/
+.claude/predictions.jsonl
+.playwright-mcp/

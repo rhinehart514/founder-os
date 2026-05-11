@@ -1,0 +1,41 @@
+{
+  "name": "@rhinehart514/founder-os",
+  "version": "8.2.0",
+  "description": "Multi-agent primitives for Claude Code: /stochastic (consensus), /model-chat (debate), /fanout (research), /skillbuilder (skill-craft), /autoresearch (hill-climb).",
+  "author": "Jacob Rhinehart",
+  "license": "MIT",
+  "homepage": "https://github.com/rhinehart514/founder-os",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/rhinehart514/founder-os.git"
+  },
+  "keywords": [
+    "claude-code",
+    "claude-code-skills",
+    "claude-code-agents",
+    "multi-agent",
+    "stochastic",
+    "consensus",
+    "ai-agent",
+    "skillbuilder",
+    "autoresearch",
+    "hill-climb"
+  ],
+  "type": "module",
+  "bin": {
+    "founder-os": "bin/install.sh"
+  },
+  "files": [
+    ".claude-plugin/",
+    "skills/",
+    "agents/",
+    "bin/",
+    "README.md"
+  ],
+  "scripts": {
+    "postinstall": "bash bin/install.sh"
+  },
+  "engines": {
+    "node": ">=18"
+  }
+}

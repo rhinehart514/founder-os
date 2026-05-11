@@ -1,0 +1,6 @@
+tests/
+.planning/
+projects/
+*.log
+.claude/
+.DS_Store
