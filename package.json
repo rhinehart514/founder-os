@@ -1,6 +1,6 @@
 {
   "name": "@rhinehart514/founder-os",
-  "version": "8.2.1",
+  "version": "8.2.2",
   "description": "Multi-agent primitives for Claude Code: /stochastic (consensus), /model-chat (debate), /fanout (research), /skillbuilder (skill-craft), /autoresearch (hill-climb).",
   "author": "Jacob Rhinehart",
   "license": "MIT",

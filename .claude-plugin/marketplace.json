@@ -6,7 +6,7 @@
   },
   "metadata": {
     "description": "Multi-agent primitives for Claude Code.",
-    "version": "8.2.1"
+    "version": "8.2.2"
   },
   "plugins": [
     {
@@ -14,10 +14,10 @@
       "source": {
         "source": "github",
         "repo": "rhinehart514/founder-os",
-        "ref": "v8.2.1"
+        "ref": "v8.2.2"
       },
       "description": "Multi-agent primitives for Claude Code: consensus, debate, fanout research, skill building, and measured optimization.",
-      "version": "8.2.1",
+      "version": "8.2.2",
       "author": {
         "name": "Jacob Rhinehart",
         "email": "rhinehart514@gmail.com"

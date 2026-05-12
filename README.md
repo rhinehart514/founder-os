@@ -16,6 +16,27 @@ Try this first:
 
 It polls 10 agents with the same prompt, then aggregates consensus, divergences, and outliers.
 
+## What you get
+
+Instead of one confident answer, `/stochastic` gives you a quick read on where independent Claude Code runs agree, where they split, and what unusual ideas only one or two runs noticed.
+
+```text
+Consensus
+- Postgres is the safer default if the app needs concurrent users, hosted backups, or analytics.
+- SQLite is better for a local-first prototype or single-user desktop workflow.
+
+Divergences
+- 6/10 agents preferred Postgres immediately.
+- 3/10 agents preferred SQLite until there is real multi-user pressure.
+- 1/10 suggested starting SQLite with a planned migration boundary.
+
+Outliers
+- Add a tiny repository layer now so the storage decision stays reversible.
+- Use the first paying/team user as the migration trigger, not an abstract scale guess.
+```
+
+Use it for architecture calls, launch plans, debugging hypotheses, API design, research questions, or any moment where a single pass feels too smooth.
+
 ## The primitives
 
 | Skill | What it does |
