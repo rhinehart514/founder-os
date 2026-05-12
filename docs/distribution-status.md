@@ -28,8 +28,18 @@ Contact email used for submission-ready materials: rhinehart514@gmail.com
   - https://www.awesomeskills.dev/en/skill/rhinehart514-founder-os
 - Tons of Skills nomination submitted:
   - Endpoint returned `{"status":"ok"}`
+- Awesome-list / marketplace outreach:
+  - PR opened: https://github.com/ccplugins/awesome-claude-code-plugins/pull/212
+  - PR opened: https://github.com/ComposioHQ/awesome-claude-skills/pull/809
+  - Review issue opened: https://github.com/trailofbits/skills-curated/issues/29
 - Non-LinkedIn launch copy prepared:
   - `docs/distribution.md`
+- npm published:
+  - `@rhinehart514/founder-os@8.2.2`
+- GitHub release created:
+  - https://github.com/rhinehart514/founder-os/releases/tag/v8.2.2
+- README conversion improved:
+  - Added concrete `/stochastic` demo output showing consensus, divergences, and outliers.
 
 ## Blocked Or Manual
 
@@ -44,3 +54,7 @@ Contact email used for submission-ready materials: rhinehart514@gmail.com
 - Reddit, Hacker News, and X:
   - Blocker: no authenticated posting account available in this environment.
   - Ready-to-post copy is in `docs/distribution.md`.
+- Additional awesome lists skipped for now:
+  - `travisvn/awesome-claude-skills` requires basic 10-star social proof and says under-10-star submissions are closed automatically.
+  - `helloianneo/awesome-claude-code-skills` requires >10 stars or clear user feedback.
+  - `subinium/awesome-claude-code` lists only repositories with 1,000+ stars.
